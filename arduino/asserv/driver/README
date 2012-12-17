@@ -1,7 +1,7 @@
-AF-Motor	: Gestion de l'alim des moteurs
+BrushlessMotor	: Gestion de l'alim des moteurs
 command		: Gestion de la reception des messages
 control		: Gestion des PWM à appliquer en fonction de la goalPos
-encoder		: Décode les codeurs avec fils A et B (utilise des interruptions ?
+encoder		: Décode les codeurs avec fils A et B (utilise des interruptions 
 fifo		: Gestion des goal
 pwm		: Interface de gestion des PWN à appliquer
 robotstate	: met à jour les infos sur la pos du robot
