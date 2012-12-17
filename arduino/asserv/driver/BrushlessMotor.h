@@ -1,9 +1,8 @@
-// Adafruit Motor shield library
-// copyright Adafruit Industries LLC, 2009
-// this code is public domain, enjoy!
+//Adapted from Adafruit Motor Shield by Quentin C for UTCoupe
+//Defined for brushless controler shield designed by UTCoupe
 
-#ifndef _AFMotor_h_
-#define _AFMotor_h_
+#ifndef _BrushlessMotor_h_
+#define _BrushlessMotor_h_
 
 #include <inttypes.h>
 #include <avr/io.h>
@@ -14,17 +13,22 @@
 #define MOTOR12_2KHZ _BV(CS21) | _BV(CS20) // divide by 32
 #define MOTOR12_1KHZ _BV(CS22)  // divide by 64
 
-#define MOTOR1_DIR PIN_DIR_LEFT
-#define MOTOR2_DIR PIN_DIR_RIGHT
+#define MOTOR1_DIR 50
+#define MOTOR2_DIR 40
 
-#define MOTOR1_A 2
-#define MOTOR1_B 3
-#define MOTOR2_A 1
-#define MOTOR2_B 4
-#define MOTOR4_A 0
-#define MOTOR4_B 6
-#define MOTOR3_A 5
-#define MOTOR3_B 7
+#define MOTOR1_EN 48
+#define MOTOR2_EN 38
+
+#define MOTOR1_SPD 3
+#define MOTOR2_SPD 5
+
+#define MOTOR1_RDY 42
+#define MOTOR2_RDY 36
+
+#define MOTOR1_DIG1 46
+#define MOTOR1_DIG2 44
+#define MOTOR2_DIG1 30
+#define MOTOR2_DIG2 32
 
 #define FORWARD 1
 #define BACKWARD 2
