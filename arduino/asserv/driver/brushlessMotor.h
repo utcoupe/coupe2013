@@ -1,8 +1,8 @@
 //Adapted from Adafruit Motor Shield by Quentin C for UTCoupe
 //Defined for brushless controler shield designed by UTCoupe
 
-#ifndef _BrushlessMotor_h_
-#define _BrushlessMotor_h_
+#ifndef _brushlessMotor_h_
+#define _brushlessMotor_h_
 
 #include <inttypes.h>
 #include <avr/io.h>
@@ -36,10 +36,10 @@
 #define RELEASE 4
 
 
-class AF_DCMotor
+class Motor
 {
  public:
-  AF_DCMotor(uint8_t motornum, uint8_t freq =  MOTOR12_8KHZ);
+  Motor(uint8_t motornum, uint8_t freq =  MOTOR12_8KHZ);
   void run(uint8_t);
   void setSpeed(uint8_t);
 

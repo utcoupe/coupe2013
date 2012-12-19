@@ -4,7 +4,7 @@
 #include <avr/io.h>
 #include "include_arduino.h"
 
-#include "BrushlessMotor.h"
+#include "brushlessMotor.h"
 
 
 /******************************************
@@ -47,7 +47,7 @@ might be configured to smth else in order use speed slavering
 see datasheet of DEC-MODULE-24/2
 ***********************************/
 
-AF_DCMotor::AF_DCMotor(uint8_t num, uint8_t freq) {
+Motor::Motor(uint8_t num, uint8_t freq) {
   motornum = num;
   pwmfreq = freq;
 
@@ -65,7 +65,7 @@ AF_DCMotor::AF_DCMotor(uint8_t num, uint8_t freq) {
   }
 }
 
-void AF_DCMotor::run(uint8_t cmd) {
+void Motor::run(uint8_t cmd) {
   uint8_t dirPin;
   uint8_t enPin;
   switch (motornum) {
@@ -95,7 +95,7 @@ void AF_DCMotor::run(uint8_t cmd) {
   }
 }
 
-void AF_DCMotor::setSpeed(uint8_t speed) {
+void Motor::setSpeed(uint8_t speed) {
   switch (motornum) {
   case 1:
     analogWrite(MOTOR1_SPD, speed); break;
