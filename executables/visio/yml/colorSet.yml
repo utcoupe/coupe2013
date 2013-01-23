@@ -1,0 +1,19 @@
+%YAML:1.0
+blue_h_lower: 61
+blue_s_lower: 21
+blue_v_lower: 0
+blue_h_higher: 145
+blue_s_higher: 55
+blue_v_higher: 255
+red_h_lower: 0
+red_s_lower: 0
+red_v_lower: 0
+red_h_higher: 255
+red_s_higher: 255
+red_v_higher: 255
+white_h_lower: 75
+white_s_lower: 6
+white_v_lower: 84
+white_h_higher: 130
+white_s_higher: 92
+white_v_higher: 162

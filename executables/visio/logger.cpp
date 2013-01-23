@@ -3,20 +3,20 @@
 
 void Logger::log(int msg)
 {
-	cerr << "> [LOG] " << "Get int: " << msg << endl;
+	cerr << "> [ LOG | " << this->name << ":" << this->id << " ] " << msg << endl;
 }
 
 void Logger::log(string msg)
 {
-	cout << "> [LOG] " << msg << endl;
+	cout << "> [ LOG | " << this->name << ":" << this->id << " ] " << msg << endl;
 }
 
 void Logger::err(int msg)
 {
-	cout << "> [ERR] " <<"Get int: " << msg << endl;
+	cout << "> [ ERR | " << this->name << ":" << this->id << " ] " <<"Get int: " << msg << endl;
 }
 
 void Logger::err(string msg)
 {
-	cout << "> [ERR] " << msg << endl;
+	cout << "> [ ERR | " << this->name << ":" << this->id << " ] " << msg << endl;
 }

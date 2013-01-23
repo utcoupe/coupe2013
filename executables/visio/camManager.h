@@ -9,15 +9,22 @@ class camManager
 {
 private:
 	int CAMERA_N;
+	int display;
+
 	cv::Mat image;
-	cv::VideoCapture capture;
+	
 	Logger *logger;
 
 public:
-	camManager(int id) { this->CAMERA_N = id; }
+	cv::VideoCapture capture;
+	
+	camManager(int id, int display = 1) { this->CAMERA_N = id; this->display = display; }
 	~camManager() { delete logger; }
+
 	int Init();
-	void loop();
+
+	void DisplayLoop();
+	cv::Mat SnapShot();
 };
 
 #endif
