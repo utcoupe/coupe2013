@@ -3,7 +3,9 @@
 #include "calibManager.h"
 #include <iostream>
 
-
+/*
+	Calibration class. This is used to calibrate color matching schemes and save them to file
+ */
 calibManager::calibManager(){
 	this->logger = new Logger("Calibration", 0);
 	this->colorsetPath = "./yml/colorSet.yml";
@@ -15,6 +17,9 @@ calibManager::calibManager(){
 	this->loadSets();
 }
 
+/*
+	This one take the current schema settings and save it into yml file.
+ */
 void calibManager::writeSets()
 {
 	cv::FileStorage ColorSetFile(this->colorsetPath, cv::FileStorage::WRITE);
@@ -49,6 +54,9 @@ void calibManager::writeSets()
 	ColorSetFile.release();
 }
 
+/*
+	loads color matching schema from the yml file. This file is human readable
+ */
 void calibManager::loadSets()
 {
 	cv::FileStorage ColorSetFile(this->colorsetPath, cv::FileStorage::READ);
@@ -79,6 +87,12 @@ void calibManager::loadSets()
 	ColorSetFile.release();
 }
 
+/**
+ * binary filtering
+ * @param  img the image to be filtered
+ * @param  set Color Set to use, this is fetched from trackbars and passed in according to color id
+ * @return     processed image	
+ */
 cv::Mat *calibManager::binaryFiltering(cv::Mat *img, ColorSet set)
 {
 	cv::Mat img_hsv;
@@ -99,6 +113,12 @@ cv::Mat *calibManager::binaryFiltering(cv::Mat *img, ColorSet set)
 	return img;
 }
 
+/**
+ * Creat trackbar for each color
+ * @param  id    0 for blue, 1 for red, 2 for white
+ * @param  image the image to be binary filtered
+ * @return       return the image binary filtered
+ */
 cv::Mat *calibManager::calib(int id, cv::Mat *image)
 {
 	switch (id){
@@ -144,6 +164,12 @@ cv::Mat *calibManager::calib(int id, cv::Mat *image)
 	}
 }
 
+
+/**
+ * set yml file for color matching schema, usable for three colors by default
+ * @param cam the camera to use. ATTENTION: NEED TO CHANGE the colorschema file path if you want multiple schemes, by 
+ * default, like the case for 2013, we tend to use the same schema for both cameras.
+ */
 void calibManager::yamlSetter(camManager *cam)
 {
 	cv::Mat image;
