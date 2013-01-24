@@ -19,8 +19,8 @@
 #define MOTOR1_EN 48
 #define MOTOR2_EN 38
 
-#define MOTOR1_SPD 3
-#define MOTOR2_SPD 5
+#define MOTOR1_SPD 5
+#define MOTOR2_SPD 3
 
 #define MOTOR1_RDY 42
 #define MOTOR2_RDY 36

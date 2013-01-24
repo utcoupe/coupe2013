@@ -16,9 +16,9 @@ inline void initPWM1(uint8_t freq) {
     pinMode(MOTOR1_EN, OUTPUT);
     digitalWrite(MOTOR1_EN, HIGH); //Enable motor
 
-    pinMode(MOTOR1_DIG1, OUTOUT);
+    pinMode(MOTOR1_DIG1, OUTPUT);
     digitalWrite(MOTOR1_DIG1, LOW);
-    pinMode(MOTOR1_DIG2, OUTOUT);
+    pinMode(MOTOR1_DIG2, OUTPUT);
     digitalWrite(MOTOR1_DIG2, LOW); //config DIG1&2 to 0 
 
     pinMode(MOTOR1_RDY, INPUT);
@@ -31,9 +31,9 @@ inline void initPWM2(uint8_t freq) {
     pinMode(MOTOR2_EN, OUTPUT);
     digitalWrite(MOTOR2_EN,OUTPUT); //enable motor
         
-    pinMode(MOTOR1_DIG2, OUTOUT);
+    pinMode(MOTOR1_DIG2, OUTPUT);
     digitalWrite(MOTOR2_DIG1, LOW);
-    pinMode(MOTOR1_DIG2, OUTOUT);
+    pinMode(MOTOR1_DIG2, OUTPUT);
     digitalWrite(MOTOR2_DIG2, LOW); //config DIG1&2 to 0
 
     pinMode(MOTOR2_RDY, INPUT);
@@ -73,8 +73,8 @@ void Motor::run(uint8_t cmd) {
     dirPin = MOTOR1_DIR;
     enPin = MOTOR1_EN; break;
   case 2:
-    dirPin = MOTOR2_DIR; break;
-    enPin = MOTOR2_EN
+    dirPin = MOTOR2_DIR;
+    enPin = MOTOR2_EN; break;
   default:
     return;
   }
