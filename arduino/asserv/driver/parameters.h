@@ -13,7 +13,7 @@
 /* Parametres mecanique du robot */
 #define DIST_MOTOR_AXIS_TO_BACK_MM 122.0 // Distance entre le l'axe des moteurs et l'arriere du robot
 
-
+/*
 const int ENC_RESOLUTION = 500; // Nombre de points par tour d'encodeur
 const int ENC_RADIUS = 34; // Rayon de la roue codeuse
 
@@ -24,8 +24,8 @@ const double ENC_CENTER_DIST_MM = 262.0; // Distance entre chaque roue codeuse
 const double ENC_CENTER_DIST_TICKS = ENC_CENTER_DIST_MM*ENC_MM_TO_TICKS; // Distance entre chaque roue codeuse du robot en ticks
 
 // Duree d'un cycle (en millisecondes)
+*/
 #define DUREE_CYCLE 2
-
 /* Parametres de la carte asservissement
  * pin 0 -> USB 2 TTL
  * pin 1 -> USB 2 TTL
@@ -38,6 +38,7 @@ const double ENC_CENTER_DIST_TICKS = ENC_CENTER_DIST_MM*ENC_MM_TO_TICKS; // Dist
  * pin 21 -> A encodeur 2 (droite)
  * pin 20 -> B encodeur 2 (droite)
  * */
+/*
 #define PIN_EN_LEFT 3
 #define PIN_DIR_LEFT 12
 #define PIN_EN_RIGHT 11
@@ -50,7 +51,7 @@ const double ENC_CENTER_DIST_TICKS = ENC_CENTER_DIST_MM*ENC_MM_TO_TICKS; // Dist
 #define INTERRUPT_LEFT_B 4
 #define INTERRUPT_RIGHT_A 2
 #define INTERRUPT_RIGHT_B 3
-
+*/
 /* Parametre de la table en mm*/
 #define TABLE_WIDTH_MM 2100.0
 #define TABLE_HEIGHT_MM 3000.0
