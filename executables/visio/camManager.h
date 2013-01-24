@@ -4,6 +4,7 @@
 #include <opencv/cv.h>
 #include <opencv/highgui.h>
 #include "logger.h"
+#include "colorsets.h"
 
 class camManager
 {
@@ -11,20 +12,29 @@ private:
 	int CAMERA_N;
 	int display;
 
+	string colorsetPath;
+	ColorSets colorSets;
 	cv::Mat image;
 	
 	Logger *logger;
 
+	bool EliminatedContour(cv::RotatedRect *minRect);
+
+
 public:
 	cv::VideoCapture capture;
 	
-	camManager(int id, int display = 1) { this->CAMERA_N = id; this->display = display; }
+	camManager(int id, int display = 1);
 	~camManager() { delete logger; }
 
 	int Init();
-
+	void loadSets();
 	void DisplayLoop();
 	cv::Mat SnapShot();
+	cv::Mat *binaryFiltering(cv::Mat *img, ColorSet set);
+	vector<cv::Point> findObjects(cv::Mat *src, cv::Mat *original);
+
+
 };
 
 #endif

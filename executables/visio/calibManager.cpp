@@ -18,7 +18,7 @@ calibManager::calibManager(){
 }
 
 /*
-	This one take the current schema settings and save it into yml file.
+	This one takes the current schema settings and save it into yml file.
  */
 void calibManager::writeSets()
 {
@@ -87,31 +87,7 @@ void calibManager::loadSets()
 	ColorSetFile.release();
 }
 
-/**
- * binary filtering
- * @param  img the image to be filtered
- * @param  set Color Set to use, this is fetched from trackbars and passed in according to color id
- * @return     processed image	
- */
-cv::Mat *calibManager::binaryFiltering(cv::Mat *img, ColorSet set)
-{
-	cv::Mat img_hsv;
-	cv::cvtColor(*img, img_hsv, CV_BGR2HSV);
 
-	set.h_lower = cv::getTrackbarPos("h_lower", "Calib");
-	set.s_lower = cv::getTrackbarPos("s_lower", "Calib");
-	set.v_lower = cv::getTrackbarPos("v_lower", "Calib");
-	set.h_higher = cv::getTrackbarPos("h_higher", "Calib");
-	set.s_higher = cv::getTrackbarPos("s_higher", "Calib");
-	set.v_higher = cv::getTrackbarPos("v_higher", "Calib");
-
-	cv::inRange(img_hsv, 
-		cv::Scalar(set.h_lower, set.s_lower, set.v_lower), 
-		cv::Scalar(set.h_higher, set.s_higher, set.v_higher), 
-		*img);
-
-	return img;
-}
 
 /**
  * Creat trackbar for each color
@@ -119,7 +95,7 @@ cv::Mat *calibManager::binaryFiltering(cv::Mat *img, ColorSet set)
  * @param  image the image to be binary filtered
  * @return       return the image binary filtered
  */
-cv::Mat *calibManager::calib(int id, cv::Mat *image)
+cv::Mat *calibManager::calib(int id, cv::Mat *image, camManager *cam)
 {
 	switch (id){
 		case 0:
@@ -130,7 +106,7 @@ cv::Mat *calibManager::calib(int id, cv::Mat *image)
 		cv::createTrackbar( "h_higher", "Calib", &(this->colorSets.blue.h_higher), 255 );
 		cv::createTrackbar( "s_higher", "Calib", &(this->colorSets.blue.s_higher), 255 );
 		cv::createTrackbar( "v_higher", "Calib", &(this->colorSets.blue.v_higher), 255 );
-		image = this->binaryFiltering(image, this->colorSets.blue);
+		image = cam->binaryFiltering(image, this->colorSets.blue);
 		return image;
 		break;
 
@@ -142,7 +118,7 @@ cv::Mat *calibManager::calib(int id, cv::Mat *image)
 		cv::createTrackbar( "h_higher", "Calib", &(this->colorSets.red.h_higher), 255 );
 		cv::createTrackbar( "s_higher", "Calib", &(this->colorSets.red.s_higher), 255 );
 		cv::createTrackbar( "v_higher", "Calib", &(this->colorSets.red.v_higher), 255 );
-		image = this->binaryFiltering(image, this->colorSets.red);
+		image = cam->binaryFiltering(image, this->colorSets.red);
 		return image;
 		break;
 
@@ -154,7 +130,7 @@ cv::Mat *calibManager::calib(int id, cv::Mat *image)
 		cv::createTrackbar( "h_higher", "Calib", &(this->colorSets.white.h_higher), 255 );
 		cv::createTrackbar( "s_higher", "Calib", &(this->colorSets.white.s_higher), 255 );
 		cv::createTrackbar( "v_higher", "Calib", &(this->colorSets.white.v_higher), 255 );
-		image = this->binaryFiltering(image, this->colorSets.white);
+		image = cam->binaryFiltering(image, this->colorSets.white);
 		return image;
 		break;
 
@@ -185,13 +161,13 @@ void calibManager::yamlSetter(camManager *cam)
 		}
 
 		if(this->calibBlue)
-			image = *(this->calib(0, &image));
+			image = *(this->calib(0, &image, cam));
 
 		if(this->calibRed)
-			image = *(this->calib(1, &image));
+			image = *(this->calib(1, &image, cam));
 
 		if(this->calibWhite)
-			image = *(this->calib(2, &image));
+			image = *(this->calib(2, &image, cam));
 
 		cv::imshow( "Calibration", image );
 

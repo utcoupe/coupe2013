@@ -28,8 +28,7 @@ class calibManager
 		void yamlSetter(camManager *cam);
 		void loadSets();
 		void writeSets();
-		cv::Mat *calib(int id, cv::Mat *image);
-		cv::Mat *binaryFiltering(cv::Mat *img, ColorSet set);
+		cv::Mat *calib(int id, cv::Mat *image, camManager *cam);
 };
 
 #endif
