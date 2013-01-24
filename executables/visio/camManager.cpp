@@ -3,6 +3,14 @@
 #include <vector>
 #include "camManager.h"
 
+#ifndef _CALIBRATION
+#define _CALIBRATION 0
+#endif
+
+#ifndef _CAMERA
+#define _CAMERA 1
+#endif
+
 using namespace std;
 
 
@@ -21,7 +29,7 @@ camManager::camManager(int id, int display)
 int camManager::Init()
 {
 	this->capture = cv::VideoCapture(this->CAMERA_N);
-
+	this->loadSets();
 	if (!capture.isOpened())
 	{
 		logger->err("Failed to open a video device!");
@@ -30,22 +38,10 @@ int camManager::Init()
 	return 0;
 }
 
-// cv::Point camManager::barycentre (vector<cv::Point> & contour)
-// {
-// 	int summ_x, summ_y, bar_x, bar_y;
-// 	summ_x = summ_y = bar_x = bar_y = 0;
-// 	for (unsigned int i=0; i < contour.size(); i++)
-// 	{
-// 		summ_x += contour[i].x;
-// 		summ_y += contour[i].y;
-// 	}
 
-// 	bar_x = (summ_x/(contour.size()));
-// 	bar_y = (summ_y/(contour.size()));
-// 	cv::Point bar(bar_x, bar_y);
-// 	return bar;
-// }
-
+/**
+ * Based on binary Mat src, we find all possible contours, then keep the right ones and draw its contours+centers
+ */
 vector<cv::Point> camManager::findObjects(cv::Mat *src, cv::Mat *original)
 {
 	vector<cv::Point> result;
@@ -60,19 +56,30 @@ vector<cv::Point> camManager::findObjects(cv::Mat *src, cv::Mat *original)
         if (not this->EliminatedContour(&minRect))
         {
         	result.push_back(minRect.center);
-        	cv::circle(*original, minRect.center, 3, cv::Scalar(255,0,0), -1, 200, 0);
+        	cv::circle(*original, minRect.center, 2, cv::Scalar(255,0,0), -1, 200, 0);
         	cv::Point2f corners[4];
         	minRect.points(corners);
-        	cv::rectangle(*original, corners[0], corners[3], cv::Scalar(255,0,0));
+        	cv::line(*original, corners[0], corners[1], cv::Scalar(128,0,0), 3);
+        	cv::line(*original, corners[1], corners[2], cv::Scalar(128,0,0), 3);
+        	cv::line(*original, corners[2], corners[3], cv::Scalar(128,0,0), 3);
+        	cv::line(*original, corners[3], corners[0], cv::Scalar(128,0,0), 3);
         }
     }
     return result;
 }
 
+
+/**
+ * Determinate if we eliminate a contour
+ * @param  minRect the minimal area rectangle found
+ * @return         true if we eliminate it, false if not
+ * @TODO	Better the algorithm to adapt to match (keep only 4 for each snapshot for ex.)
+ * 			Convert the selection into mm instead of px
+ */
 bool camManager::EliminatedContour(cv::RotatedRect *minRect)
 {
-	cout<<"size = "<<minRect->size.area()<<endl;
-	if(minRect->size.area() < 20)
+	// cout<<"size = "<<minRect->size.area()<<endl;
+	if(minRect->size.area() < 3000)
 		return true;
 	return false;
 }
@@ -85,16 +92,19 @@ bool camManager::EliminatedContour(cv::RotatedRect *minRect)
  * @param  set Color Set to use, this is fetched from trackbars and passed in according to color id
  * @return     processed image	
  */
-cv::Mat *camManager::binaryFiltering(cv::Mat *img, ColorSet set)
+cv::Mat *camManager::binaryFiltering(cv::Mat *img, ColorSet set, int calledBy)
 {
 	cv::Mat img_hsv;
 	cv::cvtColor(*img, img_hsv, CV_BGR2HSV);
-	set.h_lower = cv::getTrackbarPos("h_lower", "Calib");
-	set.s_lower = cv::getTrackbarPos("s_lower", "Calib");
-	set.v_lower = cv::getTrackbarPos("v_lower", "Calib");
-	set.h_higher = cv::getTrackbarPos("h_higher", "Calib");
-	set.s_higher = cv::getTrackbarPos("s_higher", "Calib");
-	set.v_higher = cv::getTrackbarPos("v_higher", "Calib");
+	if(calledBy == _CALIBRATION)
+	{
+		set.h_lower = cv::getTrackbarPos("h_lower", "Calib");
+		set.s_lower = cv::getTrackbarPos("s_lower", "Calib");
+		set.v_lower = cv::getTrackbarPos("v_lower", "Calib");
+		set.h_higher = cv::getTrackbarPos("h_higher", "Calib");
+		set.s_higher = cv::getTrackbarPos("s_higher", "Calib");
+		set.v_higher = cv::getTrackbarPos("v_higher", "Calib");
+	}
 
 	cv::inRange(img_hsv, 
 		cv::Scalar(set.h_lower, set.s_lower, set.v_lower), 
@@ -174,9 +184,10 @@ cv::Mat camManager::SnapShot()
  			continue;
  		}
 
-		cv::Mat binaryImg = image;
-		binaryImg = *(this->binaryFiltering(&binaryImg, this->colorSets.blue));
-		this->findObjects(&binaryImg, &image);
+		cv::Mat binaryImg = image.clone();
+		cv::Mat *pBinaryImg = &binaryImg;
+		binaryImg = *(this->binaryFiltering(pBinaryImg, this->colorSets.blue, _CAMERA));
+		this->findObjects(pBinaryImg, &image);
 
  		if(this->display)
  			cv::imshow( "object tracing test", image );
