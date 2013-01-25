@@ -2,9 +2,9 @@
 #include <opencv/highgui.h>
 #include <vector>
 #include "camManager.h"
+#include "helper.h"
 
 using namespace std;
-
 
 camManager::camManager(int id, int display)
 { 
@@ -29,22 +29,6 @@ int camManager::Init()
 	}
 	return 0;
 }
-
-// cv::Point camManager::barycentre (vector<cv::Point> & contour)
-// {
-// 	int summ_x, summ_y, bar_x, bar_y;
-// 	summ_x = summ_y = bar_x = bar_y = 0;
-// 	for (unsigned int i=0; i < contour.size(); i++)
-// 	{
-// 		summ_x += contour[i].x;
-// 		summ_y += contour[i].y;
-// 	}
-
-// 	bar_x = (summ_x/(contour.size()));
-// 	bar_y = (summ_y/(contour.size()));
-// 	cv::Point bar(bar_x, bar_y);
-// 	return bar;
-// }
 
 vector<cv::Point> camManager::findObjects(cv::Mat *src, cv::Mat *original)
 {
@@ -162,7 +146,7 @@ cv::Mat camManager::SnapShot()
  * Display raw image in a loop from camera. 
  * For debug purpose
  */
- void camManager::DisplayLoop()
+ void camManager::DisplayLoopWithColorMatching()
  {
  	while(1)
  	{
@@ -182,6 +166,56 @@ cv::Mat camManager::SnapShot()
  			cv::imshow( "object tracing test", image );
 
  		int c = cv::waitKey( 50 );
+ 		switch (c)
+ 		{
+			// p for pause, press p or esc for unpause
+ 			case 'p':
+ 			c = 0;
+ 			while( c != 'p' && c != 27 )
+ 			{
+ 				c = cvWaitKey( 250 );
+ 			}
+ 			break;
+
+			// q for quit
+ 			case 'q':
+ 			return;
+
+ 			default:
+ 			if (c != -1)
+ 				logger->err(c);
+ 		}
+ 	}
+ }
+
+ void camManager::DisplayLoopWithPatternMatching()
+ {
+ 	extern cv::Mat img;
+ 	extern cv::Mat roiImg;
+ 	extern cv::Rect rect;
+ 	extern int select_flag;
+
+ 	while(1)
+ 	{
+ 		this->capture >> img;
+
+ 		if (img.empty())
+ 		{
+ 			logger->err("image empty");
+ 			continue;
+ 		}
+
+ 		cv::setMouseCallback("DisplayLoopWithPatternMatching", mouseHandler, NULL);
+
+ 		if (select_flag == 1)
+            cv::imshow("ROI", roiImg); /* show the image bounded by the box */
+
+        cv::rectangle(img, rect, CV_RGB(255, 0, 0), 3, 8, 0);
+
+ 		if(this->display)
+ 			cv::imshow( "DisplayLoopWithPatternMatching", img );
+
+ 		int c = cv::waitKey( 20 );
  		switch (c)
  		{
 			// p for pause, press p or esc for unpause

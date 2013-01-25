@@ -1,7 +1,7 @@
 #include <opencv/cv.h>
 #include <opencv/highgui.h>
-#include "calibManager.h"
 #include <iostream>
+#include "calibManager.h"
 
 /*
 	Calibration class. This is used to calibrate color matching schemes and save them to file

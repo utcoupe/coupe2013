@@ -5,6 +5,9 @@
 #include <opencv/highgui.h>
 #include "logger.h"
 #include "colorsets.h"
+#include "helper.h"
+
+extern void mouseHandler(int event, int x, int y, int flags, void* param);
 
 class camManager
 {
@@ -29,7 +32,8 @@ public:
 
 	int Init();
 	void loadSets();
-	void DisplayLoop();
+	void DisplayLoopWithColorMatching();
+	void DisplayLoopWithPatternMatching();
 	cv::Mat SnapShot();
 	cv::Mat *binaryFiltering(cv::Mat *img, ColorSet set);
 	vector<cv::Point> findObjects(cv::Mat *src, cv::Mat *original);
