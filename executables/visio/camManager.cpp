@@ -203,44 +203,41 @@ cv::Mat camManager::SnapShot()
  	extern cv::Rect rect;
  	extern int select_flag;
 
-/**
- * First methode: take all points which is similar and draw a cercle for each of these points...
- * float threshold = 0.08;
- * cv::Mat thresholdedImage = result < threshold;
- * Print a cercle for each non zero pixel 
- */
+	/**
+	 * First methode: take all points which is similar and draw a cercle for each of these points...
+	 * float threshold = 0.08;
+	 * cv::Mat thresholdedImage = result < threshold;
+	 * Print a cercle for each non zero pixel 
+	 */
 
+	/**
+	 * Second method: Erase the most similar region at each loop!
+	 */
 
+	// Localizing the best match with minMaxLoc
+	double minVal, maxVal; 
+	cv::Point minLoc, maxLoc, matchLoc;
 
+	for (int i = 0; i < NB_OF_OBJECTS_TO_DETECT; ++i)
+	{
+		// Create the result matrix
+		int result_cols =  img.cols - roiImg.cols + 1;
+		int result_rows = img.rows - roiImg.rows + 1;
 
-/**
- * Second method: Erase the most similar region at each loop!
- */
+		result.create( result_cols, result_rows, CV_32FC1 );
 
-  // Localizing the best match with minMaxLoc
- double minVal, maxVal; 
- cv::Point minLoc, maxLoc, matchLoc;
+		// Do the Matching and Normalize
+		cv::matchTemplate( img, roiImg, result, CV_TM_SQDIFF );
+		cv::normalize( result, result, 0, 1, cv::NORM_MINMAX, -1, cv::Mat() );
+		cv::minMaxLoc( result, &minVal, &maxVal, &minLoc, &maxLoc, cv::Mat() );
+		matchLoc = minLoc; 
+		cv::rectangle( img, matchLoc, cv::Point( matchLoc.x + roiImg.cols, matchLoc.y + roiImg.rows ), cv::Scalar::all(0), 2, 8, 0 );
 
- for (int i = 0; i < NB_OF_OBJECTS_TO_DETECT; ++i)
- {
- 	// Create the result matrix
- 	int result_cols =  img.cols - roiImg.cols + 1;
- 	int result_rows = img.rows - roiImg.rows + 1;
-
- 	result.create( result_cols, result_rows, CV_32FC1 );
-
-  	// Do the Matching and Normalize
- 	cv::matchTemplate( img, roiImg, result, CV_TM_SQDIFF );
- 	cv::normalize( result, result, 0, 1, cv::NORM_MINMAX, -1, cv::Mat() );
- 	cv::minMaxLoc( result, &minVal, &maxVal, &minLoc, &maxLoc, cv::Mat() );
- 	matchLoc = minLoc; 
- 	cv::rectangle( img, matchLoc, cv::Point( matchLoc.x + roiImg.cols, matchLoc.y + roiImg.rows ), cv::Scalar::all(0), 2, 8, 0 );
-
- 	cv::Rect regionToEliminate = cv::Rect(matchLoc.x, matchLoc.y, roiImg.cols, roiImg.rows);
- 	cv::Mat temp = img(regionToEliminate);
- 	temp = temp.zeros(temp.rows, temp.cols, CV_32FC1);
- }
- return;
+		cv::Rect regionToEliminate = cv::Rect(matchLoc.x, matchLoc.y, roiImg.cols, roiImg.rows);
+		cv::Mat temp = img(regionToEliminate);
+		temp = temp.zeros(temp.rows, temp.cols, CV_32FC1);
+	}
+	return;
 }
 
 
@@ -269,12 +266,12 @@ cv::Mat camManager::SnapShot()
  		if (select_flag == 1){
             cv::imshow("ROI", roiImg); /* show the image bounded by the box */
  			this->MatchingMethod(0, 0);
- 			// select_flag = 0; Un comment this for SNAPSHOT mode. 
+ 			// select_flag = 0; Uncomment this for SNAPSHOT mode. 
  		}
 
  		cv::rectangle(img, rect, CV_RGB(255, 0, 0), 1, 8, 0);
 
- 		if(this->display)
+ 		if(this->displ=ay)
  			cv::imshow( "Display Loop With Pattern Matching", img );
 
  		int c = cv::waitKey( 50 );
