@@ -34,6 +34,7 @@ public:
 	void loadSets();
 	void DisplayLoopWithColorMatching();
 	void DisplayLoopWithPatternMatching();
+	void MatchingMethod( int, void* );
 	cv::Mat SnapShot();
 	cv::Mat *binaryFiltering(cv::Mat *img, ColorSet set);
 	vector<cv::Point> findObjects(cv::Mat *src, cv::Mat *original);

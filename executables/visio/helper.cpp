@@ -12,6 +12,7 @@ int drag = 0;
 Rect rect; /* bounding box */
 Mat img, roiImg; /* roiImg - the part of the image in the bounding box */
 int select_flag = 0;
+Mat result;
 
 void mouseHandler(int event, int x, int y, int flags, void* param)
 {
@@ -27,7 +28,7 @@ void mouseHandler(int event, int x, int y, int flags, void* param)
     {
         /* mouse dragged. ROI being selected */
         point2 = Point(x, y);
-        rectangle(img, point1, point2, CV_RGB(255, 0, 0), 3, 8, 0);
+        rectangle(img, point1, point2, CV_RGB(80, 0, 0), 3, 8, 0);
     }
      
     if (event == CV_EVENT_LBUTTONUP && drag)
@@ -36,6 +37,7 @@ void mouseHandler(int event, int x, int y, int flags, void* param)
         rect = Rect(point1.x,point1.y,x-point1.x,y-point1.y);
         drag = 0;
         roiImg = img(rect);
+        roiImg = roiImg.clone();
     }
      
     if (event == CV_EVENT_LBUTTONUP)
