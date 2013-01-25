@@ -6,14 +6,6 @@
 #include "logger.h"
 #include "colorsets.h"
 
-#ifndef _CALIBRATION
-#define _CALIBRATION 0
-#endif
-
-#ifndef _CAMERA
-#define _CAMERA 1
-#endif
-
 class camManager
 {
 private:
@@ -39,7 +31,7 @@ public:
 	void loadSets();
 	void DisplayLoop();
 	cv::Mat SnapShot();
-	cv::Mat *binaryFiltering(cv::Mat *img, ColorSet set, int calledBy = _CALIBRATION);
+	cv::Mat *binaryFiltering(cv::Mat *img, ColorSet set);
 	vector<cv::Point> findObjects(cv::Mat *src, cv::Mat *original);
 
 
