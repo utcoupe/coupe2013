@@ -7,13 +7,22 @@
 using namespace std;
 
 const int NB_OF_OBJECTS_TO_DETECT = 4;
+const int RED = 0;
+const int BLUE = 1;
+const int WHITE = 2;
 
 camManager::camManager(int id, int display)
 { 
 	this->CAMERA_N = id; 
 	this->display = display; 
 	this->logger = new Logger("CAM", this->CAMERA_N);
+
 	this->colorsetPath = "./yml/colorSet.yml";
+	this->redTemplPath = "./yml/redTemplPath.yml";
+	this->blueTemplPath = "./yml/blueTemplPath.yml";
+	this->whiteTemplPath = "./yml/whiteTemplPath.yml";
+
+	this->loaded = false;
 }
 
 /**
@@ -57,7 +66,7 @@ vector<cv::Point> camManager::findObjects(cv::Mat *src, cv::Mat *original)
 
 bool camManager::EliminatedContour(cv::RotatedRect *minRect)
 {
-	cout<<"size = "<<minRect->size.area()<<endl;
+	// cout<<"size = "<<minRect->size.area()<<endl;
 	if(minRect->size.area() < 20)
 		return true;
 	return false;
@@ -195,65 +204,166 @@ cv::Mat camManager::SnapShot()
  * @function MatchingMethod
  * @brief Trackbar callback
  */
- void camManager::MatchingMethod( int, void* )
+ void camManager::MatchingMethod( int color )
  {
  	extern cv::Mat img;
  	extern cv::Mat roiImg;
  	extern cv::Mat result;
  	extern cv::Rect rect;
  	extern int select_flag;
+	
+	char buffer[50];
+	cv::Point matchLoc;
 
-	/**
-	 * First methode: take all points which is similar and draw a cercle for each of these points...
-	 * float threshold = 0.08;
-	 * cv::Mat thresholdedImage = result < threshold;
-	 * Print a cercle for each non zero pixel 
-	 */
+	// *
+	//  * First methode: take all points which is similar and draw a cercle for each of these points...
+	//  * float threshold = 0.08;
+	//  * cv::Mat thresholdedImage = result < threshold;
+	//  * Print a cercle for each non zero pixel 
+	//  *
+	//  * 	
+		result = cv::Mat(img.rows-roiImg.rows+1, img.cols-roiImg.cols+1, CV_32FC1);
+		cv::matchTemplate(img, roiImg, result, CV_TM_CCOEFF_NORMED);
+		cv::threshold(result, result, 0.8, 1., CV_THRESH_TOZERO);
+
+	    while (true) 
+	    {
+	        double minval, maxval, threshold = 0.88;
+	        cv::Point minloc, maxloc;
+	        cv::minMaxLoc(result, &minval, &maxval, &minloc, &maxloc);
+
+	        if (maxval >= threshold)
+	        {
+	        	if(color == RED)
+		            cv::rectangle(
+		                img, 
+		                maxloc, 
+		                cv::Point(maxloc.x + roiImg.cols, maxloc.y + roiImg.rows), 
+		                CV_RGB(255,0,0), 2
+		            );
+		        else if(color == BLUE)
+		        	cv::rectangle(
+		                img, 
+		                maxloc, 
+		                cv::Point(maxloc.x + roiImg.cols, maxloc.y + roiImg.rows), 
+		                CV_RGB(0,0,255), 2
+		            );
+		        else
+		        	cv::rectangle(
+		                img, 
+		                maxloc, 
+		                cv::Point(maxloc.x + roiImg.cols, maxloc.y + roiImg.rows), 
+		                CV_RGB(255,255,255), 2
+		            );
+	            cv::floodFill(result, maxloc, cv::Scalar(0), 0, cv::Scalar(.1), cv::Scalar(1.));
+	            matchLoc = maxloc;
+	        	sprintf(buffer, "matchLoc: (%d, %d): %lf", matchLoc.x, matchLoc.y, result.at<double>(matchLoc));
+				logger->log(buffer);
+	        }
+	        else
+	            break;
+	    }
+	 
 
 	/**
 	 * Second method: Erase the most similar region at each loop!
 	 */
 
 	// Localizing the best match with minMaxLoc
-	double minVal, maxVal; 
-	cv::Point minLoc, maxLoc, matchLoc;
+	// double minVal, maxVal; 
+	// cv::Point minLoc, maxLoc, matchLoc;
 
-	for (int i = 0; i < NB_OF_OBJECTS_TO_DETECT; ++i)
-	{
-		// Create the result matrix
-		int result_cols =  img.cols - roiImg.cols + 1;
-		int result_rows = img.rows - roiImg.rows + 1;
 
-		result.create( result_cols, result_rows, CV_32FC1 );
 
-		// Do the Matching and Normalize
-		cv::matchTemplate( img, roiImg, result, CV_TM_SQDIFF );
-		cv::normalize( result, result, 0, 1, cv::NORM_MINMAX, -1, cv::Mat() );
-		cv::minMaxLoc( result, &minVal, &maxVal, &minLoc, &maxLoc, cv::Mat() );
-		matchLoc = minLoc; 
-		cv::rectangle( img, matchLoc, cv::Point( matchLoc.x + roiImg.cols, matchLoc.y + roiImg.rows ), cv::Scalar::all(0), 2, 8, 0 );
+	// for (int i = 0; i < NB_OF_OBJECTS_TO_DETECT; ++i)
+	// {
+	// 	// Create the result matrix
+	// 	result.create( img.cols - roiImg.cols + 1, img.rows - roiImg.rows + 1, CV_32FC1 );
+	// 	// Do the Matching and Normalize
+	// 	cv::matchTemplate( img, roiImg, result, cv::TM_SQDIFF );
+	// 	cv::normalize( result, result, 0, 1, cv::NORM_MINMAX, -1, cv::Mat() );
+	// 	cv::imshow("result", result);
+	// 	cv::minMaxLoc( result, &minVal, &maxVal, &minLoc, &maxLoc, cv::Mat() );
+	// 	matchLoc = minLoc; 
+	// 	cv::rectangle( 	img, 
+	// 					matchLoc, 
+	// 					cv::Point( matchLoc.x + roiImg.cols, matchLoc.y + roiImg.rows ), 
+	// 					CV_RGB(255, 0, 0), 
+	// 					3, 8, 0 );
 
-		cv::Rect regionToEliminate = cv::Rect(matchLoc.x, matchLoc.y, roiImg.cols, roiImg.rows);
-		cv::Mat temp = img(regionToEliminate);
-		temp = temp.zeros(temp.rows, temp.cols, CV_32FC1);
-	}
+
+
+	// 	cv::Rect regionToEliminate = cv::Rect(matchLoc.x, matchLoc.y, roiImg.cols, roiImg.rows);
+	// 	cv::Mat temp = img(regionToEliminate);
+	// 	temp = temp.ones(temp.rows, temp.cols, CV_32FC1);
+		
+
+		// The lower the demonimater, the easier tracker will track different objects. As we eliminate larger area.
+		// cv::Rect regionToEliminate = cv::Rect(matchLoc.x - roiImg.cols/8, matchLoc.y-roiImg.rows/8, roiImg.cols/4, roiImg.rows/4);
+		// cv::Rect wholeArea = cv::Rect(cv::Point(0,0), cv::Point(result.cols, result.rows));
+		// regionToEliminate = regionToEliminate & wholeArea;
+
+		// cv::Mat temp = result(regionToEliminate);
+		// temp = temp.ones(temp.rows, temp.cols, CV_32FC1);
+
+	// 	sprintf(buffer, "matchLoc: (%d, %d): %lf", matchLoc.x, matchLoc.y, result.at<double>(matchLoc));
+	// 	logger->log(buffer);
+	// }
 	return;
+
+}
+
+void camManager::testCase()
+{
+	extern cv::Mat roiImg;
+	extern cv::Mat img;
+
+	this->capture >> img;
+	cv::FileStorage redTemplFile(this->redTemplPath, cv::FileStorage::READ);
+	cv::FileStorage blueTemplFile(this->blueTemplPath, cv::FileStorage::READ);
+	cv::FileStorage whiteTemplFile(this->whiteTemplPath, cv::FileStorage::READ);
+	
+	redTemplFile["red_roi_img"] >> roiImg;
+	if(!roiImg.empty())
+	{
+		cv::imshow("ROI_red", roiImg); /* show the image bounded by the box */
+		logger->log("Test for red pattern search...");
+		this->MatchingMethod(RED);
+	}
+
+	blueTemplFile["blue_roi_img"] >> roiImg;
+	if(!roiImg.empty())
+	{
+		cv::imshow("ROI_blue", roiImg); /* show the image bounded by the box */
+		logger->log("Test for blue pattern search...");
+		this->MatchingMethod(BLUE);
+	}
+
+	whiteTemplFile["white_roi_img"] >> roiImg;
+	if(!roiImg.empty())
+	{
+		cv::imshow("ROI_white", roiImg); /* show the image bounded by the box */
+		logger->log("Test for white pattern search...");
+		this->MatchingMethod(WHITE);
+	}
 }
 
 
 /**
  * @TODO, find a way to get rid of global variables...Callback has to be static member function
  */
- void camManager::DisplayLoopWithPatternMatching()
+ void camManager::LocatingWithPatternMatching()
  {
  	extern cv::Mat img;
  	extern cv::Mat roiImg;
  	extern cv::Rect rect;
- 	extern int select_flag;
+ 	extern bool select_flag;
+ 	vector<cv::Point> result;
+
+ 	this->capture >> img; // Move this out of the loop for SNAPSHOT mode.
 
  	while(1)
  	{
- 		this->capture >> img; // Move this out of the loop for SNAPSHOT mode.
 
  		if (img.empty())
  		{
@@ -265,16 +375,16 @@ cv::Mat camManager::SnapShot()
 
  		if (select_flag == 1){
             cv::imshow("ROI", roiImg); /* show the image bounded by the box */
- 			this->MatchingMethod(0, 0);
- 			// select_flag = 0; Uncomment this for SNAPSHOT mode. 
+ 			this->MatchingMethod(RED);
+ 			select_flag = 0; //Uncomment this for SNAPSHOT mode. 
  		}
 
- 		cv::rectangle(img, rect, CV_RGB(255, 0, 0), 1, 8, 0);
+ 		cv::rectangle(img, rect, CV_RGB(0, 0, 0), 1, 8, 0);
 
- 		if(this->displ=ay)
+ 		if(this->display)
  			cv::imshow( "Display Loop With Pattern Matching", img );
 
- 		int c = cv::waitKey( 50 );
+ 		int c = cv::waitKey(50);
  		switch (c)
  		{
 			// p for pause, press p or esc for unpause
@@ -282,13 +392,58 @@ cv::Mat camManager::SnapShot()
  			c = 0;
  			while( c != 'p' && c != 27 )
  			{
- 				c = cvWaitKey( 250 );
+ 				c = cv::waitKey( 250 );
  			}
  			break;
 
 			// q for quit
  			case 'q':
  			return;
+
+ 			// r for reload camera
+ 			case 'r':
+ 			this->capture >> img;
+ 			if(!roiImg.empty())
+ 				select_flag = 1;
+ 			break;
+
+ 			// t for test (three colors)
+ 			case 't':
+	 			this->testCase();
+ 			break;
+
+ 			// type sr for save red etc.
+ 			case 's':
+ 			if(!roiImg.empty())
+ 			{
+ 				int color = cv::waitKey(250);
+ 				if (color == 'r')
+ 				{
+ 					cv::FileStorage redTemplFile(this->redTemplPath, cv::FileStorage::WRITE);
+ 					redTemplFile << "red_roi_img" << roiImg;
+ 					redTemplFile.release();
+ 					logger->log("Red roi img saved");
+ 				}
+ 				else if (color == 'b')
+ 				{
+ 					cv::FileStorage blueTemplFile(this->blueTemplPath, cv::FileStorage::WRITE);
+ 					blueTemplFile << "blue_roi_img" << roiImg;
+ 					blueTemplFile.release();
+ 					logger->log("Blue roi img saved");
+ 				}
+ 				else if (color == 'w')
+ 				{
+ 					cv::FileStorage whiteTemplFile(this->whiteTemplPath, cv::FileStorage::WRITE);
+ 					whiteTemplFile << "white_roi_img" << roiImg;
+ 					whiteTemplFile.release();
+ 					logger->log("White roi img saved");
+ 				}
+ 				else
+ 					logger->err("Save operation timed out!");
+ 			}
+ 			else
+ 				logger->err("roiImg empty!");
+ 			break;
 
  			default:
  			if (c != -1)

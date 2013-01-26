@@ -12,7 +12,7 @@ int main(int argc, char const *argv[])
 	cam0->loadSets();
 	if(!cam0->Init())
 	{
-		cam0->DisplayLoopWithPatternMatching();
+		cam0->LocatingWithPatternMatching();
 		// cam0->SnapShot();
 		// calib->yamlSetter(cam0);
 		

@@ -14,6 +14,14 @@ Mat img, roiImg; /* roiImg - the part of the image in the bounding box */
 int select_flag = 0;
 Mat result;
 
+/**
+ * Faites pas double-click!
+ * @param event [description]
+ * @param x     [description]
+ * @param y     [description]
+ * @param flags [description]
+ * @param param [description]
+ */
 void mouseHandler(int event, int x, int y, int flags, void* param)
 {
     if (event == CV_EVENT_LBUTTONDOWN && !drag)
@@ -28,7 +36,7 @@ void mouseHandler(int event, int x, int y, int flags, void* param)
     {
         /* mouse dragged. ROI being selected */
         point2 = Point(x, y);
-        rectangle(img, point1, point2, CV_RGB(80, 0, 0), 3, 8, 0);
+        // rectangle(img, point1, point2, CV_RGB(80, 0, 0), 3, 8, 0);
     }
      
     if (event == CV_EVENT_LBUTTONUP && drag)
@@ -46,4 +54,7 @@ void mouseHandler(int event, int x, int y, int flags, void* param)
         select_flag = 1;
         drag = 0;
     }
+
+    else
+        return;
 }

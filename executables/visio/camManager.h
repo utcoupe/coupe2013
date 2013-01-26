@@ -16,8 +16,11 @@ private:
 	int display;
 
 	string colorsetPath;
+	string redTemplPath, blueTemplPath, whiteTemplPath;
+
 	ColorSets colorSets;
 	cv::Mat image;
+	bool loaded;
 	
 	Logger *logger;
 
@@ -33,8 +36,9 @@ public:
 	int Init();
 	void loadSets();
 	void DisplayLoopWithColorMatching();
-	void DisplayLoopWithPatternMatching();
-	void MatchingMethod( int, void* );
+	void LocatingWithPatternMatching();
+	void MatchingMethod(int color);
+	void testCase();
 	cv::Mat SnapShot();
 	cv::Mat *binaryFiltering(cv::Mat *img, ColorSet set);
 	vector<cv::Point> findObjects(cv::Mat *src, cv::Mat *original);
