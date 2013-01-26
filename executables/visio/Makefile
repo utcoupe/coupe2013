@@ -17,5 +17,7 @@ logger.o :
 helper.o : helper.h
 
 
-clean : 
+clean_o: 
+	rm *.o
+clean:
 	rm visio *.o

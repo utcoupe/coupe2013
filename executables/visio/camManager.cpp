@@ -400,7 +400,7 @@ void camManager::testCase()
  			case 'q':
  			return;
 
- 			// r for reload camera
+ 			// r for reload from camera
  			case 'r':
  			this->capture >> img;
  			if(!roiImg.empty())
@@ -412,7 +412,7 @@ void camManager::testCase()
 	 			this->testCase();
  			break;
 
- 			// type sr for save red etc.
+ 			// type sr for save red sb for blue, etc. 
  			case 's':
  			if(!roiImg.empty())
  			{
