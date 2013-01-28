@@ -1,0 +1,6 @@
+*~
+*.pyc
+*.elf
+*.hex
+.sconsign.dblite
+build/
