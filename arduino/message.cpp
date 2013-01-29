@@ -109,4 +109,13 @@ int sendEvent(int16_t uid, char * s) {
 	return send(uid, 0, s);
 }
 
-
+int sendResponse(int16_t uid, int16_t s) {
+  int16_t tab[1];
+  tab[0] = s;
+  return send(uid, 1, 1, tab);
+}
+int sendEvent(int16_t uid, int16_t s) {
+  int16_t tab[1];
+  tab[0] = s;
+  return send(uid, 0, 1, tab);
+}

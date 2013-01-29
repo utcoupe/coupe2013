@@ -1,6 +1,4 @@
-
-#include "include_arduino.h"
-
+#include "Arduino.h"
 
 #include "parameters.h"
 #include <math.h>
@@ -11,6 +9,7 @@
 #include "fifo.h"
 #include "message.h"
 #include "control.h"
+#include "command.h"
 
 unsigned long index = 0;
 unsigned long timeStart = 0;
@@ -45,7 +44,7 @@ void loop(){
 	/* zone programmation libre */
 	
 	/*lecture des ordres*/
-	readIncomingData();
+	readIncomingData(cmd);
 
 	/*recuperation du but suivant (vitesse, angle ou position) */
 	if(current_goal.isReached)

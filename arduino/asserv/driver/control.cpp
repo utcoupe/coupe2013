@@ -204,7 +204,7 @@ void angleControl(int* value_pwm_left, int* value_pwm_right){
 		if(current_goal.id != -1 && !current_goal.isMessageSent){
 			//le message d'arrivee n'a pas encore ete envoye a l'intelligence
 			//envoi du message
-			sendMessage(current_goal.id,0);
+			sendResponse(current_goal.id,0);
 			current_goal.isMessageSent = true;
 		}
 		if(!fifoIsEmpty()){ //on passe a la tache suivante
@@ -349,7 +349,7 @@ positionControl(int* value_pwm_left, int* value_pwm_right){
 			if(abs(currentDelta) < 10*ENC_MM_TO_TICKS) /*si l'ecart n'est plus que de 6 mm, on considere la consigne comme atteinte*/
 			{
 				//envoi du message
-				sendMessage(current_goal.id,0);
+				sendResponse(current_goal.id,0);
 				current_goal.isMessageSent = true;
 				
 				current_goal.phase = PHASE_ARRET;
@@ -447,7 +447,7 @@ void pwmControl(int* value_pwm_left, int* value_pwm_right){
 	if(millis()-start > current_goal.period){
 		current_goal.isReached = true;
 		initDone = false;
-		sendMessage(current_goal.id, 0);
+		sendResponse(current_goal.id, 0);
 		(*value_pwm_right) = 0;
 		(*value_pwm_left) = 0;
 	}

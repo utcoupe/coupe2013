@@ -16,6 +16,8 @@ int sendEvent(int16_t uid, int16_t nb_args, int16_t args[MAX_ARGS]);
 int send(int16_t uid, char type, char * s);
 int sendResponse(int16_t uid, char * s);
 int sendEvent(int16_t uid, char * s);
+int sendResponse(int16_t uid, int16_t s);
+int sendEvent(int16_t uid, int16_t s);
 
 
 #ifndef ARDUINO

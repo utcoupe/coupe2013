@@ -1,3 +1,4 @@
+#include "Arduino.h"
 #include "command.h"
 #include "parameters.h"
 #include "robotstate.h"
@@ -5,8 +6,8 @@
 #include "message.h"
 #include "encoder.h"
 #include "pwm.h"
-#include "include_arduino.h"
 
+#define CHECK_ARGS(nbr) if (size < nbr) { sendResponse(id, E_INVALID_PARAMETERS_NUMBERS); } else
 
 /**
  * Analyse le message et effectue les actions associees
@@ -15,141 +16,126 @@
  * @param header : le type de message (en-tete)
  * @param args : le tableau d'entier contenant les arguments
  * */
-void cmd(int id, int id_cmd, int* args, int size){
+void cmd(int16_t id, int8_t cmd, int8_t size, int16_t *args){
                         
 	/* On analyse le message en fonction de son type */
-	switch(id_cmd){
+	switch(cmd){
 
-		case QA_ID: /* Identification */
+		case Q_ID: /* Identification */
 		{
-			sendMessage(id, ID_ASSERV, (char*)"asserv");
+			sendResponse(id, (char *)ID_ASSERV);
 			break;
 		}
 
-		case QA_PING:
+		case Q_PING:
 		{
-			sendMessage(id, (char*)"Pong");
+			sendResponse(id, (char*)"Pong");
 			break;
 		}
 
-		case QA_SETPID:
+		case Q_SETPID:
 		{
 			//ENC_CENTER_DIST_MM = args[0]/10.0;
 			break;
 		}
 
-		case QA_GOTO:
+		case Q_GOTO:
 		{
-			if (size < 3)
-				sendMessage(id, E_INVALID_PARAMETERS_NUMBERS);
-			else
+			CHECK_ARGS(3)
 			{
 				pushGoalPosition(id,(double)args[0]*ENC_MM_TO_TICKS, (double)args[1]*ENC_MM_TO_TICKS, (double)args[2]);
-				sendMessage(id, 1);
+				//sendResponse(id, 1);
 			}
 			break;
 		}
 
-		case QA_GOTOR:
+		case Q_GOTOR:
 		{
-			if (size < 3)
-				sendMessage(id, E_INVALID_PARAMETERS_NUMBERS);
-			else
+			CHECK_ARGS(3)
 			{
 				double co = cos(robot_get_angle());
 				double si = sin(robot_get_angle());
 
 				pushGoalPosition(id,((double)args[0]*co-(double)args[1]*si)*18+robot_get_x()*0.01, ((double)args[0]*si+(double)args[1]*co)*18+robot_get_y()*0.01, (double)args[2]);
-				sendMessage(id, 1);
+				//sendResponse(id, 1);
 			}
 			break;
 		}
 
-		case QA_TURN:
+		case Q_TURN:
 		{
-			if (size < 2)
-				sendMessage(id, E_INVALID_PARAMETERS_NUMBERS);
-			else
+			CHECK_ARGS(2)
 			{
 				double angle = moduloPI(((double)args[0]) * DEG_TO_RAD);
-				sendMessage(-1, (int)(angle*100.0));
+				//sendMessage(-1, (int)(angle*100.0));
 				pushGoalOrientation(id,angle,args[1]);
-				sendMessage(id, 1);
+				//sendResponse(id, 1);
 			}
 			break;
 		}
 
-		case QA_TURNR:
+		case Q_TURNR:
 		{
-			if (size < 2)
-				sendMessage(id, E_INVALID_PARAMETERS_NUMBERS);
-			else
+			CHECK_ARGS(2)
 			{
 				double angle = moduloPI(((double)args[0]) * DEG_TO_RAD + robot_get_angle());
 				pushGoalOrientation(id,angle,args[1]);
-				sendMessage(id, 1);
+				//sendResponse(id, 1);
 			}
 			break;
 		}
 
-		case QA_POS:
+		case Q_POS:
 		{
 			int x_mm = robot_get_x()*0.01*ENC_TICKS_TO_MM;
 			int y_mm = robot_get_y()*0.01*ENC_TICKS_TO_MM;
 			int a_deg = robot_get_angle()*RAD_TO_DEG;
 			int tab[] = {x_mm,y_mm,a_deg};
-			sendMessage(id,tab,3);
+			sendResponse(id, 3, tab);
 	        break;
 		}
 
-		case QA_SET_POS:
+		case Q_SET_POS:
 		{
-			if (size < 2)
-				sendMessage(id, E_INVALID_PARAMETERS_NUMBERS);
-			else {
+			CHECK_ARGS(2)
+			{
 				robot_set_mm_x(args[0]);
 				robot_set_mm_y(args[1]);
 				robot_set_deg_angle(args[2]);
 				value_left_enc = 0;
 				value_right_enc = 0;
-				sendMessage(id, 0);
+				sendResponse(id, 0);
 			}
 			break;
 		}
 
-		case QA_PWM:
+		case Q_PWM:
 		{
-			if (size < 2)
-				sendMessage(id, E_INVALID_PARAMETERS_NUMBERS);
-			else
+			CHECK_ARGS(2)
 			{
 				pushGoalPwm(id,args[0],args[1],args[2]);
-				sendMessage(id, 1);
+				//sendResponse(id, 1);
 			}
 			break;
 		}
 /*
 		case Q_MODIF_GOAL_ABS:
 		{
-			if (size < 3)
-				sendMessage(id, E_INVALID_PARAMETERS_NUMBERS);
-			else
+			CHECK_ARGS(3)
 			{
 				current_goal.type = TYPE_POSITION;
 				current_goal.isReached = false;
 				current_goal.x = (double)args[0]*ENC_MM_TO_TICKS;
 				current_goal.y = (double)args[1]*ENC_MM_TO_TICKS;
 				current_goal.speed = args[2];
-				sendMessage(id, 1);
+				sendResponse(id, 1);
 			}
 			break;
 		}
 
 		case Q_MODIF_GOAL_REL:
 		{
-			if (size < 3)
-				sendMessage(id, E_INVALID_PARAMETERS_NUMBERS);
-			else
+			CHECK_ARGS(3)
 			{
 				double co = cos(robot_state.angle);
 				double si = sin(robot_state.angle);
@@ -159,34 +145,34 @@ void cmd(int id, int id_cmd, int* args, int size){
 				current_goal.x = (args[0]*co-args[1]*si)*18+robot_state.x;
 				current_goal.y = (args[0]*si+args[1]*co)*18+robot_state.y;
 				current_goal.speed = args[2];
-				sendMessage(id, 1);
+				sendResponse(id, 1);
 			}
 			break;
 		}
 		*/
-		case QA_CANCEL: /* comme stop */
+		case Q_CANCEL: /* comme stop */
 		{
 			clearGoals();
 			current_goal.isCanceled = true;
-			sendMessage(id, 0);
+			sendResponse(id, 0);
 			break;
 		}
 
-		case QA_STOP: /* comme pause */
+		case Q_STOP: /* comme pause */
 		{
 			current_goal.isPaused = true;
-			sendMessage(id, 0);
+			sendResponse(id, 0);
 			break;
 		}
 
-		case QA_RESUME: /* comme resume */
+		case Q_RESUME: /* comme resume */
 		{
 			current_goal.isPaused = false;
-			sendMessage(id, 0);
+			sendResponse(id, 0);
 			break;
 		}
 
-		case QA_RESET:
+		case Q_RESET:
 		{
 			clearGoals();
 			current_goal.isCanceled = true;
@@ -196,25 +182,25 @@ void cmd(int id, int id_cmd, int* args, int size){
 			robot_set_rad_angle(0.0);
 			robot_set_x(0);
 			robot_set_y(0);
-			sendMessage(id, 0);
+			sendResponse(id, 0);
 			break;
 		}
 
-		case QA_GETSENS:
+		case Q_GETSENS:
 		{
 			if (value_pwm_right > 0)
-				sendMessage(id, AVANT);
+				sendResponse(id, AVANT);
 			else if (value_pwm_right < 0)
-				sendMessage(id, ARRIERE);
+				sendResponse(id, ARRIERE);
 			else
-				sendMessage(id, ARRET);
+				sendResponse(id, ARRET);
 			break;
 		}
 
-		case QA_GETENC:
+		case Q_GETENC:
 		{
 			int tab[2] = {value_left_enc,value_right_enc};
-			sendMessage(id, tab, 2);
+			sendResponse(id, 2, tab);
 			break;
 		}
 
@@ -237,7 +223,7 @@ void cmd(int id, int id_cmd, int* args, int size){
 
 		default:
 		{
-			sendMessage(id,E_INVALID_CMD);
+			sendResponse(id,E_INVALID_CMD);
 			break;
 		}
 	}
