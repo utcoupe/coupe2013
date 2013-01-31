@@ -7,6 +7,8 @@
 #include "colorsets.h"
 #include "helper.h"
 
+#include "json/json.h"
+
 extern void mouseHandler(int event, int x, int y, int flags, void* param);
 
 class camManager
@@ -37,8 +39,8 @@ public:
 	void loadSets();
 	void DisplayLoopWithColorMatching();
 	void LocatingWithPatternMatching();
-	void MatchingMethod(int color);
-	void testCase();
+	void MatchingMethod(int color, Json::Value *response);
+	void testCase(Json::Value *response);
 	cv::Mat SnapShot();
 	cv::Mat *binaryFiltering(cv::Mat *img, ColorSet set);
 	vector<cv::Point> findObjects(cv::Mat *src, cv::Mat *original);

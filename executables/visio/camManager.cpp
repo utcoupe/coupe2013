@@ -4,6 +4,8 @@
 #include "camManager.h"
 #include "helper.h"
 
+#include "json/json.h"
+
 using namespace std;
 
 const int NB_OF_OBJECTS_TO_DETECT = 4;
@@ -18,9 +20,9 @@ camManager::camManager(int id, int display)
 	this->logger = new Logger("CAM", this->CAMERA_N);
 
 	this->colorsetPath = "./yml/colorSet.yml";
-	this->redTemplPath = "./yml/redTemplPath.yml";
-	this->blueTemplPath = "./yml/blueTemplPath.yml";
-	this->whiteTemplPath = "./yml/whiteTemplPath.yml";
+	this->redTemplPath = "./yml/redTemplPath"+this->CAMERA_N+".yml";
+	this->blueTemplPath = "./yml/blueTemplPath"+this->CAMERA_N+".yml";
+	this->whiteTemplPath = "./yml/whiteTemplPath"+this->CAMERA_N+".yml";
 
 	this->loaded = false;
 }
@@ -204,7 +206,7 @@ cv::Mat camManager::SnapShot()
  * @function MatchingMethod
  * @brief Trackbar callback
  */
- void camManager::MatchingMethod( int color )
+ void camManager::MatchingMethod( int color, Json::Value *response)
  {
  	extern cv::Mat img;
  	extern cv::Mat roiImg;
@@ -257,8 +259,23 @@ cv::Mat camManager::SnapShot()
 		            );
 	            cv::floodFill(result, maxloc, cv::Scalar(0), 0, cv::Scalar(.1), cv::Scalar(1.));
 	            matchLoc = maxloc;
-	        	sprintf(buffer, "matchLoc: (%d, %d): %lf", matchLoc.x, matchLoc.y, result.at<double>(matchLoc));
-				logger->log(buffer);
+	        	if(!response)
+	        		sprintf(buffer, "matchLoc: (%d, %d): %lf", matchLoc.x, matchLoc.y, result.at<double>(matchLoc));
+					logger->log(buffer);
+				else{
+					if(color == RED){
+						sprintf(buffer, "%s(%d, %d) ", buffer, matchLoc.x, matchLoc.y);
+						response["pos"]["red"] = buffer;
+					}
+					else if(color == BLUE){
+						sprintf(buffer, "%s(%d, %d) ", buffer, matchLoc.x, matchLoc.y);
+						response["pos"]["blue"] = buffer;
+					}
+					else if(color == WHITE){
+						sprintf(buffer, "%s(%d, %d) ", buffer, matchLoc.x, matchLoc.y);
+						response["pos"]["white"] = buffer;
+					}
+				}
 	        }
 	        else
 	            break;
@@ -313,7 +330,7 @@ cv::Mat camManager::SnapShot()
 
 }
 
-void camManager::testCase()
+void camManager::testCase(Json::Value *response)
 {
 	extern cv::Mat roiImg;
 	extern cv::Mat img;
@@ -326,26 +343,32 @@ void camManager::testCase()
 	redTemplFile["red_roi_img"] >> roiImg;
 	if(!roiImg.empty())
 	{
-		cv::imshow("ROI_red", roiImg); /* show the image bounded by the box */
+		if(this->display)
+			cv::imshow("ROI_red", roiImg); /* show the image bounded by the box */
 		logger->log("Test for red pattern search...");
-		this->MatchingMethod(RED);
+		this->MatchingMethod(RED, response);
 	}
 
 	blueTemplFile["blue_roi_img"] >> roiImg;
 	if(!roiImg.empty())
 	{
-		cv::imshow("ROI_blue", roiImg); /* show the image bounded by the box */
+		if(this->display)
+			cv::imshow("ROI_blue", roiImg); /* show the image bounded by the box */
 		logger->log("Test for blue pattern search...");
-		this->MatchingMethod(BLUE);
+		this->MatchingMethod(BLUE, response);
 	}
 
 	whiteTemplFile["white_roi_img"] >> roiImg;
 	if(!roiImg.empty())
 	{
-		cv::imshow("ROI_white", roiImg); /* show the image bounded by the box */
+		if(this->display)
+			cv::imshow("ROI_white", roiImg); /* show the image bounded by the box */
 		logger->log("Test for white pattern search...");
-		this->MatchingMethod(WHITE);
+		this->MatchingMethod(WHITE, response);
 	}
+	redTemplFile.release();
+	blueTemplFile.release();
+	whiteTemplFile.release();
 }
 
 
@@ -375,13 +398,13 @@ void camManager::testCase()
 
  		if (select_flag == 1){
             cv::imshow("ROI", roiImg); /* show the image bounded by the box */
- 			this->MatchingMethod(RED);
+ 			this->MatchingMethod(RED, NULL);
  			select_flag = 0; //Uncomment this for SNAPSHOT mode. 
  		}
 
  		cv::rectangle(img, rect, CV_RGB(0, 0, 0), 1, 8, 0);
 
- 		if(this->display)
+ 		// if(this->display)
  			cv::imshow( "Display Loop With Pattern Matching", img );
 
  		int c = cv::waitKey(50);

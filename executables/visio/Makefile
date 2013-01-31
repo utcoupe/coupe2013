@@ -1,7 +1,7 @@
 # Makefile for visio
 
-OBJS = main.o camManager.o logger.o calibManager.o helper.o
-FLAGS = -g -std=c++0x -lopencv_core -lopencv_imgproc -lopencv_calib3d -lopencv_video -lopencv_features2d -lopencv_ml -lopencv_highgui -lopencv_objdetect -lopencv_contrib -lopencv_legacy
+OBJS = main.o camManager.o logger.o calibManager.o helper.o service.o
+FLAGS = `pkg-config jsoncpp --cflags --libs` -lzmq -g -std=c++0x -lopencv_core -lopencv_imgproc -lopencv_calib3d -lopencv_video -lopencv_features2d -lopencv_ml -lopencv_highgui -lopencv_objdetect -lopencv_contrib -lopencv_legacy
 CC = g++
 
 # construction de l'exe
@@ -15,7 +15,7 @@ camManager.o : camManager.h helper.h
 calibManager.o : camManager.h colorsets.h
 logger.o :
 helper.o : helper.h
-
+service.o :
 
 clean_o: 
 	rm *.o
