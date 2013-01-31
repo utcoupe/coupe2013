@@ -11,14 +11,15 @@ logging.basicConfig(level=logging.DEBUG)
 
 def run(file_, **args):
     default = {}
-    default["server_ip"]           = "localhost"
-    default["server_backend_port"] = 5001
-    default["server_events_port"]  = 5003
-    default["identity"]            = "arduino"
-    default["serial_port"]         = "/dev/ttyACM0"
-    default["serial_baudrate"]     = 115200
-    default["protocol_file"]       = os.path.join(os.path.dirname(os.path.abspath(file_)), "driver", "protocole.h")
-    default["protocol_prefixe"]    = "Q_"
+    default["server_ip"]              = "localhost"
+    default["server_backend_port"]    = 5001
+    default["server_events_port"]     = 5003
+    default["identity"]               = "arduino"
+    default["serial_port"]            = "/dev/ttyACM0"
+    default["serial_baudrate"]        = 115200
+    default["protocol_file"]          = os.path.join(os.path.dirname(os.path.abspath(file_)), "driver", "protocole.h")
+    default["protocol_prefixe"]       = "Q_"
+    default["protocol_prefix_erreur"] = "E_"
     default.update(args)
 
     usage = "usage: %prog [options]"
@@ -46,7 +47,10 @@ def run(file_, **args):
                       help="Emplacement du fichier protocole à utiliser")
     parser.add_option("-x", "--protocol-prefixe",
                       action="store", dest="protocol_prefixe", default=default["protocol_prefixe"],
-                      help="Préfixe utilisé par le protocole")
+                      help="Préfixe utilisé par le protocole pour les fonctions")
+    parser.add_option("-y", "--protocol-prefixe-erreur",
+                      action="store", dest="protocol_prefixe_erreur", default=default["protocol_prefix_erreur"],
+                      help="Préfixe utilisé par le protocole pour les erreurs")
 
     (options, _args) = parser.parse_args()
 
@@ -59,6 +63,7 @@ def run(file_, **args):
         ev_push_addr = "tcp://%s:%s" % (options.server_ip, options.server_events_port),
         serial = ser,
         protocol_file = options.protocol_file,
-        prefix = options.protocol_prefixe)
+        prefix = options.protocol_prefixe,
+        prefix_erreur = options.protocol_prefixe_erreur)
 
     adapter.start()

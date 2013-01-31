@@ -119,3 +119,9 @@ int sendEvent(int16_t uid, int16_t s) {
   tab[0] = s;
   return send(uid, 0, 1, tab);
 }
+
+int sendError(int16_t uid, char s) {
+    int16_t tab[1];
+    tab[0] = (int16_t)s;
+    return send(uid, 2, 1, tab);
+}

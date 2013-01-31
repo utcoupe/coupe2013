@@ -19,6 +19,20 @@ int sendEvent(int16_t uid, char * s);
 int sendResponse(int16_t uid, int16_t s);
 int sendEvent(int16_t uid, int16_t s);
 
+int sendError(int16_t uid, char error);
+
+/**
+ * Détail du protocole :
+ * le pc envoie une chaine constitués de l'id de la requête
+ *   de l'id de la commande et des arguments,
+ *   le tout séparé par SEP
+ *
+ * En retour on envoie l'id de la requête, le type de réponse et
+ *   les arguments de retour, la tout séparé par SEP
+ * Détail du type de réponse :
+ *  Bit 0 : 1 = réponse, 0 = event
+ *  Bit 1 : 1 = erreur, 0 = pas d'erreur
+ */
 
 #ifndef ARDUINO
 
