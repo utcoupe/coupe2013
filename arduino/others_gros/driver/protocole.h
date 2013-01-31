@@ -36,6 +36,12 @@
 #define Q_GOTO_AX12          3
 
 /**
+ * Renvoie la position actuelle d'un ax12
+ * @param id
+ */
+#define Q_POS_AX12          4
+
+/**
  * @event
  */
 #define Q_JACK_REMOVED       1
@@ -74,6 +80,8 @@
 #define E_MERDE_AX18						-59
 #define W_MS								-60
 #define Q_KILL								-69
+
+// Maximum : -127
 
 #define ID_OTHERS		"others_gros"
 

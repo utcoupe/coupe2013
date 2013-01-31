@@ -11,7 +11,7 @@ int ordre[NB_MOTEURS];
 
 int tourner(int id, int id_moteur, int position, int vitesse) {
   if (position < -150 || position > 150 || vitesse < 0 || vitesse > 114 || id_moteur > NB_MOTEURS) {
-    sendResponse(id, E_INVALID_PARAMETERS_VALUE);
+    sendError(id, E_INVALID_PARAMETERS_VALUE);
   }
   else {
     int speed;
@@ -29,22 +29,26 @@ int tourner(int id, int id_moteur, int position, int vitesse) {
   }
 }
 
-int get_position(int id, int id_moteur) {
+int get_position(int id_moteur, char* erreur) {
+  *erreur = 0;
   if (id_moteur > NB_MOTEURS) {
-    return E_INVALID_PARAMETERS_VALUE;
+    *erreur = E_INVALID_PARAMETERS_VALUE;
+    return 0;
   }
   else {
-    int valeur = lire (id, PRESENT_POSITION, id_moteur);
-    if (valeur == -1)
-      return -1;
+      int valeur = lire (PRESENT_POSITION, id_moteur, erreur);
+      if (erreur != 0)
+          return 0;
     else
       return (valeur*0.293255132)-150;
   }
 }
 
-int lire(int id, int ordre, int id_moteur) {
+int lire(int ordre, int id_moteur, char* erreur) {
+  *erreur = 0;
   if (id_moteur > NB_MOTEURS) {
-    return E_INVALID_PARAMETERS_VALUE;
+    *erreur = E_INVALID_PARAMETERS_VALUE;
+    return 0;
   }
   else {
     motor[id_moteur].readInfo (ordre);
@@ -113,13 +117,16 @@ void cherche_moteurs(void) {
  * Si oui on envoie une réponse au PC
  */
 void check_ax12_goals() {
+    char error;
     for (char i=0; i<NB_MOTEURS; i++) {
         if (ordre[i] != -1) {
-            int pos = lire(0, PRESENT_POSITION, i);
-            int err = pos - goal[i];
-            if(err <= 4 && err >= -4) {
-                sendResponse(ordre[i], 4);
-                ordre[i] = -1;
+            int pos = lire(PRESENT_POSITION, i, &error);
+            if (error == 0) {
+                int err = pos - goal[i];
+                if(err <= 4 && err >= -4) {
+                    sendResponse(ordre[i], 0);
+                    ordre[i] = -1;
+                }
             }
         }
     }

@@ -15,8 +15,8 @@ extern int ordre[NB_MOTEURS];
 
 void cherche_moteurs(void);
 int tourner(int id, int id_moteur, int position, int vitesse);
-int get_position(int id, int id_moteur);
-int lire(int id, int ordre, int id_moteur);
+int get_position(int id_moteur, char* erreur);
+int lire(int ordre, int id_moteur, char* erreur);
 void check_ax12_goals();
 
 #endif /* C_AX12_H */
