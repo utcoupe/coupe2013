@@ -1,10 +1,11 @@
 
 #include <iostream>
+#include <stdlib>
 #include <string>
 
 #include "json/json.h"
 #include "zhelpers.hpp"
-#include "../../../cpp/service.hpp"
+#include "service.hpp"
 
 #include "camManager.h"
 #include "logger.h"
@@ -48,12 +49,13 @@ class Visio : public Service
 					calib->yamlSetter(this->cam_0);
 				// else if(camId == 1)
 				// 	calib->yamlSetter(this->cam_1);
-				response["data"] = "Type b for blue, r for red, w for white. Use trackbars to adjust to the best calibration, then type v to save it.";
+				cout << "Type b for blue, r for red, w for white. Use trackbars to adjust to the best calibration, then type v to save it.";
+				response["data"] = "";
 				response["error"] = "";
 				s_sendmore(_socket, remote_id);
 			}
 			// "getcandles 0" or "getcandles 1" to get candles' positions. positions are returned by red, blue and white.
-			// It should return positions only for ones with balls on top.
+			// It should return positions only for ones with tennis ball on top.
 			else if (request["fct"] == "getcandles"){
 				int camId = request["args"][0].asInt();
 
@@ -68,7 +70,7 @@ class Visio : public Service
 						response["error"] = "";
 					break;
 					default:
-					sprintf(response["error"], "Unkown camId at visio::service.cpp line: %s", __LINE__;
+					sprintf(response["error"], "Unkown camId at %s:%s line: %d", __FILE__, __FUNCTION__, __LINE__);
 				}
 
 				s_sendmore(_socket, remote_id);
@@ -84,11 +86,11 @@ class Visio : public Service
 					break;
 
 					case 1:
-						this->cam_1->LocatingWithPatternMatching();
-						response["error"] = "";
+						// this->cam_1->LocatingWithPatternMatching();
+						// response["error"] = "";
 					break;
 					default:
-					sprintf(response["error"], "Unkown camId at visio::service.cpp line: %s", __LINE__;
+					sprintf(response["error"], "Unkown camId at %s:%s line: %d", __FILE__, __FUNCTION__, __LINE__);
 				}
 
 			}

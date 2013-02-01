@@ -1,6 +1,7 @@
 #include <opencv/cv.h>
 #include <opencv/highgui.h>
 #include <vector>
+#include <cstring>
 #include "camManager.h"
 #include "helper.h"
 
@@ -265,15 +266,15 @@ cv::Mat camManager::SnapShot()
 				else{
 					if(color == RED){
 						sprintf(buffer, "%s(%d, %d) ", buffer, matchLoc.x, matchLoc.y);
-						response["pos"]["red"] = buffer;
+						response["data"]["red"] = buffer;
 					}
 					else if(color == BLUE){
 						sprintf(buffer, "%s(%d, %d) ", buffer, matchLoc.x, matchLoc.y);
-						response["pos"]["blue"] = buffer;
+						response["data"]["blue"] = buffer;
 					}
 					else if(color == WHITE){
 						sprintf(buffer, "%s(%d, %d) ", buffer, matchLoc.x, matchLoc.y);
-						response["pos"]["white"] = buffer;
+						response["data"]["white"] = buffer;
 					}
 				}
 	        }
