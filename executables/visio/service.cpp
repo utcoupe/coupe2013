@@ -1,6 +1,5 @@
 
 #include <iostream>
-#include <stdlib>
 #include <string>
 
 #include "json/json.h"
@@ -89,7 +88,7 @@ class Visio : public Service
 						// this->cam_1->LocatingWithPatternMatching();
 						// response["error"] = "";
 					break;
-					default:
+					default:		
 					sprintf(response["error"], "Unkown camId at %s:%s line: %d", __FILE__, __FUNCTION__, __LINE__);
 				}
 

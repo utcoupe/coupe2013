@@ -18,7 +18,7 @@ private:
 	int display;
 
 	string colorsetPath;
-	string redTemplPath, blueTemplPath, whiteTemplPath;
+	char redTemplPath[80], blueTemplPath[80], whiteTemplPath[80];
 
 	ColorSets colorSets;
 	cv::Mat image;

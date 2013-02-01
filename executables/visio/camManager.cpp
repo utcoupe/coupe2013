@@ -21,9 +21,13 @@ camManager::camManager(int id, int display)
 	this->logger = new Logger("CAM", this->CAMERA_N);
 
 	this->colorsetPath = "./yml/colorSet.yml";
-	this->redTemplPath = "./yml/redTemplPath"+this->CAMERA_N+".yml";
-	this->blueTemplPath = "./yml/blueTemplPath"+this->CAMERA_N+".yml";
-	this->whiteTemplPath = "./yml/whiteTemplPath"+this->CAMERA_N+".yml";
+	sprintf(this->redTemplPath, "./yml/redTemplPath_%d.yml", this->CAMERA_N);
+	sprintf(this->blueTemplPath, "./yml/blueTemplPath_%d.yml", this->CAMERA_N);
+	sprintf(this->whiteTemplPath, "./yml/whiteTemplPath_%d.yml", this->CAMERA_N);
+	
+	// this->redTemplPath= "./yml/redTemplPath_"+ itoa(this->CAMERA_N)+".yml";
+	// this->blueTemplPath= "./yml/blueTemplPath_"+ itoa(this->CAMERA_N)+".yml";
+	// this->whiteTemplPath= "./yml/whiteTemplPath_"+ itoa(this->CAMERA_N)+".yml";
 
 	this->loaded = false;
 }
@@ -260,21 +264,22 @@ cv::Mat camManager::SnapShot()
 		            );
 	            cv::floodFill(result, maxloc, cv::Scalar(0), 0, cv::Scalar(.1), cv::Scalar(1.));
 	            matchLoc = maxloc;
-	        	if(!response)
+	        	if(!response){
 	        		sprintf(buffer, "matchLoc: (%d, %d): %lf", matchLoc.x, matchLoc.y, result.at<double>(matchLoc));
 					logger->log(buffer);
+	        	}
 				else{
 					if(color == RED){
 						sprintf(buffer, "%s(%d, %d) ", buffer, matchLoc.x, matchLoc.y);
-						response["data"]["red"] = buffer;
+						(*response)["data"]["red"] = buffer;
 					}
 					else if(color == BLUE){
 						sprintf(buffer, "%s(%d, %d) ", buffer, matchLoc.x, matchLoc.y);
-						response["data"]["blue"] = buffer;
+						(*response)["data"]["blue"] = buffer;
 					}
 					else if(color == WHITE){
 						sprintf(buffer, "%s(%d, %d) ", buffer, matchLoc.x, matchLoc.y);
-						response["data"]["white"] = buffer;
+						(*response)["data"]["white"] = buffer;
 					}
 				}
 	        }
@@ -433,7 +438,7 @@ void camManager::testCase(Json::Value *response)
 
  			// t for test (three colors)
  			case 't':
-	 			this->testCase();
+	 			this->testCase(NULL);
  			break;
 
  			// type sr for save red sb for blue, etc. 
