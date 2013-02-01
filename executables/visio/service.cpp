@@ -112,11 +112,11 @@ int main() {
 	
 	
 
-	Visio visio("cool", "tcp://localhost:8081", Service::CONNECT);
+	Visio visio("visio", "tcp://localhost:8081", Service::CONNECT);
 	cout << "connect on port 8081" << endl;
 	
 	while (!s_interrupted) {
-		cool.read();
+		visio.read();
 	}
 
 	return 0;
