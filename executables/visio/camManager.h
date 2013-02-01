@@ -7,7 +7,7 @@
 #include "colorsets.h"
 #include "helper.h"
 
-#include "json/json.h"
+#include "jsoncpp/json/json.h"
 
 extern void mouseHandler(int event, int x, int y, int flags, void* param);
 
@@ -30,6 +30,9 @@ private:
 
 
 public:
+	int NB_OF_OBJECTS_TO_DETECT;
+	enum COLOR {RED, BLUE, WHITE};
+	
 	cv::VideoCapture capture;
 	
 	camManager(int id, int display = 1);
@@ -39,7 +42,7 @@ public:
 	void loadSets();
 	void DisplayLoopWithColorMatching();
 	void LocatingWithPatternMatching();
-	void MatchingMethod(int color, Json::Value *response);
+	void MatchingMethod(COLOR color, Json::Value *response);
 	void testCase(Json::Value *response);
 	cv::Mat SnapShot();
 	cv::Mat *binaryFiltering(cv::Mat *img, ColorSet set);

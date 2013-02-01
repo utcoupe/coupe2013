@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 
-#include "json/json.h"
+#include "jsoncpp/json/json.h"
 #include "zhelpers.hpp"
 #include "service.hpp"
 
@@ -20,7 +20,7 @@ class Visio : public Service
 				// Set both cam to display = 0, no graphic mode.
 				cam_0 = new camManager(0, 0);
 				// cam_1 = new camManager(1, 0);
-				this->cam_0->Init()
+				this->cam_0->Init();
 				// this->cam_1->Init()
 			};
 	
@@ -65,11 +65,13 @@ class Visio : public Service
 					break;
 
 					case 1:
-						this->cam_1->testCase(&response);
+						// this->cam_1->testCase(&response);
 						response["error"] = "";
 					break;
 					default:
-					sprintf(response["error"], "Unkown camId at %s:%s line: %d", __FILE__, __FUNCTION__, __LINE__);
+					char buffer[80];
+					sprintf(buffer, "Unkown camId at %s:%s line: %d", __FILE__, __FUNCTION__, __LINE__);
+					response["error"] = buffer;
 				}
 
 				s_sendmore(_socket, remote_id);
@@ -89,7 +91,9 @@ class Visio : public Service
 						// response["error"] = "";
 					break;
 					default:		
-					sprintf(response["error"], "Unkown camId at %s:%s line: %d", __FILE__, __FUNCTION__, __LINE__);
+					char buffer[80];
+					sprintf(buffer, "Unkown camId at %s:%s line: %d", __FILE__, __FUNCTION__, __LINE__);
+					response["error"] = buffer;
 				}
 
 			}
@@ -112,11 +116,11 @@ int main() {
 	
 	
 
-	Visio visio("cool", "tcp://localhost:8081", Service::CONNECT);
+	Visio visio("visio", "tcp://localhost:8081", Service::CONNECT);
 	cout << "connect on port 8081" << endl;
 	
 	while (!s_interrupted) {
-		cool.read();
+		visio.read();
 	}
 
 	return 0;

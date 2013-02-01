@@ -5,17 +5,14 @@
 #include "camManager.h"
 #include "helper.h"
 
-#include "json/json.h"
+#include "jsoncpp/json/json.h"
 
 using namespace std;
 
-const int NB_OF_OBJECTS_TO_DETECT = 4;
-const int RED = 0;
-const int BLUE = 1;
-const int WHITE = 2;
-
 camManager::camManager(int id, int display)
 { 
+	NB_OF_OBJECTS_TO_DETECT = 4;
+	
 	this->CAMERA_N = id; 
 	this->display = display; 
 	this->logger = new Logger("CAM", this->CAMERA_N);
@@ -28,7 +25,6 @@ camManager::camManager(int id, int display)
 	// this->redTemplPath= "./yml/redTemplPath_"+ itoa(this->CAMERA_N)+".yml";
 	// this->blueTemplPath= "./yml/blueTemplPath_"+ itoa(this->CAMERA_N)+".yml";
 	// this->whiteTemplPath= "./yml/whiteTemplPath_"+ itoa(this->CAMERA_N)+".yml";
-
 	this->loaded = false;
 }
 
@@ -211,7 +207,7 @@ cv::Mat camManager::SnapShot()
  * @function MatchingMethod
  * @brief Trackbar callback
  */
- void camManager::MatchingMethod( int color, Json::Value *response)
+ void camManager::MatchingMethod( COLOR color, Json::Value *response)
  {
  	extern cv::Mat img;
  	extern cv::Mat roiImg;
