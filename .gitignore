@@ -4,3 +4,6 @@
 *.hex
 .sconsign.dblite
 build/
+*.o
+a.out
+visio
