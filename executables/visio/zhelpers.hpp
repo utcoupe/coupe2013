@@ -32,16 +32,17 @@
 #include <iomanip>
 #include <string>
 #include <sstream>
-
-#include <sys/time.h>
-#include <unistd.h>
-#include <time.h>
-#include <assert.h>
-#include <pthread.h>
-#include <stdlib.h>        // random()  RAND_MAX
-#include <stdio.h>
-#include <stdarg.h>
-#include <signal.h>
+extern "C"{
+    #include <sys/time.h>
+    #include <unistd.h>
+    #include <time.h>
+    #include <assert.h>
+    #include <pthread.h>
+    #include <stdlib.h>        // random()  RAND_MAX
+    #include <stdio.h>
+    #include <stdarg.h>
+    #include <signal.h>    
+}
 
 //  Bring Windows MSVC up to C99 scratch
 #if (defined (__WINDOWS__))
