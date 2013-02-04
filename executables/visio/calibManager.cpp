@@ -4,7 +4,7 @@
 #include "calibManager.h"
 
 /*
-	Calibration class. This is used to calibrate color matching schemes and save them to file
+	Calibration class. This is used to calibrate color matching schemes and save them to file 
  */
 calibManager::calibManager(){
 	this->logger = new Logger("Calibration", 0);
