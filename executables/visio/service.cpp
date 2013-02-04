@@ -1,8 +1,9 @@
 
 #include <iostream>
 #include <string>
+#include <ctime>
 
-#include "jsoncpp/json/json.h"
+#include "json/json.h"
 #include "zhelpers.hpp"
 #include "service.hpp"
 
@@ -19,8 +20,16 @@ class Visio : public Service
 			: Service(identity, addr, type) {
 				// Set both cam to display = 0, no graphic mode.
 				cam_0 = new camManager(0, 0);
+				cam_0->Init();
+				cam_0->SnapShot();
 				// cam_1 = new camManager(1, 0);
-				this->cam_0->Init();
+
+
+
+				/**
+				 * It takes 3secs to grab a picture from the camera (if cam is not initialized). It seems better to grab a picture at launch so as to intialize the camera, then, taking a picture is much faster
+				 */
+
 				// this->cam_1->Init()
 			};
 	
@@ -116,8 +125,8 @@ int main() {
 	
 	
 
-	Visio visio("visio", "tcp://localhost:8081", Service::CONNECT);
-	cout << "connect on port 8081" << endl;
+	Visio visio("visio", "tcp://*:5001", Service::CONNECT);
+	cout << "connect on port 5001" << endl;
 	
 	while (!s_interrupted) {
 		visio.read();

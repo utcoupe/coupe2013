@@ -7,7 +7,7 @@
 #include "colorsets.h"
 #include "helper.h"
 
-#include "jsoncpp/json/json.h"
+#include "json/json.h"
 
 extern void mouseHandler(int event, int x, int y, int flags, void* param);
 
