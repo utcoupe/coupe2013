@@ -31,7 +31,7 @@ private:
 
 public:
 	int NB_OF_OBJECTS_TO_DETECT;
-	enum COLOR {RED, BLUE, WHITE};
+	enum COLOR {RED = 1, BLUE, WHITE};
 	
 	cv::VideoCapture capture;
 	
@@ -42,7 +42,7 @@ public:
 	void loadSets();
 	void DisplayLoopWithColorMatching();
 	void LocatingWithPatternMatching();
-	void MatchingMethod(COLOR color, Json::Value *response);
+	void MatchingMethod(COLOR color, char *buffer);
 	void testCase(Json::Value *response);
 	cv::Mat SnapShot();
 	cv::Mat *binaryFiltering(cv::Mat *img, ColorSet set);
