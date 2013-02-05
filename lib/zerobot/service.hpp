@@ -35,6 +35,9 @@ class Service
 			process_request(remote_id, request);
 		};
 
+		/**
+		 * Renvoie une réponse au client
+		 */
 		void sendResponse(const string & remote_id, const Json::Value & request, Json::Value & data) {
 			Json::Value response;
 			Json::Value null_value;
@@ -46,6 +49,9 @@ class Service
 			s_send(_socket, packed_response);
 		};
 		
+		/**
+		 * Renvoie une erreur au client
+		 */
 		void sendError(const string & remote_id, const Json::Value & request, const string error, const string traceback) {
 			Json::Value response;
 			response["uid"] = request["uid"];

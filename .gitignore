@@ -1,0 +1,10 @@
+*~
+*.pyc
+*.elf
+*.hex
+.sconsign.dblite
+build/
+*.o
+a.out
+.DS_Store
+.gitignore
