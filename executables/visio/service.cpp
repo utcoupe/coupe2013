@@ -35,23 +35,15 @@ class Visio : public Service
 	
 	protected:
 		virtual void process_request(const string & remote_id, const Json::Value & request) {
-			Json::Value response;
-			response["uid"] = request["uid"];
 			// "ping"
 			if (request["fct"] == "ping") {
-				response["data"] = "pong";
-				response["error"] = "";
-				// response["error"]["error"] = "";
-				// response["error"]["tb"] = "";
-				s_sendmore(_socket, remote_id);
+			    Json::Value data("pong");
+			    sendResponse(remote_id, request, data);
 			}
 			// "who"
 			else if (request["fct"] == "who") {
-				response["data"] = "visio";
-				response["error"] = "";
-				// response["error"]["error"] = "";
-				// response["error"]["tb"] = "";
-				s_sendmore(_socket, remote_id);
+			    Json::Value data("visio");
+			    sendResponse(remote_id, request, data);
 			}
 			// "calib(0)" or "calib(1)", this is used for colormatching, which is not recommended for 2013.
 			else if (request["fct"] == "calib") {
@@ -62,20 +54,24 @@ class Visio : public Service
 				// else if(camId == 1)
 				// 	calib->yamlSetter(this->cam_1);
 				cout << "Type b for blue, r for red, w for white. Use trackbars to adjust to the best calibration, then type v to save it.";
-				response["data"] = "";
-				response["error"] = "";
+				
+			    Json::Value data("");
+			    sendResponse(remote_id, request, data);
 				// response["error"]["error"] = "";
 				// response["error"]["tb"] = "";
-				s_sendmore(_socket, remote_id);
 			}
 			// "getcandles 0" or "getcandles 1" to get candles' positions. positions are returned by red, blue and white.
 			// It should return positions only for ones with tennis ball on top.
 			else if (request["fct"] == "getcandles"){
 				int camId = request["args"][0].asInt();
+				string result;
+				Json::Value response;
 
 				switch(camId){
 					case 0:
-						this->cam_0->testCase(&response);
+						result = this->cam_0->testCase();
+        			    response = new Json::Value (result);
+						sendResponse(remote_id, request, response);
 					break;
 
 					case 1:
@@ -83,13 +79,10 @@ class Visio : public Service
 					break;
 					default:
 					char buffer[80];
-					sprintf(buffer, "Unkown camId at %s:%s line: %d", __FILE__, __FUNCTION__, __LINE__);
-					response["data"] = "";
-					response["error"]["error"] = buffer;
-					response["error"]["tb"] = "";
+					sprintf(buffer, "At %s:%s line: %d", __FILE__, __FUNCTION__, __LINE__);
+					sendError(remote_id, request, "Unknown camID", buffer);
 				}
 
-				s_sendmore(_socket, remote_id);
 			}
 			// "setROI(0)" or "setROI(1)"
 			else if (request["fct"] == "setROI"){
@@ -98,29 +91,22 @@ class Visio : public Service
 				switch(camId){
 					case 0:
 						this->cam_0->LocatingWithPatternMatching();
-						response["error"] = "";
 					break;
 
 					case 1:
 						// this->cam_1->LocatingWithPatternMatching();
 						// response["error"] = "";
 					break;
-					default:		
+					default:
 					char buffer[80];
-					sprintf(buffer, "Unkown camId at %s:%s line: %d", __FILE__, __FUNCTION__, __LINE__);
-					response["data"] = "";
-					response["error"]["error"] = buffer;
-					response["error"]["tb"] = "";
+					sprintf(buffer, "At %s:%s line: %d", __FILE__, __FUNCTION__, __LINE__);
+					sendError(remote_id, request, "Unkown camId", buffer);
 				}
 
 			}
 			else {
-				response["data"] = "";
-				response["error"]["error"] = "unknown function";
-				response["error"]["tb"] = "";
+				this->sendError(remote_id, request, "Unknow function", "");
 			}
-			string packed_response = _writer.write( response );
-			s_send(_socket, packed_response);
 		}
 
 	private:

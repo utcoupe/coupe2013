@@ -43,7 +43,7 @@ public:
 	void DisplayLoopWithColorMatching();
 	void LocatingWithPatternMatching();
 	void MatchingMethod(COLOR color, char *buffer);
-	void testCase(Json::Value *response);
+	string testCase();
 	cv::Mat SnapShot();
 	cv::Mat *binaryFiltering(cv::Mat *img, ColorSet set);
 	vector<cv::Point> findObjects(cv::Mat *src, cv::Mat *original);

@@ -331,7 +331,7 @@ void camManager::MatchingMethod(COLOR color, char *buffer)
 	// }
 	}
 
-	void camManager::testCase(Json::Value *response)
+	string camManager::testCase()
 	{
 		extern cv::Mat roiImg;
 		extern cv::Mat img;
@@ -387,19 +387,14 @@ void camManager::MatchingMethod(COLOR color, char *buffer)
 		blueTemplFile.release();
 		whiteTemplFile.release();
 
-		if(response != NULL)
-		{
-			(*response)["data"] = buffer;
-			(*response)["error"] = "";
-		}
 		logger->log(buffer);
-		sprintf(buffer, "");
 
 		if(this->display)
 		{
  			cv::imshow( "Snapshot With Pattern Matching", img );
  			cv::waitKey(30);
 		}
+		return buffer;
 	}
 
 
@@ -470,7 +465,7 @@ void camManager::MatchingMethod(COLOR color, char *buffer)
 
  			// t for test (three colors)
  			case 't':
- 			this->testCase(NULL);
+ 			this->testCase();
  			break;
 
  			// type sr for save red sb for blue, etc. 
