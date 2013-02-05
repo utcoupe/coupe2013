@@ -19,9 +19,9 @@ class Visio : public Service
 		Visio(const string & identity, const string & addr, CONNECTION_TYPE type=CONNECT)
 			: Service(identity, addr, type) {
 				// Set both cam to display = 0, no graphic mode.
-				cam_0 = new camManager(0, 0);
+				cam_0 = new camManager(0);
 				cam_0->Init();
-				cam_0->SnapShot();
+				// cam_0->SnapShot();
 				// cam_1 = new camManager(1, 0);
 
 
@@ -39,8 +39,7 @@ class Visio : public Service
 			response["uid"] = request["uid"];
 			// "ping"
 			if (request["fct"] == "ping") {
-				char buffer[50] = "pong";
-				response["data"] = buffer;
+				response["data"] = "pong";
 				response["error"] = "";
 				// response["error"]["error"] = "";
 				// response["error"]["tb"] = "";

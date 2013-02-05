@@ -339,6 +339,15 @@ void camManager::MatchingMethod(COLOR color, char *buffer)
 
 		char buffer[355];
 
+
+		/*
+			Une facon pour vider le ring buffer....4-6 pour linux, 2 pour windows, et pas besoin pour mac osx.
+			Ceci est du au creation d'un buffer au niveau de camera, donc c'est peut-etre pas gerable autrement... 
+		 */
+ 		for (int i = 0; i < 4; ++i)
+ 		{
+ 			this->capture.grab();
+ 		}
 		this->capture >> img;
 
 		cv::FileStorage redTemplFile(this->redTemplPath, cv::FileStorage::READ);
@@ -349,8 +358,8 @@ void camManager::MatchingMethod(COLOR color, char *buffer)
 		if(!roiImg.empty())
 		{
 			if(this->display)
-			cv::imshow("ROI_red", roiImg); /* show the image bounded by the box */
-				logger->log("Test for red pattern search...");
+				cv::imshow("ROI_red", roiImg); /* show the image bounded by the box */
+			logger->log("Test for red pattern search...");
 			sprintf(buffer, "R:");
 			this->MatchingMethod(RED, buffer);
 		}
@@ -359,8 +368,8 @@ void camManager::MatchingMethod(COLOR color, char *buffer)
 		if(!roiImg.empty())
 		{
 			if(this->display)
-			cv::imshow("ROI_blue", roiImg); /* show the image bounded by the box */
-				logger->log("Test for blue pattern search...");
+				cv::imshow("ROI_blue", roiImg); /* show the image bounded by the box */
+			logger->log("Test for blue pattern search...");
 			strcat(buffer, "B:");
 			this->MatchingMethod(BLUE, buffer);
 		}
@@ -369,8 +378,8 @@ void camManager::MatchingMethod(COLOR color, char *buffer)
 		if(!roiImg.empty())
 		{
 			if(this->display)
-			cv::imshow("ROI_white", roiImg); /* show the image bounded by the box */
-				logger->log("Test for white pattern search...");
+				cv::imshow("ROI_white", roiImg); /* show the image bounded by the box */
+			logger->log("Test for white pattern search...");
 			strcat(buffer, "W:");
 			this->MatchingMethod(WHITE, buffer);
 		}
@@ -385,6 +394,12 @@ void camManager::MatchingMethod(COLOR color, char *buffer)
 		}
 		logger->log(buffer);
 		sprintf(buffer, "");
+
+		if(this->display)
+		{
+ 			cv::imshow( "Snapshot With Pattern Matching", img );
+ 			cv::waitKey(30);
+		}
 	}
 
 
