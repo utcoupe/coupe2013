@@ -123,5 +123,5 @@ int sendEvent(int16_t uid, int16_t s) {
 int sendError(int16_t uid, char s) {
     int16_t tab[1];
     tab[0] = (int16_t)s;
-    return send(uid, 2, 1, tab);
+    return send(uid, 3, 1, tab);
 }
