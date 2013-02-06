@@ -25,10 +25,10 @@ class calibManager
 		calibManager();
 		~calibManager() {delete this->logger;}
 
-		void yamlSetter(camManager *cam);
+		void yamlSetter(camManager &cam);
 		void loadSets();
 		void writeSets();
-		cv::Mat *calib(int id, cv::Mat *image, camManager *cam);
+		cv::Mat & calib(const int id, cv::Mat &image, camManager &cam);
 };
 
 #endif

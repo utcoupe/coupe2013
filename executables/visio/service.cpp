@@ -49,7 +49,7 @@ class Visio : public Service
 				calibManager *calib = new calibManager();
 				int camId = request["args"][0].asInt();
 				if(camId == 0)
-					calib->yamlSetter(this->cam_0);
+					calib->yamlSetter( * cam_0 );
 				// else if(camId == 1)
 				// 	calib->yamlSetter(this->cam_1);
 				cout << "Type b for blue, r for red, w for white. Use trackbars to adjust to the best calibration, then type v to save it.";

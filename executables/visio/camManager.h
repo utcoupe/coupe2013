@@ -26,7 +26,7 @@ private:
 	
 	Logger *logger;
 
-	bool EliminatedContour(cv::RotatedRect *minRect);
+	bool EliminatedContour(const cv::RotatedRect &minRect);
 
 
 public:
@@ -39,14 +39,22 @@ public:
 	~camManager() { delete logger; }
 
 	int Init();
+
 	void loadSets();
+
 	void DisplayLoopWithColorMatching();
+
 	void LocatingWithPatternMatching();
+
 	Json::Value testCase();
+
 	void MatchingMethod(COLOR color, char *buffer);
+
 	cv::Mat SnapShot();
-	cv::Mat *binaryFiltering(cv::Mat *img, ColorSet set);
-	vector<cv::Point> findObjects(cv::Mat *src, cv::Mat *original);
+
+	cv::Mat & binaryFiltering(cv::Mat &img, ColorSet set);
+	
+	vector<cv::Point> findObjects(const cv::Mat &src, cv::Mat &original);
 
 
 };

@@ -7,14 +7,14 @@
 	Calibration class. This is used to calibrate color matching schemes and save them to file 
  */
 calibManager::calibManager(){
-	this->logger = new Logger("Calibration", 0);
-	this->colorsetPath = "./yml/colorSet.yml";
+	logger = new Logger("Calibration", 0);
+	colorsetPath = "./yml/colorSet.yml";
 
-	this->calibBlue = false;
-	this->calibRed = false;
-	this->calibWhite = false;
+	calibBlue = false;
+	calibRed = false;
+	calibWhite = false;
 
-	this->loadSets();
+	loadSets();
 }
 
 /*
@@ -22,29 +22,29 @@ calibManager::calibManager(){
  */
 void calibManager::writeSets()
 {
-	cv::FileStorage ColorSetFile(this->colorsetPath, cv::FileStorage::WRITE);
+	cv::FileStorage ColorSetFile(colorsetPath, cv::FileStorage::WRITE);
 	if(ColorSetFile.isOpened())
 	{
-		ColorSetFile << "blue_h_lower" << this->colorSets.blue.h_lower;
-		ColorSetFile << "blue_s_lower" << this->colorSets.blue.s_lower;
-		ColorSetFile << "blue_v_lower" << this->colorSets.blue.v_lower;
-		ColorSetFile << "blue_h_higher" << this->colorSets.blue.h_higher;
-		ColorSetFile << "blue_s_higher" << this->colorSets.blue.s_higher;
-		ColorSetFile << "blue_v_higher" << this->colorSets.blue.v_higher;
+		ColorSetFile << "blue_h_lower" << colorSets.blue.h_lower;
+		ColorSetFile << "blue_s_lower" << colorSets.blue.s_lower;
+		ColorSetFile << "blue_v_lower" << colorSets.blue.v_lower;
+		ColorSetFile << "blue_h_higher" << colorSets.blue.h_higher;
+		ColorSetFile << "blue_s_higher" << colorSets.blue.s_higher;
+		ColorSetFile << "blue_v_higher" << colorSets.blue.v_higher;
 
-		ColorSetFile << "red_h_lower" << this->colorSets.red.h_lower;
-		ColorSetFile << "red_s_lower" << this->colorSets.red.s_lower;
-		ColorSetFile << "red_v_lower" << this->colorSets.red.v_lower;
-		ColorSetFile << "red_h_higher" << this->colorSets.red.h_higher;
-		ColorSetFile << "red_s_higher" << this->colorSets.red.s_higher;
-		ColorSetFile << "red_v_higher" << this->colorSets.red.v_higher;
+		ColorSetFile << "red_h_lower" << colorSets.red.h_lower;
+		ColorSetFile << "red_s_lower" << colorSets.red.s_lower;
+		ColorSetFile << "red_v_lower" << colorSets.red.v_lower;
+		ColorSetFile << "red_h_higher" << colorSets.red.h_higher;
+		ColorSetFile << "red_s_higher" << colorSets.red.s_higher;
+		ColorSetFile << "red_v_higher" << colorSets.red.v_higher;
 
-		ColorSetFile << "white_h_lower" << this->colorSets.white.h_lower;
-		ColorSetFile << "white_s_lower" << this->colorSets.white.s_lower;
-		ColorSetFile << "white_v_lower" << this->colorSets.white.v_lower;
-		ColorSetFile << "white_h_higher" << this->colorSets.white.h_higher;
-		ColorSetFile << "white_s_higher" << this->colorSets.white.s_higher;
-		ColorSetFile << "white_v_higher" << this->colorSets.white.v_higher;
+		ColorSetFile << "white_h_lower" << colorSets.white.h_lower;
+		ColorSetFile << "white_s_lower" << colorSets.white.s_lower;
+		ColorSetFile << "white_v_lower" << colorSets.white.v_lower;
+		ColorSetFile << "white_h_higher" << colorSets.white.h_higher;
+		ColorSetFile << "white_s_higher" << colorSets.white.s_higher;
+		ColorSetFile << "white_v_higher" << colorSets.white.v_higher;
 
 		logger->log("Successfully write to file");
 	}
@@ -59,28 +59,28 @@ void calibManager::writeSets()
  */
 void calibManager::loadSets()
 {
-	cv::FileStorage ColorSetFile(this->colorsetPath, cv::FileStorage::READ);
+	cv::FileStorage ColorSetFile(colorsetPath, cv::FileStorage::READ);
 
-	this->colorSets.blue.h_lower = ColorSetFile["blue_h_lower"];
-	this->colorSets.blue.s_lower = ColorSetFile["blue_s_lower"];
-	this->colorSets.blue.v_lower = ColorSetFile["blue_v_lower"];
-	this->colorSets.blue.h_higher = ColorSetFile["blue_h_higher"];
-	this->colorSets.blue.s_higher = ColorSetFile["blue_s_higher"];
-	this->colorSets.blue.v_higher = ColorSetFile["blue_v_higher"];
+	colorSets.blue.h_lower = ColorSetFile["blue_h_lower"];
+	colorSets.blue.s_lower = ColorSetFile["blue_s_lower"];
+	colorSets.blue.v_lower = ColorSetFile["blue_v_lower"];
+	colorSets.blue.h_higher = ColorSetFile["blue_h_higher"];
+	colorSets.blue.s_higher = ColorSetFile["blue_s_higher"];
+	colorSets.blue.v_higher = ColorSetFile["blue_v_higher"];
 
-	this->colorSets.red.h_lower = ColorSetFile["red_h_lower"];
-	this->colorSets.red.s_lower = ColorSetFile["red_s_lower"];
-	this->colorSets.red.v_lower = ColorSetFile["red_v_lower"];
-	this->colorSets.red.h_higher = ColorSetFile["red_h_higher"];
-	this->colorSets.red.s_higher = ColorSetFile["red_s_higher"];
-	this->colorSets.red.v_higher = ColorSetFile["red_v_higher"];
+	colorSets.red.h_lower = ColorSetFile["red_h_lower"];
+	colorSets.red.s_lower = ColorSetFile["red_s_lower"];
+	colorSets.red.v_lower = ColorSetFile["red_v_lower"];
+	colorSets.red.h_higher = ColorSetFile["red_h_higher"];
+	colorSets.red.s_higher = ColorSetFile["red_s_higher"];
+	colorSets.red.v_higher = ColorSetFile["red_v_higher"];
 	
-	this->colorSets.white.h_lower = ColorSetFile["white_h_lower"];
-	this->colorSets.white.s_lower = ColorSetFile["white_s_lower"];
-	this->colorSets.white.v_lower = ColorSetFile["white_v_lower"];
-	this->colorSets.white.h_higher = ColorSetFile["white_h_higher"];
-	this->colorSets.white.s_higher = ColorSetFile["white_s_higher"];
-	this->colorSets.white.v_higher = ColorSetFile["white_v_higher"];
+	colorSets.white.h_lower = ColorSetFile["white_h_lower"];
+	colorSets.white.s_lower = ColorSetFile["white_s_lower"];
+	colorSets.white.v_lower = ColorSetFile["white_v_lower"];
+	colorSets.white.h_higher = ColorSetFile["white_h_higher"];
+	colorSets.white.s_higher = ColorSetFile["white_s_higher"];
+	colorSets.white.v_higher = ColorSetFile["white_v_higher"];
 
 	logger->log("Successfully load file");
 
@@ -95,48 +95,48 @@ void calibManager::loadSets()
  * @param  image the image to be binary filtered
  * @return       return the image binary filtered
  */
-cv::Mat *calibManager::calib(int id, cv::Mat *image, camManager *cam)
+cv::Mat & calibManager::calib(const int id, cv::Mat &image, camManager &cam)
 {
 	switch (id){
 		case 0:
 		cv::namedWindow( "Calib" , CV_WINDOW_AUTOSIZE);
-		cv::createTrackbar( "h_lower", "Calib", &(this->colorSets.blue.h_lower), 255 );
-		cv::createTrackbar( "s_lower", "Calib", &(this->colorSets.blue.s_lower), 255 );
-		cv::createTrackbar( "v_lower", "Calib", &(this->colorSets.blue.v_lower), 255 );
-		cv::createTrackbar( "h_higher", "Calib", &(this->colorSets.blue.h_higher), 255 );
-		cv::createTrackbar( "s_higher", "Calib", &(this->colorSets.blue.s_higher), 255 );
-		cv::createTrackbar( "v_higher", "Calib", &(this->colorSets.blue.v_higher), 255 );
-		image = cam->binaryFiltering(image, this->colorSets.blue);
+		cv::createTrackbar( "h_lower", "Calib", &(colorSets.blue.h_lower), 255 );
+		cv::createTrackbar( "s_lower", "Calib", &(colorSets.blue.s_lower), 255 );
+		cv::createTrackbar( "v_lower", "Calib", &(colorSets.blue.v_lower), 255 );
+		cv::createTrackbar( "h_higher", "Calib", &(colorSets.blue.h_higher), 255 );
+		cv::createTrackbar( "s_higher", "Calib", &(colorSets.blue.s_higher), 255 );
+		cv::createTrackbar( "v_higher", "Calib", &(colorSets.blue.v_higher), 255 );
+		image = cam.binaryFiltering(image, colorSets.blue);
 		return image;
 		break;
 
 		case 1:
 		cv::namedWindow( "Calib" , CV_WINDOW_AUTOSIZE);
-		cv::createTrackbar( "h_lower", "Calib", &(this->colorSets.red.h_lower), 255 );
-		cv::createTrackbar( "s_lower", "Calib", &(this->colorSets.red.s_lower), 255 );
-		cv::createTrackbar( "v_lower", "Calib", &(this->colorSets.red.v_lower), 255 );
-		cv::createTrackbar( "h_higher", "Calib", &(this->colorSets.red.h_higher), 255 );
-		cv::createTrackbar( "s_higher", "Calib", &(this->colorSets.red.s_higher), 255 );
-		cv::createTrackbar( "v_higher", "Calib", &(this->colorSets.red.v_higher), 255 );
-		image = cam->binaryFiltering(image, this->colorSets.red);
+		cv::createTrackbar( "h_lower", "Calib", &(colorSets.red.h_lower), 255 );
+		cv::createTrackbar( "s_lower", "Calib", &(colorSets.red.s_lower), 255 );
+		cv::createTrackbar( "v_lower", "Calib", &(colorSets.red.v_lower), 255 );
+		cv::createTrackbar( "h_higher", "Calib", &(colorSets.red.h_higher), 255 );
+		cv::createTrackbar( "s_higher", "Calib", &(colorSets.red.s_higher), 255 );
+		cv::createTrackbar( "v_higher", "Calib", &(colorSets.red.v_higher), 255 );
+		image = cam.binaryFiltering(image, colorSets.red);
 		return image;
 		break;
 
 		case 2:
 		cv::namedWindow( "Calib" , CV_WINDOW_AUTOSIZE);
-		cv::createTrackbar( "h_lower", "Calib", &(this->colorSets.white.h_lower), 255 );
-		cv::createTrackbar( "s_lower", "Calib", &(this->colorSets.white.s_lower), 255 );
-		cv::createTrackbar( "v_lower", "Calib", &(this->colorSets.white.v_lower), 255 );
-		cv::createTrackbar( "h_higher", "Calib", &(this->colorSets.white.h_higher), 255 );
-		cv::createTrackbar( "s_higher", "Calib", &(this->colorSets.white.s_higher), 255 );
-		cv::createTrackbar( "v_higher", "Calib", &(this->colorSets.white.v_higher), 255 );
-		image = cam->binaryFiltering(image, this->colorSets.white);
+		cv::createTrackbar( "h_lower", "Calib", &(colorSets.white.h_lower), 255 );
+		cv::createTrackbar( "s_lower", "Calib", &(colorSets.white.s_lower), 255 );
+		cv::createTrackbar( "v_lower", "Calib", &(colorSets.white.v_lower), 255 );
+		cv::createTrackbar( "h_higher", "Calib", &(colorSets.white.h_higher), 255 );
+		cv::createTrackbar( "s_higher", "Calib", &(colorSets.white.s_higher), 255 );
+		cv::createTrackbar( "v_higher", "Calib", &(colorSets.white.v_higher), 255 );
+		image = cam.binaryFiltering(image, colorSets.white);
 		return image;
 		break;
 
 		default:
 		logger->err("calibManager::calib doesn't return properly!");
-		return NULL;
+		return image;
 	}
 }
 
@@ -146,13 +146,13 @@ cv::Mat *calibManager::calib(int id, cv::Mat *image, camManager *cam)
  * @param cam the camera to use. ATTENTION: NEED TO CHANGE the colorschema file path if you want multiple schemes, by 
  * default, like the case for 2013, we tend to use the same schema for both cameras.
  */
-void calibManager::yamlSetter(camManager *cam)
+void calibManager::yamlSetter(camManager &cam)
 {
 	cv::Mat image;
 
 	while(1)
 	{
-		cam->capture >> image;
+		cam.capture >> image;
 
 		if (image.empty())
 		{
@@ -160,14 +160,14 @@ void calibManager::yamlSetter(camManager *cam)
 			continue;
 		}
 
-		if(this->calibBlue)
-			image = *(this->calib(0, &image, cam));
+		if(calibBlue)
+			image = calib(0, image, cam);
 
-		if(this->calibRed)
-			image = *(this->calib(1, &image, cam));
+		if(calibRed)
+			image = calib(1, image, cam);
 
-		if(this->calibWhite)
-			image = *(this->calib(2, &image, cam));
+		if(calibWhite)
+			image = calib(2, image, cam);
 
 		cv::imshow( "Calibration", image );
 
@@ -188,30 +188,30 @@ void calibManager::yamlSetter(camManager *cam)
 			return;
 
 			case 'b':
-			this->calibBlue = true;
-			this->calibRed = false;
-			this->calibWhite = false;
+			calibBlue = true;
+			calibRed = false;
+			calibWhite = false;
 			break;
 
 			case 'r':
-			this->calibBlue = false;
-			this->calibRed = true;
-			this->calibWhite = false;
+			calibBlue = false;
+			calibRed = true;
+			calibWhite = false;
 			break;
 
 			case 'w':
-			this->calibBlue = false;
-			this->calibRed = false;
-			this->calibWhite = true;
+			calibBlue = false;
+			calibRed = false;
+			calibWhite = true;
 			break;
 
 			case 'v':
-			this->writeSets();
+			writeSets();
 			break;
 
 			default:
 			if (c != -1)
-				this->logger->err(c);
+				logger->err(c);
 		}
 	}
 }
