@@ -331,14 +331,12 @@ void camManager::MatchingMethod(COLOR color, char *buffer)
 	// }
 	}
 
-	string camManager::testCase()
+	Json::Value camManager::testCase()
 	{
 		extern cv::Mat roiImg;
 		extern cv::Mat img;
-
-
-		char buffer[355];
-
+			
+		Json::Value res;
 
 		/*
 			Une facon pour vider le ring buffer....4-6 pour linux, 2 pour windows, et pas besoin pour mac osx.
@@ -357,44 +355,52 @@ void camManager::MatchingMethod(COLOR color, char *buffer)
 		redTemplFile["red_roi_img"] >> roiImg;
 		if(!roiImg.empty())
 		{
+			char buffer[355] = "";
 			if(this->display)
 				cv::imshow("ROI_red", roiImg); /* show the image bounded by the box */
 			logger->log("Test for red pattern search...");
-			sprintf(buffer, "R:");
+			// sprintf(buffer, "R:");
 			this->MatchingMethod(RED, buffer);
+			res["data"]["red"] = buffer;
+			logger->log(buffer);
 		}
 
 		blueTemplFile["blue_roi_img"] >> roiImg;
 		if(!roiImg.empty())
 		{
+			char buffer[355] = "";
 			if(this->display)
 				cv::imshow("ROI_blue", roiImg); /* show the image bounded by the box */
 			logger->log("Test for blue pattern search...");
-			strcat(buffer, "B:");
+			// strcat(buffer, "B:");
 			this->MatchingMethod(BLUE, buffer);
+			res["data"]["blue"] = buffer;
+			logger->log(buffer);
 		}
 
 		whiteTemplFile["white_roi_img"] >> roiImg;
 		if(!roiImg.empty())
 		{
+			char buffer[355] = "";
 			if(this->display)
 				cv::imshow("ROI_white", roiImg); /* show the image bounded by the box */
 			logger->log("Test for white pattern search...");
-			strcat(buffer, "W:");
+			// strcat(buffer, "W:");
 			this->MatchingMethod(WHITE, buffer);
+			res["data"]["white"] = buffer;
+			logger->log(buffer);
 		}
 		redTemplFile.release();
 		blueTemplFile.release();
 		whiteTemplFile.release();
 
-		logger->log(buffer);
 
 		if(this->display)
 		{
  			cv::imshow( "Snapshot With Pattern Matching", img );
  			cv::waitKey(30);
 		}
-		return buffer;
+		return res;
 	}
 
 

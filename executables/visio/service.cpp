@@ -4,8 +4,7 @@
 #include <ctime>
 
 #include "json/json.h"
-#include "zhelpers.hpp"
-#include "service.hpp"
+#include "../../../zerobot/cpp/service.hpp"
 
 #include "camManager.h"
 #include "logger.h"
@@ -64,16 +63,13 @@ class Visio : public Service
 			// It should return positions only for ones with tennis ball on top.
 			else if (request["fct"] == "getcandles"){
 				int camId = request["args"][0].asInt();
-				string result;
-				Json::Value response;
+				Json::Value res;
 
 				switch(camId){
 					case 0:
-						result = this->cam_0->testCase();
-        			    response = new Json::Value (result);
-						sendResponse(remote_id, request, response);
+						res = this->cam_0->testCase();
+						sendResponse(remote_id, request, res);
 					break;
-
 					case 1:
 						// this->cam_1->testCase(&response);
 					break;
