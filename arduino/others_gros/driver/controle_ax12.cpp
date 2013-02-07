@@ -19,7 +19,7 @@ int tourner(int id, int id_moteur, int position, int vitesse) {
     if (vitesse == 0)
         speed = 0;
     else
-        speed = map(vitesse, 1, 114, 0, 1023);
+		speed = map(vitesse, 1, 114, 0, 1023);
 
     goal[id_moteur] = angle;
     ordre[id_moteur] = id;
@@ -39,20 +39,21 @@ int get_position(int id_moteur, char* erreur) {
       int valeur = lire (PRESENT_POSITION, id_moteur, erreur);
       if (erreur != 0)
           return 0;
-    else
-      return (valeur*0.293255132)-150;
+	  else
+		  return map(valeur, 0, 1023, -150, 150);
   }
 }
 
 int lire(int ordre, int id_moteur, char* erreur) {
   *erreur = 0;
+  
   if (id_moteur > NB_MOTEURS) {
     *erreur = E_INVALID_PARAMETERS_VALUE;
     return 0;
   }
   else {
-    motor[id_moteur].readInfo (ordre);
-    return motor[id_moteur].status_data;
+	motor[id_moteur].readInfo (ordre);
+	return motor[id_moteur].status_data;
   }
 }
 
@@ -83,8 +84,8 @@ void cherche_moteurs(void) {
       // et donc CCW : Counter-CLockWise
 
       // on veut que le moteur aille EXACTEMENT au bon endroit
-      motor[i].writeInfo (CW_COMPLIANCE_MARGIN, 0);
-      motor[i].writeInfo (CCW_COMPLIANCE_MARGIN, 0);
+      motor[i].writeInfo (CW_COMPLIANCE_MARGIN, 1);
+      motor[i].writeInfo (CCW_COMPLIANCE_MARGIN, 1);
 
       // euh ça sert pour l'asservissement apparemment
       // ratio couple/erreur de position
@@ -100,7 +101,7 @@ void cherche_moteurs(void) {
       motor[i].writeInfo (DOWN_LIMIT_VOLTAGE, 60); //valeur par défaut
       motor[i].writeInfo (UP_LIMIT_VOLTAGE, 190); //valeur par défaut
 
-      motor[i].writeInfo (RETURN_LEVEL, 2);
+      motor[i].writeInfo (RETURN_LEVEL, AX_RETURN_READ);
       motor[i].writeInfo (RETURN_DELAY_TIME, 150);
 
       // sécurités interne, on arrête le moteur quand trop de charge ou surchauffe ou problem d'alim
@@ -121,13 +122,13 @@ void check_ax12_goals() {
     for (char i=0; i<NB_MOTEURS; i++) {
         if (ordre[i] != -1) {
             int pos = lire(PRESENT_POSITION, i, &error);
-            if (error == 0) {
+            //if (error == 0) {
                 int err = pos - goal[i];
                 if(err <= 4 && err >= -4) {
                     sendResponse(ordre[i], 0);
                     ordre[i] = -1;
                 }
-            }
+				//}
         }
     }
 }

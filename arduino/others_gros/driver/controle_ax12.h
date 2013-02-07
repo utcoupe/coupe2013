@@ -7,7 +7,7 @@
 
 
 
-#define NB_MOTEURS 3
+#define NB_MOTEURS 6
 
 extern AX12 motor[NB_MOTEURS];
 extern int goal[NB_MOTEURS];

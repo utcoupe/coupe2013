@@ -38,8 +38,8 @@ void cmd(int16_t id, int8_t cmd, int8_t size, int16_t *args){
                 {
                     tourner(id, args[0], args[1], args[2]);
                 }
+			break;
         }
-
     case Q_POS_AX12:
         {
             CHECK_ARGS(1)
@@ -50,11 +50,12 @@ void cmd(int16_t id, int8_t cmd, int8_t size, int16_t *args){
                     else
                         sendError(id, error);
                 }
+			break;
         }
 
     default:
         {
-            sendResponse(id,E_INVALID_CMD);
+            sendError(id,E_INVALID_CMD);
             break;
         }
     }

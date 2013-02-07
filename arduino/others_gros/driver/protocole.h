@@ -81,6 +81,11 @@
 #define W_MS								-60
 #define Q_KILL								-69
 
+/**
+ * @event
+ */
+#define Q_MAINLOOP_TROP_LONGUE              70
+
 // Maximum : -127
 
 #define ID_OTHERS		"others_gros"

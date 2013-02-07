@@ -10,11 +10,12 @@ void setup(){
 	initSerialLink();
 
     /* Détection des ax12 */
+	delay(100);
     cherche_moteurs();
 
     /* Active le jack et le bouton d'arrêt*/
-    initJackDetection();
-    initEmergencyStopDetection();
+    /*initJackDetection();
+	  initEmergencyStopDetection();*/
 
 	// LED qui n'en est pas une
 	pinMode(16,OUTPUT);
@@ -33,22 +34,27 @@ void loop(){
 	readIncomingData(cmd);
 
     /*on regarde l'état du jack et du bouton d'arrêt*/
-    jackCheck();
+    /*jackCheck();
     if (emergencyCheck()) {
       //STOP ALL THE STUFF !
-    }
+	  }*/
 	
 	/* fin zone de programmation libre */
 	
+	check_ax12_goals();
+
 	/* On eteint la del */
 	digitalWrite(16, LOW);
 	
+	delay(5);
 	/* On attend le temps qu'il faut pour boucler */
+	/*
 	long udelay = DUREE_CYCLE*1000-(micros()-timeStart);
 	if(udelay<0)
-		Serial.println("ouch : mainloop trop longue");
+		sendEvent(Q_MAINLOOP_TROP_LONGUE, udelay);
 	else
 		 delayMicroseconds(udelay);
+	*/
 }
 
 
