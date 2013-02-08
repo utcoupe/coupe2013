@@ -45,14 +45,45 @@ void cmd(int16_t id, int8_t cmd, int8_t size, int16_t *args){
             CHECK_ARGS(1)
                 {
                     int resp = get_position(args[0], &error);
-                    if (error == 0)
+                    //if (error == 0)
                         sendResponse(id, resp);
-                    else
-                        sendError(id, error);
+                        //else
+                        //sendError(id, error);
+                }
+			break;
+        }
+    case Q_READ_AX12:
+        {
+            CHECK_ARGS(2)
+                {
+                    int resp = lire(args[1], args[0], &error);
+					sendResponse(id, resp);
                 }
 			break;
         }
 
+    case Q_WRITE_AX12:
+        {
+            CHECK_ARGS(3)
+                {
+					if (args[0] >= NB_MOTEURS) {
+						sendError(id, E_INVALID_PARAMETERS_VALUE);
+					} else {
+						motor[args[0]].writeInfo(args[1], args[2]);
+						sendResponse(id, motor[args[0]].status_error);
+					}
+                }
+			break;
+        }
+	case Q_DETECT_AX12:
+		{
+			CHECK_ARGS(0)
+				{
+					cherche_moteurs();
+					sendResponse(id, 18, reverse);
+				}
+            break;
+		}
     default:
         {
             sendError(id,E_INVALID_CMD);

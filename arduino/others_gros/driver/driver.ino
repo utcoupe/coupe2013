@@ -11,7 +11,6 @@ void setup(){
 
     /* Détection des ax12 */
 	delay(100);
-    cherche_moteurs();
 
     /* Active le jack et le bouton d'arrêt*/
     /*initJackDetection();
