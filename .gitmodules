@@ -1,0 +1,3 @@
+[submodule "lib/zerobot"]
+	path = lib/zerobot
+	url = git@github.com:utcoupe/zerobot.git
