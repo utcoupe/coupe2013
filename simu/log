@@ -1,0 +1,791 @@
+Loading chipmunk for Darwin (64bit) [/Library/Frameworks/Python.framework/Versions/3.3/lib/python3.3/site-packages/pymunk/libchipmunk.dylib]
+add 4
+Vec(25, 23)
+Vec(25, -23)
+Vec(1.4083438190194562e-15, 23.0)
+Vec(1.4083438190194562e-15, -23.0)
+add 4
+Vec(25, 23)
+Vec(25, -23)
+Vec(1.4083438190194562e-15, 23.0)
+Vec(1.4083438190194562e-15, -23.0)
+Couldn't connect to socket: [Errno 61] Connection refused
+Vec(0, 0)
+Vec(750, 0)
+Couldn't connect to socket: [Errno 61] Connection refused
+Vec(0, 500)
+Vec(0, 0)
+Vec(0, 125)
+Vec(625, 125)
+Couldn't connect to socket: [Errno 61] Connection refused
+Vec(81, 500)
+Vec(668, 500)
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+motorphysics._add_extension shape already added to space
+motorphysics._add_extension shape already added to space
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+Initializing cpSpace - Chipmunk v6.1.1 (Debug Enabled)
+Compile with -DNDEBUG defined to disable debug mode and runtime assertion checks
+Loading chipmunk for Darwin (64bit) [/Library/Frameworks/Python.framework/Versions/3.3/lib/python3.3/site-packages/pymunk/libchipmunk.dylib]
+add 4
+Vec(25, 23)
+Vec(25, -23)
+Vec(1.4083438190194562e-15, 23.0)
+Vec(1.4083438190194562e-15, -23.0)
+add 4
+Vec(25, 23)
+Vec(25, -23)
+Vec(1.4083438190194562e-15, 23.0)
+Vec(1.4083438190194562e-15, -23.0)
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Vec(0, 0)
+Vec(750, 0)
+Couldn't connect to socket: [Errno 61] Connection refused
+Vec(0, 500)
+Vec(0, 0)
+Vec(0, 125)
+Couldn't connect to socket: [Errno 61] Connection refused
+Vec(625, 125)
+Vec(81, 500)
+Vec(668, 500)
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+motorphysics._add_extension shape already added to space
+motorphysics._add_extension shape already added to space
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+Couldn't connect to socket: [Errno 61] Connection refused
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+exit
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+(0, {'arrachercarte': 0, 'lingos': 0, 'cds': 0})
+Initializing cpSpace - Chipmunk v6.1.1 (Debug Enabled)
+Compile with -DNDEBUG defined to disable debug mode and runtime assertion checks
