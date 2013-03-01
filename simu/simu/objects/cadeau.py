@@ -11,7 +11,7 @@ class Cadeau(EngineObjectPoly):
 			colltype		= COLLTYPE_CADEAU,
 			posinit			= posinit,
 			color			= color,
-			poly_points		= map(lambda p: mm_to_px(*p),[(0,0),(150,0),(150,2),(0,2)])
+			poly_points		= map(lambda p: mm_to_px(*p),[(0,0),(150,0),(150,20),(0,20)])
 		)
 
 	def __repr__(self):

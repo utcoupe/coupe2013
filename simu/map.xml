@@ -11,21 +11,21 @@
 	<!-- Placement du gateau -->
 	<gateau x="1500" y="2000" />
 	
-	<!-- Placement des assiettes de cerise du côté gauche (mettre en commentaire l'assiette où le robot est) -->
-	<cerise x="200" y="250" color="blue" />
-	<cerise x="200" y="600" color="blue" />
-	<cerise x="200" y="1000" color="blue" />
-	<cerise x="200" y="1400" color="blue" />
-	<cerise x="200" y="1750" color="blue" />
+	<!-- Placement des assiettes de cerise du cÃ´tÃ© gauche (mettre en commentaire l'assiette oÃ¹ le robot est) -->
+	<cerise x="200" y="250" />
+	<cerise x="200" y="600" />
+	<cerise x="200" y="1000" />
+	<cerise x="200" y="1400" />
+	<cerise x="200" y="1750" />
 	
-	<!-- Placement des assiettes de cerise du côté droite (mettre en commentaire l'assiette où le robot est) -->
-	<cerise x="2800" y="250" color="red" />
-	<cerise x="2800" y="600" color="red" />
-	<cerise x="2800" y="1000" color="red" />
-	<cerise x="2800" y="1400" color="red" />
-	<cerise x="2800" y="1750" color="red" />
+	<!-- Placement des assiettes de cerise du cÃ´tÃ© droite (mettre en commentaire l'assiette oÃ¹ le robot est) -->
+	<cerise x="2800" y="250"/>
+	<cerise x="2800" y="600"/>
+	<cerise x="2800" y="1000"/>
+	<cerise x="2800" y="1400"/>
+	<cerise x="2800" y="1750"/>
 	
-	<!-- Placement des verres du côté gauche -->
+	<!-- Placement des verres du cÃ´tÃ© gauche -->
 	<verre x="900" y="550" />
 	<verre x="900" y="1050" />
 	<verre x="1050" y="800" />
@@ -33,7 +33,7 @@
 	<verre x="1200" y="1050" />
 	<verre x="1350" y="800" />
 	
-	<!-- Placement des verres du côté droite -->
+	<!-- Placement des verres du cÃ´tÃ© droite -->
 	<verre x="2100" y="550" />
 	<verre x="2100" y="1050" />
 	<verre x="1950" y="800" />
@@ -41,8 +41,8 @@
 	<verre x="1800" y="1050" />
 	<verre x="1650" y="800" />
 	
-	<!-- Pour les bougies, les couleurs ont été mises arbitrairement pour le moment -->
-	<!-- Placement des bougies du première étage -->
+	<!-- Pour les bougies, les couleurs ont Ã©tÃ© mises arbitrairement pour le moment -->
+	<!-- Placement des bougies du premiÃ¨re Ã©tage -->
 	<bougie x="1054" y="1941" color="blue" />
 	<bougie x="1084" y="1828" color="red" />
 	<bougie x="1143" y="1726" color="red" />
@@ -56,7 +56,7 @@
 	<bougie x="1916" y="1828" color="blue" />
 	<bougie x="1946" y="1941" color="red" />
 	
-	<!-- Placement des bougies du deuxième étage -->
+	<!-- Placement des bougies du deuxiÃ¨me Ã©tage -->
 	<bougie x="1157" y="1932" color="blue" />
 	<bougie x="1209" y="1806" color="red" />
 	<bougie x="1306" y="1709" color="blue" />
@@ -66,7 +66,7 @@
 	<bougie x="1791" y="1806" color="red" />
 	<bougie x="1843" y="1932" color="blue" />
 	
-	<!-- Placement des cadeaux (couleur fixe, supposé bleu à gauche -->
+	<!-- Placement des cadeaux (couleur fixe, supposÃ© bleu Ã  gauche -->
 	<cadeau x="515" y="0" color="blue" />
 	<cadeau x="685" y="0" color="red" />
 	
