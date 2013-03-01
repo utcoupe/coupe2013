@@ -5,13 +5,14 @@ from geometry import ConvexPoly
 
 
 from .define import *
-from .objects import Cd, Lingo
+from .objects import Verre
 
 points = {
-	T_CD: 1,
-	T_LINGO: 3,
-	T_CARTE: 5,
-	T_BOTTLE: 5,
+	T_VERRE		:4,
+	T_CERISE	:2,
+	T_BOUGIE	:4,
+	T_CADEAU	:4,
+	T_FUNNY		:12
 }
 
 class Match:
@@ -21,69 +22,48 @@ class Match:
 	def init(self, engine):
 		self.engine = engine
 
-	def arracher_carte(self, team):
-		self.carte_arrache[team] = 1
-
 	def score(self, team):
-		cds, lingos = self.get_cds_lingos(team)
-		score  = self.carte_arrache[team] * points[T_CARTE]
-		score += cds * points[T_CD]
-		score += lingos * points[T_LINGO]
-		return score, {'arrachercarte': self.carte_arrache[team], 'cds':cds, 'lingos':lingos}
+		verres = self.get_verres(team)
+		score  =  verres * points[T_VERRE]
 
-	def get_cds_lingos(self, team):
+		## TODO Complete score calculus
+		return score  #, {'arrachercarte': self.carte_arrache[team], 'cds':cds, 'lingos':lingos}
+
+	def get_verres(self, team):
 		if team == BLUE:
-			return self.get_cds_lingos_for_blue()
+			return self.get_verres_for_blue()
 		elif team == RED:
-			return self.get_cds_lingos_for_red()
+			return self.get_verres_for_red()
 		else:
 			raise Exception("team inconnue")
 	
-	def get_cds_lingos_for_blue(self):
+	def get_verres_for_blue(self):
 		poly = ConvexPoly(mm_to_px(
-			(0,500),
-			(400,500),
-			(325,2000),
+			(0,0),
+			(400,0),
+			(400,2000),
 			(0,2000)
 		))
-		poly2 = ConvexPoly(mm_to_px(
-			(0,0),
-			(500,0),
-			(500,500),
-			(0,500)
-		))
-		cds,lingos = self._get_cds_lingos_in_poly(poly)
-		cds2,lingos2 = self._get_cds_lingos_in_poly(poly2)
-		return cds+cds2, lingos+lingos2
+		verres = self._get_verres_in_poly(poly)
+		return verres
 		
-	def get_cds_lingos_for_red(self):
+	def get_verres_for_red(self):
 		poly = ConvexPoly(mm_to_px(
-			(3000,500),
-			(2600,500),
-			(2675,2000),
-			(3000,2000)
-		))
-		poly2 = ConvexPoly(mm_to_px(
-			(2500,0),
+			(2600,0),
 			(3000,0),
-			(3000,500),
-			(2500,500)
+			(3000,2000),
+			(2600,2000)
 		))
-		cds,lingos = self._get_cds_lingos_in_poly(poly)
-		cds2,lingos2 = self._get_cds_lingos_in_poly(poly2)
-		return cds+cds2, lingos+lingos2
+		verres = self._get_verres_in_poly(poly)
+		return verres
 
-	def _get_cds_lingos_in_poly(self, poly):
-		cds = 0
-		lingos = 0
+	def _get_verres_in_poly(self, poly):
+		verres = 0
 		for obj in self.engine.objects:
-			if isinstance(obj, Cd):
-				if obj.color == "white" and obj.pos() in poly:
-					cds += 1
-			if isinstance(obj, Lingo):
+			if isinstance(obj, Verre):
 				if obj.pos() in poly:
-					lingos += 1
-		return cds,lingos
+					verres += 1
+		return verres
 
 
 

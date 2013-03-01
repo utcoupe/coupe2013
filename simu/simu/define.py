@@ -10,37 +10,59 @@ PX_TO_MM			= 4
 
 
 
-COLLTYPE_DEFAULT	= 0
-COLLTYPE_WALL		= 1
-COLLTYPE_ROBOT		= 2
-COLLTYPE_VERRE 		= 3
-COLLTYPE_ASSIETTE	= 4
-COLLTYPE_CATEAU		= 5
+COLLTYPE_DEFAULT		= 0
+COLLTYPE_WALL			= 1
+COLLTYPE_GROS_ROBOT		= 2
+COLLTYPE_PETIT_ROBOT	= 3
+COLLTYPE_BRAS			= 4
+COLLTYPE_VERRE			= 5
+COLLTYPE_BOUGIE			= 6
+COLLTYPE_CERISE			= 7
+COLLTYPE_CADEAU			= 8
+COLLTYPE_ROULEAU		= 9
+COLLTYPE_ROBOT   		= 10
+
+#a virer juste pour les tests
+# COLLTYPE_CD		= 6
+# COLLTYPE_LINGO		= 6
+# COLLTYPE_ROULEAU	= 6
+
 
 BLUE				= 0
 RED					= 1
 
 T_VERRE				= 0
-T_ASSIETTE			= 1
-T_CATEAU			= 2
+T_CERISE			= 1
+T_BOUGIE			= 2
+T_CADEAU			= 3
+T_FUNNY				= 4
+#a supprimer c'est juste pour faire les tests
+# T_CD				= 1
+# T_LINGO				= 3
+# T_CARTE				= 5
+# T_BOTTLE			= 5
 
-COEFF_ENGORGEMENT_CERISE	= 0.05 # eq : on peut mettre 20 Cds avant d'être plein (0.05 * 20 = 1)
+
+#coeff non modifiés (mais il faut surement ajuster celui pour CD == VERRE dans la simu2013)
+#idem pour le coeff LINGO == CERISE
+COEFF_ENGORGEMENT_CERISE= 0.02 # eq : on peut mettre 50 Cerises avant d'être plein (0.05 * 20 = 1)
+# COEFF_ENGORGEMENT_LINGO	= 0.2
+COEFF_ENGORGEMENT_VERRE = 0.5  # Pour le petit robot, il en prend 2 a la fois.
+
+
 
 KEY_CHANGE_TEAM		= K_LSHIFT		# changer de robot
 KEY_CHANGE_ROBOT	= K_LCTRL		# changer d'équipe
 KEY_STOP_RESUME		= K_SPACE		# apppui = stop, relache = resume
 KEY_CANCEL			= K_ESCAPE		# cancel
-KEY_LANCE_CERISES	= K_l			# lancer les cerises
-KEY_ETENDRE_BOUGIES = K_e     		# eteintre les bougies
-KEY_EMPILER_VERRES  = K_v   		# empiler les verres
+KEY_DROP			= K_d			# vider le gros robot
+KEY_ARRACHE			= K_a			# arracher la carte
+KEY_BALAIS_LEFT		= K_q			# sortir le balais de gauche
+KEY_BALAIS_RIGHT	= K_w			# sortir le balais de droite
+KEY_BULDO			= K_x			# mode buldozer
+KEY_TELEPORTATION	= K_t			# mode téléportation
+KEY_RECUL			= K_r			# mode marche arrière
 KEY_JACK			= K_j			# jack
-
-# KEY_ARRACHE			= K_a			# arracher la carte
-# KEY_BALAIS_LEFT		= K_q			# sortir le balais de gauche
-# KEY_BALAIS_RIGHT	= K_w			# sortir le balais de droite
-# KEY_BULDO			= K_x			# mode buldozer
-# KEY_TELEPORTATION	= K_t			# mode téléportation
-# KEY_RECUL			= K_r			# mode marche arrière
 
 
 BIG			= 0
@@ -53,12 +75,12 @@ RIGHT		= 1
 WIDTH_MINI 		= 184
 HEIGHT_MINI 	= 200
 # dimension des palettes (buldo) du mini robot
-# SIZE_PALETTE	= 70
-# WIDTH_PALETTE	= 5
+SIZE_PALETTE	= 70
+WIDTH_PALETTE	= 5
 # dimensions balais qui râclent la zone adverse	
-# SIZE_BALAIS		= 180
-# WIDTH_BALAIS	= 50
-# ECART_ROBOT_BALAIS	= 0
+SIZE_BALAIS		= 180
+WIDTH_BALAIS	= 50
+ECART_ROBOT_BALAIS	= 0
 
 #ECART_CENTRE = -65 # ecart par rapport au centre du robot
 

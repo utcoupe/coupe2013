@@ -10,9 +10,6 @@ from .motorphysic import MotorPhysic
 from .motorgraphic import MotorGraphic
 
 
-
-
-
 class Engine:
 	"""
 	Engine, cette classe permet de coupler un moteur physique et un
@@ -25,9 +22,12 @@ class Engine:
 		"""
 		self.graphicsengine = MotorGraphic()
 		self.physicsengine = MotorPhysic()
-		self.physicsengine.add_collision_handler(COLLTYPE_ROBOT, COLLTYPE_WALL, self.graphicsengine.draw_collision)
-		self.physicsengine.add_collision_handler(COLLTYPE_ROULEAU, COLLTYPE_CD, self.on_collision_rouleau_cd)
-		self.physicsengine.add_collision_handler(COLLTYPE_ROULEAU, COLLTYPE_LINGO, self.on_collision_rouleau_lingo)
+		self.physicsengine.add_collision_handler(COLLTYPE_GROS_ROBOT, COLLTYPE_WALL, self.graphicsengine.draw_collision)
+		self.physicsengine.add_collision_handler(COLLTYPE_PETIT_ROBOT, COLLTYPE_WALL, self.graphicsengine.draw_collision)
+		self.physicsengine.add_collision_handler(COLLTYPE_BRAS, COLLTYPE_BOUGIE, self.on_collision_bras_bougie)
+		self.physicsengine.add_collision_handler(COLLTYPE_GROS_ROBOT, COLLTYPE_CERISE, self.on_collision_gros_robot_cerise)
+		self.physicsengine.add_collision_handler(COLLTYPE_PETIT_ROBOT, COLLTYPE_VERRE, self.on_collision_petit_robot_verre)
+		self.physicsengine.add_collision_handler(COLLTYPE_PETIT_ROBOT, COLLTYPE_CADEAU, self.on_collision_petit_robot_cadeau)
 		self.e_stop = threading.Event()
 		self.objects = []
 		self.objects_to_remove = []
@@ -48,35 +48,62 @@ class Engine:
 		return None
 
 	
-	def on_collision_rouleau_cd(self, space, arb):
+	def on_collision_bras_bougie(self, space, arb):
 		"""
-		Quand un rouleau touche un cd
-		"""
-		robot = self.find_obj_by_shape(arb.shapes[0])
-		if not robot:
-			print("robot not found")
-		else:
-			cd = self.find_obj_by_shape(arb.shapes[1])
-			if not cd:
-				print("Cd not found")
-			else:
-				robot.eat_cd(cd.color)
-				self.objects_to_remove.append(cd)
-
-	def on_collision_rouleau_lingo(self, space, arb):
-		"""
-		Quand un rouleau touche un cd
+		Quand le bras touche une bougie
 		"""
 		robot = self.find_obj_by_shape(arb.shapes[0])
 		if not robot:
 			print("robot not found")
 		else:
-			lingo = self.find_obj_by_shape(arb.shapes[1])
-			if not lingo:
-				print("Lingo not found")
+			bougie = self.find_obj_by_shape(arb.shapes[1])
+			if not bougie:
+				print("Bougie not found")
 			else:
-				robot.eat_lingo()
-				self.objects_to_remove.append(lingo)
+				robot.eteindre_bougie(bougie)
+	
+	def on_collision_gros_robot_cerise(self, space, arb):
+		"""
+		Quand le gros robot passe sur une assiette de cerises
+		"""
+		robot = self.find_obj_by_shape(arb.shapes[0])
+		if not robot:
+			print("robot not found")
+		else:
+			cerise = self.find_obj_by_shape(arb.shapes[1])
+			if not cerise:
+				print("Cerise not found")
+			else:
+				robot.prendre_cerise(cerise)
+				
+	def on_collision_petit_robot_verre(self, space, arb):
+		"""
+		Quand le petit robot touche un verre
+		"""
+		robot = self.find_obj_by_shape(arb.shapes[0])
+		if not robot:
+			print("robot not found")
+		else:
+			verre = self.find_obj_by_shape(arb.shapes[1])
+			if not verre:
+				print("Verre not found")
+			else:
+				robot.prendre_verre(verre)
+				
+	def on_collision_petit_robot_cadeau(self, space, arb):
+		"""
+		Quand le petit robot touche un cadeau
+		"""
+		robot = self.find_obj_by_shape(arb.shapes[0])
+		if not robot:
+			print("robot not found")
+		else:
+			cadeau = self.find_obj_by_shape(arb.shapes[1])
+			if not cadeau:
+				print("Cadeau not found")
+			else:
+				robot.pousser_cadeau(cadeau.color)
+				self.objects_to_remove.append(cadeau)
 		
 
 

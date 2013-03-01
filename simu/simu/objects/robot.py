@@ -10,8 +10,8 @@ from py3irc.mypyirc.mypyircbot import Executer
 from py3irc.mypyirc.ircutils import *
 from ..define import *
 from ..engine.engineobject import EngineObjectPoly
-from .cd import Cd
-from .lingo import Lingo
+#from .cd import Cd
+#from .lingo import Lingo
 
 
 def angle_diff(a, b):
