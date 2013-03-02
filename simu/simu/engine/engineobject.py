@@ -98,6 +98,7 @@ class EngineObjectCircle(EngineObject):
 		self.radius = radius
 		EngineObject.__init__(self, t=CIRCLE, **kwargs)
 
+
 	def create_body(self):
 		body = self.engine.physicsengine.create_body_circle(self.mass, self.posinit, self.radius)
 		return body

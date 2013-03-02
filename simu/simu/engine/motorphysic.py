@@ -32,9 +32,9 @@ class MotorPhysic:
 	def create_shape_segment(self, body, p1, p2, width):
 		return pm.Segment(body, p1, p2, width)
 
-
 	def create_body_circle(self, mass, posinit, radius):
 		inertia = pm.moment_for_circle(mass, 0, radius, (0,0))
+		print("mass = ", mass, "posinit = ", posinit, "inertia = ", inertia)
 		body = pm.Body(mass, inertia)
 		body.position = Vec2d(posinit)
 		return body

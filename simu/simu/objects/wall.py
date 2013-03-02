@@ -14,7 +14,7 @@ class Wall(EngineObjectSegment):
 			posB			= posb,
 			color			= "black",
 			mass			= MASS_INF,
-			width			= 5
+			width			= 2
 		)
 
 	def __repr__(self):

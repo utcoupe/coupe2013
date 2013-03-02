@@ -24,8 +24,8 @@ class Palette(EngineObjectSegment):
 			posA			= pa,
 			posB			= pb,
 			color			= "orange",
-			mass			= 10,
-			width			= WIDTH_PALETTE
+			mass			= 80,
+			width			= WIDTH_PALETTE 
 		)
 
 # class Balais(EngineObjectSegment):
@@ -71,7 +71,7 @@ class MiniRobot(Robot):
 
 		self.match = match
 		
-		self.palette_left = Palette(engine, mm_to_px(HEIGHT_MINI*2, WIDTH_MINI*2), 45)
+		self.palette_left = Palette(engine, mm_to_px(HEIGHT_MINI/2, WIDTH_MINI/2), 45)
 		self.palette_right = Palette(engine, mm_to_px(HEIGHT_MINI/2, -WIDTH_MINI/2), -45)
 		# self.balais_left = Balais(engine, 90)
 		# self.balais_right = Balais(engine, -90)
@@ -93,10 +93,16 @@ class MiniRobot(Robot):
 		self.add_body_extension(self.palette_right)
 
 	def prendre_verre(self, verre):
+		print("Le petit petit pousse un verre")
 		if not self.state_buldo:
 			if not self.is_full():
-				print("Le petit prend un verre!")
-				verre.colltype = COLLTYPE_DEFAULT
+				DIST = 200
+				# calcul de la position d'attérissage (un peu devant le robot
+				pos = Vec(self.pos())
+				angle = self.angle()
+				pos_drop = pos + mm_to_px(DIST * cos(angle), DIST * sin(angle))
+				pos_drop = tuple(pos_drop)
+				verre.posinit = pos_drop
 				self.add_body_extension(verre)
 				self.monter_verre()
 

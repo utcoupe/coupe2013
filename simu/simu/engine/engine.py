@@ -83,6 +83,7 @@ class Engine:
 		"""
 		Quand le petit robot touche un verre
 		"""
+		print("PETIT-VERRE")
 		robot = self.find_obj_by_shape(arb.shapes[0])
 		if not robot:
 			print("robot not found")

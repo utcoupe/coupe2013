@@ -45,14 +45,14 @@ T_FUNNY				= 4
 
 #coeff non modifiés (mais il faut surement ajuster celui pour CD == VERRE dans la simu2013)
 #idem pour le coeff LINGO == CERISE
-COEFF_ENGORGEMENT_CERISE= 0.02 # eq : on peut mettre 50 Cerises avant d'être plein (0.05 * 20 = 1)
+COEFF_ENGORGEMENT_CERISE= 0.05 # eq : on peut mettre 25 Cerises avant d'être plein (0.05 * 20 = 1)
 # COEFF_ENGORGEMENT_LINGO	= 0.2
 COEFF_ENGORGEMENT_VERRE = 0.5  # Pour le petit robot, il en prend 2 a la fois.
 
 
 
-KEY_CHANGE_TEAM		= K_LSHIFT		# changer de robot
-KEY_CHANGE_ROBOT	= K_LCTRL		# changer d'équipe
+KEY_CHANGE_TEAM		= K_LSHIFT		# changer d'equipe
+KEY_CHANGE_ROBOT	= K_LCTRL		# changer de robot
 KEY_STOP_RESUME		= K_SPACE		# apppui = stop, relache = resume
 KEY_CANCEL			= K_ESCAPE		# cancel
 KEY_DROP			= K_d			# vider le gros robot
@@ -75,11 +75,11 @@ RIGHT		= 1
 WIDTH_MINI 		= 184
 HEIGHT_MINI 	= 200
 # dimension des palettes (buldo) du mini robot
-SIZE_PALETTE	= 70
-WIDTH_PALETTE	= 5
+SIZE_PALETTE	= 120
+WIDTH_PALETTE	= 10
 # dimensions balais qui râclent la zone adverse	
-SIZE_BALAIS		= 180
-WIDTH_BALAIS	= 50
+SIZE_BALAIS		= 70
+WIDTH_BALAIS	= 10
 ECART_ROBOT_BALAIS	= 0
 
 #ECART_CENTRE = -65 # ecart par rapport au centre du robot

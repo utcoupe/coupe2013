@@ -11,6 +11,7 @@ from ..define import *
 from ..engine.engineobject import EngineObjectPoly
 from .bougie import Bougie
 from .cerise import Cerise
+from .ping_pong import Ping_pong
 
 class BigRobot(Robot):
 	def __init__(self, *, engine, canal_asserv, canal_others, canal_visio, canal_extras, posinit, team):
@@ -70,28 +71,30 @@ class BigRobot(Robot):
 		print("Bougie eteinte: %d" % self.nb_bougie)
 
 	def prendre_cerise(self, cerise):
-		self.nb_cerise_bonne 	+= 7	#on a 7 bonnes cerises par assiettes
-		self.nb_cerise_pourri 	+= 1
-		cerise.color = 'gray'
-		print("bonnes cerises: %d mauvaises cerises: %d" % (self.nb_cerise_bonne, self.nb_cerise_pourri))
+		if not self.is_full():
+			self.nb_cerise_bonne 	+= 7	#on a 7 bonnes cerises par assiettes
+			self.nb_cerise_pourri 	+= 1
+			cerise.color = 'gray'
+			print("bonnes cerises: %d mauvaises cerises: %d" % (self.nb_cerise_bonne, self.nb_cerise_pourri))
 		
 #à supprimer car inutile pour la version 2013
 
 	def _cmd_others_drop(self, **kwargs):
-		DIST = 200
 		# calcul de la position d'attérissage (un peu derrière le robot
-		pos = Vec(self.pos())
-		angle = self.angle() + math.pi
-		pos_drop = pos + mm_to_px(random.randint(-100,100),random.randint(-100,100)) + mm_to_px(DIST * math.cos(angle), DIST * math.sin(angle))
-		pos_drop = tuple(pos_drop)
+		# DIST = 200
+		# pos = Vec(self.pos())
+		# angle = self.angle() + math.pi
+		# pos_drop = pos + mm_to_px(random.randint(-50,50),random.randint(-50,50)) + mm_to_px(DIST * math.cos(angle), DIST * math.sin(angle))
+		# print("pos_drop= ", pos_drop)
 		# création des objets
 		for _ in range(self.nb_cerise_bonne):
-			cd = Cd(self.engine, pos_drop, "white")
-			self.engine.add(cd)
-		for _ in range(self.nb_cerise_pourri):
-			cd = Cd(self.engine, pos, "black")
-			self.engine.add(cd)
-		
+			pos_drop = 	mm_to_px(1449 + random.randint(-25, 25), 51 + random.randint(-25, 25)) \
+						if self.team == BLUE \
+						else mm_to_px(1551 + random.randint(-25, 25), 51 + random.randint(-25, 25))
+			pos_drop = tuple(pos_drop)
+			pingpong = Ping_pong(self.engine, pos_drop, self.team)
+			self.engine.add(pingpong)
+
 		self.nb_cerise_bonne = 0
 		self.nb_cerise_pourri = 0
 
@@ -101,6 +104,9 @@ class BigRobot(Robot):
 	# def _cmd_others_vider_totem(self, **kwargs):
 	# 	self.nb_white_cds += 4
 	# 	self.nb_lingos += 1
+	# 	
+	def is_full(self):
+		return COEFF_ENGORGEMENT_CERISE * (self.nb_cerise_bonne + self.nb_cerise_pourri) > 1
 
 	def _cmd_others_is_full(self, **kwargs):
 		coeff_engorgement = (self.nb_cerise_bonne+self.nb_cerise_pourri) * COEFF_ENGORGEMENT_CERISE

@@ -9,7 +9,7 @@ class Verre(EngineObjectCircle):
 	def __init__(self,engine,posinit):
 		EngineObjectCircle.__init__(self,
 			engine			= engine,
-			colltype		= COLLTYPE_VERRE,
+			colltype		= COLLTYPE_DEFAULT,
 			posinit			= posinit,
 			color			=  "black",
 			mass			= 60,

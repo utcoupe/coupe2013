@@ -3,11 +3,13 @@
 	<backgroundmap src="map.jpg" />
 	
 	<!-- Placement des bords de la table -->
-	<wall x1="0" y1="0" x2="1300" y2="0" />
-	<wall x1="1700" y1="0" x2="3000" y2="0" />
+	<wall x1="0" y1="0" x2="3000" y2="0" />
 	<wall x1="3000" y1="0" x2="3000" y2="2000" />
 	<wall x1="0" y1="2000" x2="3000" y2="2000" />
 	<wall x1="0" y1="0" x2="0" y2="2000" />
+
+	<!-- diviseur des bacs de reception des ping pongs -->
+	<wall x1="1500" y1="0" x2="1500" y2="200"/>
 	
 	<!-- Placement du gateau -->
 	<!-- <gateau x="1500" y="0" /> -->
