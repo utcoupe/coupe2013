@@ -12,7 +12,8 @@ class Verre(EngineObjectCircle):
 			colltype		= COLLTYPE_VERRE,
 			posinit			= posinit,
 			color			=  "black",
-			radius			= mm_to_px(80)
+			mass			= 60,
+			radius			= mm_to_px(40)
 		)
 
 		self.etage = 0

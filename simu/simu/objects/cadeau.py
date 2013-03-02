@@ -10,8 +10,9 @@ class Cadeau(EngineObjectPoly):
 			engine			= engine,
 			colltype		= COLLTYPE_CADEAU,
 			posinit			= posinit,
+			mass			= MASS_INF,
 			color			= color,
-			poly_points		= map(lambda p: mm_to_px(*p),[(0,0),(150,0),(150,20),(0,20)])
+			poly_points		= map(lambda p: mm_to_px(*p),[(0,0),(150,0),(150,22),(0,22)])
 		)
 
 	def __repr__(self):

@@ -11,8 +11,12 @@ class Bougie(EngineObjectCircle):
 			colltype		= COLLTYPE_BOUGIE,
 			posinit			= posinit,
 			color			= color,
-			radius			= mm_to_px(80)
+			mass 			= MASS_INF,
+			radius			= mm_to_px(40)
 		)
 
 	def __repr__(self):
 		return "Bougies %s " % (self.posinit,)
+
+	def eteindre(self):
+		self.color = "gray"

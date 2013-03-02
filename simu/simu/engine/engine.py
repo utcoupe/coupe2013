@@ -25,7 +25,7 @@ class Engine:
 		self.physicsengine.add_collision_handler(COLLTYPE_GROS_ROBOT, COLLTYPE_WALL, self.graphicsengine.draw_collision)
 		self.physicsengine.add_collision_handler(COLLTYPE_PETIT_ROBOT, COLLTYPE_WALL, self.graphicsengine.draw_collision)
 		self.physicsengine.add_collision_handler(COLLTYPE_BRAS, COLLTYPE_BOUGIE, self.on_collision_bras_bougie)
-		self.physicsengine.add_collision_handler(COLLTYPE_GROS_ROBOT, COLLTYPE_CERISE, self.on_collision_gros_robot_cerise)
+		self.physicsengine.add_collision_handler(COLLTYPE_ROULEAU, COLLTYPE_CERISE, self.on_collision_gros_robot_cerise)
 		self.physicsengine.add_collision_handler(COLLTYPE_PETIT_ROBOT, COLLTYPE_VERRE, self.on_collision_petit_robot_verre)
 		self.physicsengine.add_collision_handler(COLLTYPE_PETIT_ROBOT, COLLTYPE_CADEAU, self.on_collision_petit_robot_cadeau)
 		self.e_stop = threading.Event()
@@ -66,6 +66,7 @@ class Engine:
 		"""
 		Quand le gros robot passe sur une assiette de cerises
 		"""
+		# print("Rouleau touche cerise!")
 		robot = self.find_obj_by_shape(arb.shapes[0])
 		if not robot:
 			print("robot not found")
@@ -73,6 +74,8 @@ class Engine:
 			cerise = self.find_obj_by_shape(arb.shapes[1])
 			if not cerise:
 				print("Cerise not found")
+			elif cerise.color == 'gray':
+				return
 			else:
 				robot.prendre_cerise(cerise)
 				

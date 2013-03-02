@@ -19,7 +19,7 @@ class Palette(EngineObjectSegment):
 		pb = mm_to_px(SIZE_PALETTE * cos(angle), SIZE_PALETTE * sin(angle))
 		EngineObjectSegment.__init__(self,
 			engine			= engine,
-			colltype		= COLLTYPE_ROBOT,
+			colltype		= COLLTYPE_PETIT_ROBOT,
 			offset 			= offset,
 			posA			= pa,
 			posB			= pb,
@@ -71,12 +71,13 @@ class MiniRobot(Robot):
 
 		self.match = match
 		
-		self.palette_left = Palette(engine, mm_to_px(HEIGHT_MINI/2, WIDTH_MINI/2), 45)
+		self.palette_left = Palette(engine, mm_to_px(HEIGHT_MINI*2, WIDTH_MINI*2), 45)
 		self.palette_right = Palette(engine, mm_to_px(HEIGHT_MINI/2, -WIDTH_MINI/2), -45)
 		# self.balais_left = Balais(engine, 90)
 		# self.balais_right = Balais(engine, -90)
 
 		self.nb_verres	 = 0
+		self.nb_cadeau_pousse = 0
 		self.state_buldo = False
 
 	def remove_palette_left(self):
@@ -94,9 +95,16 @@ class MiniRobot(Robot):
 	def prendre_verre(self, verre):
 		if not self.state_buldo:
 			if not self.is_full():
+				print("Le petit prend un verre!")
 				verre.colltype = COLLTYPE_DEFAULT
 				self.add_body_extension(verre)
 				self.monter_verre()
+
+	def pousser_cadeau(self, color):
+		if(color == 'red' and self.team == RED) or (color == 'blue' and self.team == BLUE):
+			self.nb_cadeau_pousse += 1
+		else:
+			print("-> Le petit a pousse le mauvais cadeau!")
 
 	def monter_verre(self):
 		for v in self.extension_objects:
@@ -110,7 +118,7 @@ class MiniRobot(Robot):
 				self.remove_body_extension(v)
 
 	def is_full(self):
-		return self.nb_verres * COEFF_ENGORGEMENT_VERRE < 1
+		return self.nb_verres * COEFF_ENGORGEMENT_VERRE > 1
 
 	# def remove_balais_left(self):
 	# 	self.remove_body_extension(self.balais_left)

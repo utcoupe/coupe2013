@@ -57,13 +57,14 @@ class Robot(EngineObjectPoly, Executer):
 		color = 'blue' if team == BLUE else 'red'
 		EngineObjectPoly.__init__(self,
 			engine		 	= engine,
-			colltype		= COLLTYPE_ROBOT,
 			mass			= mass,
 			posinit			= posinit,
 			color			= color,
+			colltype		= COLLTYPE_GROS_ROBOT if typerobot == BIG else COLLTYPE_PETIT_ROBOT, 
 			poly_points		= poly_points,
 			extension_objects	= extension_objects
 		)
+
 		Executer.__init__(self)
 
 		self.typerobot = typerobot

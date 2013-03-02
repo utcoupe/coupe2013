@@ -10,8 +10,9 @@ class Gateau(EngineObjectCircle):
 			engine			= engine,
 			colltype		= COLLTYPE_WALL,
 			posinit			= posinit,
-			color			=  "black",
-			radius			= mm_to_px(500)
+			mass			= MASS_INF,
+			color			=  "white",
+			radius			= mm_to_px(200)
 		)
 
 	def __repr__(self):

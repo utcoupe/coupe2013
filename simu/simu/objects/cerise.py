@@ -11,8 +11,8 @@ class Cerise(EngineObjectPoly):
 			engine			= engine,
 			colltype		= COLLTYPE_CERISE,
 			posinit			= posinit,
-			color			= "white",
-			mass			= 10,
+			color			= "purple",
+			mass			= 380,
 			poly_points		= map(lambda p: mm_to_px(*p),[(0,0),(170,0),(170,170),(0,170)])
 		)
 

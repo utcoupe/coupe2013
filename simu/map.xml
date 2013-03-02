@@ -3,81 +3,82 @@
 	<backgroundmap src="map.jpg" />
 	
 	<!-- Placement des bords de la table -->
-	<wall x1="0" y1="0" x2="3000" y2="0" />
+	<wall x1="0" y1="0" x2="1300" y2="0" />
+	<wall x1="1700" y1="0" x2="3000" y2="0" />
 	<wall x1="3000" y1="0" x2="3000" y2="2000" />
 	<wall x1="0" y1="2000" x2="3000" y2="2000" />
 	<wall x1="0" y1="0" x2="0" y2="2000" />
 	
 	<!-- Placement du gateau -->
-	<gateau x="1500" y="2000" />
+	<!-- <gateau x="1500" y="0" /> -->
 	
 	<!-- Placement des assiettes de cerise du côté gauche (mettre en commentaire l'assiette où le robot est) -->
-	<cerise x="200" y="250" />
-	<cerise x="200" y="600" />
-	<cerise x="200" y="1000" />
-	<cerise x="200" y="1400" />
 	<cerise x="200" y="1750" />
+	<cerise x="200" y="1400" />
+	<cerise x="200" y="1000" />
+	<cerise x="200" y="600" />
+	<!-- <cerise x="200" y="250" /> -->
 	
 	<!-- Placement des assiettes de cerise du côté droite (mettre en commentaire l'assiette où le robot est) -->
-	<cerise x="2800" y="250"/>
-	<cerise x="2800" y="600"/>
-	<cerise x="2800" y="1000"/>
-	<cerise x="2800" y="1400"/>
 	<cerise x="2800" y="1750"/>
+	<cerise x="2800" y="1400"/>
+	<cerise x="2800" y="1000"/>
+	<cerise x="2800" y="600"/>
+	<!-- <cerise x="2800" y="250"/> -->
 	
 	<!-- Placement des verres du côté gauche -->
-	<verre x="900" y="550" />
-	<verre x="900" y="1050" />
-	<verre x="1050" y="800" />
-	<verre x="1200" y="550" />
-	<verre x="1200" y="1050" />
-	<verre x="1350" y="800" />
+	<verre x="900" y="1450" />
+	<verre x="900" y="950" />
+	<verre x="1050" y="1200" />
+	<verre x="1200" y="1450" />
+	<verre x="1200" y="950" />
+	<verre x="1350" y="1200" />
 	
 	<!-- Placement des verres du côté droite -->
-	<verre x="2100" y="550" />
-	<verre x="2100" y="1050" />
-	<verre x="1950" y="800" />
-	<verre x="1800" y="550" />
-	<verre x="1800" y="1050" />
-	<verre x="1650" y="800" />
+	<verre x="2100" y="1450" />
+	<verre x="2100" y="950" />
+	<verre x="1950" y="1200" />
+	<verre x="1800" y="1450" />
+	<verre x="1800" y="950" />
+	<verre x="1650" y="1200" />
 	
 	<!-- Pour les bougies, les couleurs ont été mises arbitrairement pour le moment -->
 	<!-- Placement des bougies du première étage -->
-	<bougie x="1054" y="1941" color="blue" />
-	<bougie x="1084" y="1828" color="red" />
-	<bougie x="1143" y="1726" color="red" />
-	<bougie x="1226" y="1643" color="blue" />
-	<bougie x="1328" y="1584" color="white" />	<!-- bougie neutre -->
-	<bougie x="1441" y="1554" color="white" />	<!-- bougie neutre -->
-	<bougie x="1559" y="1554" color="white" />	<!-- bougie neutre -->
-	<bougie x="1672" y="1584" color="white" />	<!-- bougie neutre -->
-	<bougie x="1774" y="1643" color="red" />
-	<bougie x="1857" y="1726" color="blue" />
-	<bougie x="1916" y="1828" color="blue" />
-	<bougie x="1946" y="1941" color="red" />
+	<bougie x="1054" y="59" color="blue" />
+	<bougie x="1084" y="172" color="red" />
+	<bougie x="1143" y="274" color="red" />
+	<bougie x="1226" y="357" color="blue" />
+	<bougie x="1328" y="416" color="white" />	<!-- bougie neutre -->
+	<bougie x="1441" y="446" color="white" />	<!-- bougie neutre -->
+	<bougie x="1559" y="446" color="white" />	<!-- bougie neutre -->
+	<bougie x="1672" y="416" color="white" />	<!-- bougie neutre -->
+	<bougie x="1774" y="357" color="red" />
+	<bougie x="1857" y="274" color="blue" />
+	<bougie x="1916" y="172" color="blue" />
+	<bougie x="1946" y="59" color="red" />
 	
 	<!-- Placement des bougies du deuxième étage -->
-	<bougie x="1157" y="1932" color="blue" />
-	<bougie x="1209" y="1806" color="red" />
-	<bougie x="1306" y="1709" color="blue" />
-	<bougie x="1432" y="1657" color="red" />
-	<bougie x="1568" y="1657" color="red" />
-	<bougie x="1694" y="1709" color="blue" />
-	<bougie x="1791" y="1806" color="red" />
-	<bougie x="1843" y="1932" color="blue" />
+	<bougie x="1157" y="68" color="blue" />
+	<bougie x="1209" y="194" color="red" />
+	<bougie x="1306" y="291" color="blue" />
+	<bougie x="1432" y="343" color="red" />
+	<bougie x="1568" y="343" color="red" />
+	<bougie x="1694" y="291" color="blue" />
+	<bougie x="1791" y="194" color="red" />
+	<bougie x="1843" y="68" color="blue" />
 	
 	<!-- Placement des cadeaux (couleur fixe, supposé bleu à gauche -->
-	<cadeau x="515" y="0" color="blue" />
-	<cadeau x="685" y="0" color="red" />
+	<cadeau x="515" y="2000" color="blue" />
+	<cadeau x="685" y="2000" color="red" />
 	
-	<cadeau x="1115" y="0" color="blue" />
-	<cadeau x="1285" y="0" color="red" />
+	<cadeau x="1115" y="2000" color="blue" />
+	<cadeau x="1285" y="2000" color="red" />
 	
-	<cadeau x="1715" y="0" color="blue" />
-	<cadeau x="1885" y="0" color="red" />
+	<cadeau x="1715" y="2000" color="blue" />
+	<cadeau x="1885" y="2000" color="red" />
 	
-	<cadeau x="2315" y="0" color="blue" />
-	<cadeau x="2485" y="0" color="red" />
+	<cadeau x="2315" y="2000" color="blue" />
+	<cadeau x="2485" y="2000" color="red" />
 	
 	
 </map>

@@ -19,16 +19,16 @@ class BigRobot(Robot):
 			colltype	= COLLTYPE_BRAS,
 			offset		= mm_to_px(6,-137),
 			color		= "red",
-			poly_points = map(lambda p: mm_to_px(*p),[(0,0),(20,0),(20,100),(0,100)]), #taille du bras
+			poly_points = map(lambda p: mm_to_px(*p),[(0,0),(200,0),(200,20),(0,20)]), #taille du bras
 			is_extension= True
 		)
 
 		self.rouleau = EngineObjectPoly(
 			engine 		= engine,
 			colltype	= COLLTYPE_ROULEAU,
-			offset		= mm_to_px(6,-137),
+			offset		= mm_to_px(6,0),
 			color		= "orange",
-			poly_points = map(lambda p: mm_to_px(*p),[(0,0),(138,0),(138,274),(0,274)]),
+			poly_points = map(lambda p: mm_to_px(*p),[(20,0),(118,0),(118,134),(20,134)]),
 			is_extension= True
 		)
 
@@ -46,8 +46,7 @@ class BigRobot(Robot):
 			extension_objects	= [self.bras, self.rouleau]
 		)
 
-		self.nb_red_bougie 		= 0
-		self.nb_blue_bougie 	= 0
+		self.nb_bougie 		= 0
 		self.nb_cerise_pourri 	= 0
 		self.nb_cerise_bonne 	= 0
 
@@ -60,19 +59,21 @@ class BigRobot(Robot):
 						return True
 
 	def eteindre_bougie(self, bougie):
-		if color == 'red':
-			self.nb_red_bougie += 1
-			bougie.color = 'black'
-		elif color == 'blue':
-			self.nb_blue_bougie += 1
-			bougie.color = 'black'
+		if bougie.color == 'gray':
+			return
+		if (bougie.color == 'red' and self.team == RED) or \
+			(bougie.color == 'blue' and self.team == BLUE) or (bougie.color == 'white'):
+			self.nb_bougie += 1
 		else:
-			print ("Couleur de Bougie inconnue : %s" % color)
+			self.nb_bougie -= 1
+		bougie.color = 'gray'
+		print("Bougie eteinte: %d" % self.nb_bougie)
 
 	def prendre_cerise(self, cerise):
 		self.nb_cerise_bonne 	+= 7	#on a 7 bonnes cerises par assiettes
 		self.nb_cerise_pourri 	+= 1
-		cerise.color = 'black'
+		cerise.color = 'gray'
+		print("bonnes cerises: %d mauvaises cerises: %d" % (self.nb_cerise_bonne, self.nb_cerise_pourri))
 		
 #à supprimer car inutile pour la version 2013
 
