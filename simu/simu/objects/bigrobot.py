@@ -18,8 +18,8 @@ class BigRobot(Robot):
 		self.bras = EngineObjectPoly(
 			engine 		= engine,
 			colltype	= COLLTYPE_BRAS,
-			offset		= mm_to_px(6,-137),
-			color		= "red",
+			offset		= mm_to_px(100,0),
+			color		= "purple",
 			poly_points = map(lambda p: mm_to_px(*p),[(0,0),(200,0),(200,20),(0,20)]), #taille du bras
 			is_extension= True
 		)
@@ -27,9 +27,9 @@ class BigRobot(Robot):
 		self.rouleau = EngineObjectPoly(
 			engine 		= engine,
 			colltype	= COLLTYPE_ROULEAU,
-			offset		= mm_to_px(6,0),
+			offset		= mm_to_px(6, -104),
 			color		= "orange",
-			poly_points = map(lambda p: mm_to_px(*p),[(20,0),(118,0),(118,134),(20,134)]),
+			poly_points = map(lambda p: mm_to_px(*p),[(0,0),(118,0),(118,220),(0,220)]),
 			is_extension= True
 		)
 
@@ -44,12 +44,19 @@ class BigRobot(Robot):
 			mass				= 10,
 			typerobot			= BIG,
 			poly_points			= mm_to_px((0,0),(288,0),(288,314),(0,314)),
-			extension_objects	= [self.bras, self.rouleau]
+			extension_objects	= [self.rouleau]
 		)
 
 		self.nb_bougie 		= 0
 		self.nb_cerise_pourri 	= 0
 		self.nb_cerise_bonne 	= 0
+		self.state_bras			= False
+
+	def remove_bras(self):
+		self.remove_body_extension(self.bras)
+
+	def add_bras(self):
+		self.add_body_extension(self.bras)
 
 	def onEvent(self, event):
 		if not Robot.onEvent(self,event):
@@ -58,6 +65,9 @@ class BigRobot(Robot):
 					if KEY_DROP == event.key:
 						self._cmd_others_drop(id_msg=42)
 						return True
+					elif KEY_BRAS == event.key:
+						self.state_bras = not self.state_bras
+						self._cmd_others_bras(self.state_bras)
 
 	def eteindre_bougie(self, bougie):
 		if bougie.color == 'gray':
@@ -76,8 +86,6 @@ class BigRobot(Robot):
 			self.nb_cerise_pourri 	+= 1
 			cerise.color = 'gray'
 			print("bonnes cerises: %d mauvaises cerises: %d" % (self.nb_cerise_bonne, self.nb_cerise_pourri))
-		
-#à supprimer car inutile pour la version 2013
 
 	def _cmd_others_drop(self, **kwargs):
 		# calcul de la position d'attérissage (un peu derrière le robot
@@ -112,4 +120,10 @@ class BigRobot(Robot):
 		coeff_engorgement = (self.nb_cerise_bonne+self.nb_cerise_pourri) * COEFF_ENGORGEMENT_CERISE
 		r = 0 if coeff_engorgement < 1 else 1
 		self.send_canal_asserv(kwargs['id_msg'], r)
+
+	def _cmd_others_bras(self, on):
+		if on:
+			self.add_bras()
+		else:
+			self.remove_bras()
 

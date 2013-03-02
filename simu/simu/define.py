@@ -56,7 +56,7 @@ KEY_CHANGE_ROBOT	= K_LCTRL		# changer de robot
 KEY_STOP_RESUME		= K_SPACE		# apppui = stop, relache = resume
 KEY_CANCEL			= K_ESCAPE		# cancel
 KEY_DROP			= K_d			# vider le gros robot
-KEY_ARRACHE			= K_a			# arracher la carte
+KEY_BRAS			= K_b			# add or remove bras
 KEY_BALAIS_LEFT		= K_q			# sortir le balais de gauche
 KEY_BALAIS_RIGHT	= K_w			# sortir le balais de droite
 KEY_BULDO			= K_x			# mode buldozer

@@ -143,18 +143,7 @@ class MiniRobot(Robot):
 		if not Robot.onEvent(self, event):
 			if self._event_concerns_me(event):
 				if KEYDOWN == event.type:
-					if KEY_ARRACHE == event.key:
-						self._cmd_others_arrachercarte(id_msg=42)
-						return True
-					elif KEY_BALAIS_LEFT == event.key:
-						self.state_balais_left = not self.state_balais_left
-						self._cmd_others_balais(LEFT, self.state_balais_left)
-						return True
-					elif KEY_BALAIS_RIGHT == event.key:
-						self.state_balais_right = not self.state_balais_right
-						self._cmd_others_balais(RIGHT, self.state_balais_right)
-						return True
-					elif KEY_BULDO == event.key:
+					if KEY_BULDO == event.key:
 						self.state_buldo = not self.state_buldo
 						self._cmd_others_buldo(self.state_buldo)
 
