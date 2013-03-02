@@ -47,7 +47,7 @@ T_FUNNY				= 4
 #idem pour le coeff LINGO == CERISE
 COEFF_ENGORGEMENT_CERISE= 0.05 # eq : on peut mettre 25 Cerises avant d'être plein (0.05 * 20 = 1)
 # COEFF_ENGORGEMENT_LINGO	= 0.2
-COEFF_ENGORGEMENT_VERRE = 0.5  # Pour le petit robot, il en prend 2 a la fois.
+COEFF_ENGORGEMENT_VERRE = 0.34  # Pour le petit robot, il en prend 2 a la fois.
 
 
 
@@ -73,7 +73,7 @@ RIGHT		= 1
 
 # dimensions du petit robot
 WIDTH_MINI 		= 184
-HEIGHT_MINI 	= 200
+HEIGHT_MINI 	= 116
 # dimension des palettes (buldo) du mini robot
 SIZE_PALETTE	= 120
 WIDTH_PALETTE	= 10

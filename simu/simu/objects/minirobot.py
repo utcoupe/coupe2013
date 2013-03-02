@@ -99,8 +99,10 @@ class MiniRobot(Robot):
 		if not self.state_buldo:
 			if not self.is_full() and verre.color != "orange":
 				# calcul de la position d'attérissage (un peu devant le robot
+				if verre.color == "red":
+					self.nb_verres += 2
+				else: self.nb_verres += 1
 				self.engine.objects_to_remove.append(verre)
-				self.nb_verres += 1
 
 						
 	def pousser_cadeau(self, color):
@@ -174,19 +176,22 @@ class MiniRobot(Robot):
 	def _cmd_others_drop_verre(self):
 
 		# Le petit drop les verres en tour de 2, et puis eventuellement un verre seul!
-		nb_tours_to_drop = self.nb_verres // 2
-		nb_verre_to_drop = 0 if self.nb_verres % 2 == 0 else 1 
+		nb_tours3_to_drop = self.nb_verres // 3
+		nb_tours2_to_drop = (self.nb_verres % 3) // 2
+		nb_verre_to_drop = 0 if (self.nb_verres % 3) % 2 == 0 else 1 
 
 		# On calcul le position de drop, donc un peu devant le robot.
-		DIST = 800
+		DIST = 600
 		pos = Vec(self.pos())
 		angle = self.angle()
 		pos_drop = pos + mm_to_px(mm_to_px(DIST * cos(angle), DIST * sin(angle)))
 		pos_drop = tuple(pos_drop)
 
-		for _ in range(nb_tours_to_drop):
-			self.engine.add(Verre(self.engine, pos_drop, "orange")) # Orange pour les tours, rouge pour les verres seule
+		for _ in range(nb_tours3_to_drop):
+			self.engine.add(Verre(self.engine, pos_drop, "orange")) # Orange pour les tours de 3, rouge pour les verres seule
+		for _ in range(nb_tours2_to_drop):
+			self.engine.add(Verre(self.engine, pos_drop, "red")) # Red pour les tours de 2, rouge pour les verres seule
 		for _ in range(nb_verre_to_drop):
-			self.engine.add(Verre(self.engine, pos_drop, "red")) # Orange pour les tours, rouge pour les verres seule
+			self.engine.add(Verre(self.engine, pos_drop, "black"))
 
 		self.nb_verres = 0

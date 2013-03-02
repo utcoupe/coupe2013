@@ -16,13 +16,5 @@ class Verre(EngineObjectCircle):
 			radius			= mm_to_px(40),
 		)
 
-		self.etage = 0
-
-	def monter_verre(self):
-		self.etage += 1
-
-	def decendre_verre(self):
-		self.etage -= 1
-
 	def __repr__(self):
 		return "Verre %s sur l'etage %d" % (self.posinit, self.etage)
