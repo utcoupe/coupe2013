@@ -8,7 +8,7 @@ class Ping_pong(EngineObjectCircle):
 	def __init__(self,engine,posinit, team):
 		EngineObjectCircle.__init__(self,
 			engine			= engine,
-			colltype		= COLLTYPE_VERRE,
+			colltype		= COLLTYPE_DEFAULT,
 			posinit			= posinit,
 			color 			= "orange" if team == RED else "green",
 			mass 			= 800,

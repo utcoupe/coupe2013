@@ -53,14 +53,14 @@ class GoalANGLER(GoalANGLE): pass
 
 class Robot(EngineObjectPoly, Executer):
 	def __init__(self, *, engine, canal_asserv, canal_others, canal_visio, canal_extras,
-	team, posinit, mass, poly_points, typerobot, extension_objects=[]):
+	team, posinit, mass, poly_points, typerobot, colltype, extension_objects=[]):
 		color = 'blue' if team == BLUE else 'red'
 		EngineObjectPoly.__init__(self,
 			engine		 	= engine,
 			mass			= mass,
 			posinit			= posinit,
 			color			= color,
-			colltype		= COLLTYPE_GROS_ROBOT if typerobot == BIG else COLLTYPE_PETIT_ROBOT, 
+			colltype		= colltype, 
 			poly_points		= poly_points,
 			extension_objects	= extension_objects
 		)

@@ -10,6 +10,7 @@ from geometry import Vec
 from ..define import *
 from .robot import Robot, MINI
 from ..engine.engineobject import EngineObjectPoly,EngineObjectSegment
+from .verre import Verre
 
 
 class Palette(EngineObjectSegment):
@@ -66,13 +67,15 @@ class MiniRobot(Robot):
 			posinit				= posinit,
 			mass				= 10,
 			typerobot			= MINI,
-			poly_points			= mm_to_px((0,0),(HEIGHT_MINI,0),(HEIGHT_MINI,WIDTH_MINI),(0,WIDTH_MINI)),
+			colltype 			= COLLTYPE_PETIT_ROBOT,
+			poly_points			= mm_to_px((0,0),(HEIGHT_MINI,0),(HEIGHT_MINI,WIDTH_MINI),(0,WIDTH_MINI))
 		)
 
 		self.match = match
 		
 		self.palette_left = Palette(engine, mm_to_px(HEIGHT_MINI/2, WIDTH_MINI/2), 45)
 		self.palette_right = Palette(engine, mm_to_px(HEIGHT_MINI/2, -WIDTH_MINI/2), -45)
+
 		# self.balais_left = Balais(engine, 90)
 		# self.balais_right = Balais(engine, -90)
 
@@ -93,19 +96,13 @@ class MiniRobot(Robot):
 		self.add_body_extension(self.palette_right)
 
 	def prendre_verre(self, verre):
-		print("Le petit petit pousse un verre")
 		if not self.state_buldo:
-			if not self.is_full():
-				DIST = 200
+			if not self.is_full() and verre.color != "orange":
 				# calcul de la position d'attérissage (un peu devant le robot
-				pos = Vec(self.pos())
-				angle = self.angle()
-				pos_drop = pos + mm_to_px(DIST * cos(angle), DIST * sin(angle))
-				pos_drop = tuple(pos_drop)
-				verre.posinit = pos_drop
-				self.add_body_extension(verre)
-				self.monter_verre()
+				self.engine.objects_to_remove.append(verre)
+				self.nb_verres += 1
 
+						
 	def pousser_cadeau(self, color):
 		if(color == 'red' and self.team == RED) or (color == 'blue' and self.team == BLUE):
 			self.nb_cadeau_pousse += 1
@@ -117,14 +114,8 @@ class MiniRobot(Robot):
 			if isinstance(v, Verre.__class__):
 				v.monter_verre()
 
-	def drop_verre(self):
-		for v in self.extension_objects:
-			if isinstance(v, Verre.__class__):
-				self.engine.add(v)
-				self.remove_body_extension(v)
-
 	def is_full(self):
-		return self.nb_verres * COEFF_ENGORGEMENT_VERRE > 1
+		return self.nb_verres * COEFF_ENGORGEMENT_VERRE >= 1
 
 	# def remove_balais_left(self):
 	# 	self.remove_body_extension(self.balais_left)
@@ -146,6 +137,8 @@ class MiniRobot(Robot):
 					if KEY_BULDO == event.key:
 						self.state_buldo = not self.state_buldo
 						self._cmd_others_buldo(self.state_buldo)
+					elif KEY_DROP == event.key:
+						self._cmd_others_drop_verre()
 
 	# def _cmd_others_arracher_carte(self, **kwargs):
 	# 	self.match.arracher_carte(self.team)
@@ -177,3 +170,23 @@ class MiniRobot(Robot):
 		coeff_engorgement += self.nb_lingos * COEFF_ENGORGEMENT_LINGO
 		r = 0 if coeff_engorgement < 1 else 1
 		self.send_canal_asserv(kwargs['id_msg'], r)
+
+	def _cmd_others_drop_verre(self):
+
+		# Le petit drop les verres en tour de 2, et puis eventuellement un verre seul!
+		nb_tours_to_drop = self.nb_verres // 2
+		nb_verre_to_drop = 0 if self.nb_verres % 2 == 0 else 1 
+
+		# On calcul le position de drop, donc un peu devant le robot.
+		DIST = 800
+		pos = Vec(self.pos())
+		angle = self.angle()
+		pos_drop = pos + mm_to_px(mm_to_px(DIST * cos(angle), DIST * sin(angle)))
+		pos_drop = tuple(pos_drop)
+
+		for _ in range(nb_tours_to_drop):
+			self.engine.add(Verre(self.engine, pos_drop, "orange")) # Orange pour les tours, rouge pour les verres seule
+		for _ in range(nb_verre_to_drop):
+			self.engine.add(Verre(self.engine, pos_drop, "red")) # Orange pour les tours, rouge pour les verres seule
+
+		self.nb_verres = 0

@@ -43,6 +43,7 @@ class BigRobot(Robot):
 			posinit				= posinit,
 			mass				= 10,
 			typerobot			= BIG,
+			colltype 			= COLLTYPE_GROS_ROBOT,
 			poly_points			= mm_to_px((0,0),(288,0),(288,314),(0,314)),
 			extension_objects	= [self.rouleau]
 		)
@@ -70,14 +71,14 @@ class BigRobot(Robot):
 						self._cmd_others_bras(self.state_bras)
 
 	def eteindre_bougie(self, bougie):
-		if bougie.color == 'gray':
-			return
+		# if bougie.color == 'gray':
+		# 	return
 		if (bougie.color == 'red' and self.team == RED) or \
 			(bougie.color == 'blue' and self.team == BLUE) or (bougie.color == 'white'):
 			self.nb_bougie += 1
 		else:
 			self.nb_bougie -= 1
-		bougie.color = 'gray'
+		self.engine.objects_to_remove.append(bougie)
 		print("Bougie eteinte: %d" % self.nb_bougie)
 
 	def prendre_cerise(self, cerise):

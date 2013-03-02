@@ -18,7 +18,7 @@ class Visio : public Service
 		Visio(const string & identity, const string & addr, CONNECTION_TYPE type=CONNECT)
 			: Service(identity, addr, type) {
 				// Set both cam to display = 0, no graphic mode.
-				cam_0 = new camManager(0, 1);
+				cam_0 = new camManager(1, 1);
 				cam_0->Init();
 				// cam_0->SnapShot();
 				// cam_1 = new camManager(1, 0);
