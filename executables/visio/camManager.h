@@ -8,11 +8,13 @@
 #include "helper.h"
 
 #include "json/json.h"
+#define	THRESHOLD 0.7
 
 extern void mouseHandler(int event, int x, int y, int flags, void* param);
 
 class camManager
 {
+
 private:
 	int CAMERA_N;
 	int display;
@@ -43,18 +45,20 @@ public:
 	void loadSets();
 
 	void DisplayLoopWithColorMatching();
+	Json::Value DisplayWithColorMatching();
 
 	void LocatingWithPatternMatching();
 
-	Json::Value testCase();
+	Json::Value testCase(const double);
 
-	void MatchingMethod(COLOR color, char *buffer);
+	void MatchingMethod(COLOR color, char *buffer, const double);
 
 	cv::Mat SnapShot();
 
 	cv::Mat & binaryFiltering(cv::Mat &img, ColorSet set);
-	
-	vector<cv::Point> findObjects(const cv::Mat &src, cv::Mat &original);
+	cv::Mat & binaryFiltering(cv::Mat &img, const COLOR color);
+
+	vector<cv::Point> findObjects(const cv::Mat &src, cv::Mat &original, const COLOR color);
 
 
 };

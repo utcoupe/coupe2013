@@ -15,10 +15,10 @@ using namespace std;
 class Visio : public Service
 {
 	public:
-		Visio(const string & identity, const string & addr, CONNECTION_TYPE type=CONNECT)
+		Visio(const int camID, const int graphic_mode, const string & identity, const string & addr, CONNECTION_TYPE type=CONNECT)
 			: Service(identity, addr, type) {
-				// Set both cam to display = 0, no graphic mode.
-				cam_0 = new camManager(1, 1);
+				// Set both cam to display = 0, no graphic_mode mode.
+				cam_0 = new camManager(camID, graphic_mode);
 				cam_0->Init();
 				// cam_0->SnapShot();
 				// cam_1 = new camManager(1, 0);
@@ -39,11 +39,6 @@ class Visio : public Service
 			    Json::Value data("pong");
 			    sendResponse(remote_id, request, data);
 			}
-			// "who"
-			else if (request["fct"] == "who") {
-			    Json::Value data("visio");
-			    sendResponse(remote_id, request, data);
-			}
 			// "calib(0)" or "calib(1)", this is used for colormatching, which is not recommended for 2013.
 			else if (request["fct"] == "calib") {
 				calibManager *calib = new calibManager();
@@ -61,13 +56,14 @@ class Visio : public Service
 			}
 			// "getcandles 0" or "getcandles 1" to get candles' positions. positions are returned by red, blue and white.
 			// It should return positions only for ones with tennis ball on top.
-			else if (request["fct"] == "getcandles"){
+			else if (request["fct"] == "get_by_pattern"){
 				int camId = request["args"][0].asInt();
+				double threshold = request["args"][1].asDouble();
 				Json::Value res;
 
 				switch(camId){
 					case 0:
-						res = this->cam_0->testCase();
+						res = this->cam_0->testCase(threshold);
 						sendResponse(remote_id, request, res);
 					break;
 					case 1:
@@ -81,7 +77,7 @@ class Visio : public Service
 
 			}
 			// "setROI(0)" or "setROI(1)"
-			else if (request["fct"] == "setROI"){
+			else if (request["fct"] == "set_ROI"){
 				int camId = request["args"][0].asInt();
 
 				switch(camId){
@@ -100,8 +96,14 @@ class Visio : public Service
 				}
 
 			}
+
+			else if (request["fct"] == "get_by_color"){
+				Json::Value res = this->cam_0->DisplayWithColorMatching();
+				sendResponse(remote_id, request, res);
+			}
+
 			else {
-				this->sendError(remote_id, request, "Unknow function", "");
+				this->sendError(remote_id, request, "Unknown function", "");
 			}
 		}
 
@@ -111,11 +113,14 @@ class Visio : public Service
 
 };
 
-int main() {
+int main(int argc, char *argv[]) {
 	
+	if(argc != 3)
+		cout << "Help -> \"visio camID graphic_mode\"\n"
+		 	 << "1 for external cam, 0 for internal cam\n"
+		 	 << "0 for no graphic_mode, 1 for graphic_mode" << endl;
 	
-
-	Visio visio("visio", "tcp://*:5001", Service::CONNECT);
+	Visio visio(atoi(argv[1]), atoi(argv[2]), "visio", "tcp://*:5001", Service::CONNECT);
 	cout << "connect on port 5001" << endl;
 	
 	while (!s_interrupted) {

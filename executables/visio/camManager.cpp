@@ -9,6 +9,35 @@
 
 using namespace std;
 
+struct CommaIterator
+:
+public std::iterator<std::output_iterator_tag, void, void, void, void>
+{
+	std::ostream *os;
+	std::string comma;
+	bool first;
+
+	CommaIterator(std::ostream& os, const std::string& comma)
+	:
+	os(&os), comma(comma), first(true)
+	{
+	}
+
+	CommaIterator& operator++() { return *this; }
+	CommaIterator& operator++(int) { return *this; }
+	CommaIterator& operator*() { return *this; }
+  template <class T>
+	CommaIterator& operator=(const T& t) {
+		if(first)
+			first = false;
+		else
+			*os << comma;
+		*os << "(" << t.x << " " << t.y << ")";
+		return *this;
+	}
+};
+
+
 camManager::camManager(const int id, const int display)
 { 
 	NB_OF_OBJECTS_TO_DETECT = 4;
@@ -28,48 +57,63 @@ camManager::camManager(const int id, const int display)
  * Initialize camera and test if there is a camera associated with CAMERA_N
  * @return -1 if camera not found, 0 if everything is ok
  */
-int camManager::Init()
-{
-	capture = cv::VideoCapture(CAMERA_N);
+ int camManager::Init()
+ {
+ 	capture = cv::VideoCapture(CAMERA_N);
+ 	this->loadSets();
+ 	if (!capture.isOpened())
+ 	{
+ 		logger->err("Failed to open a video device!");
+ 		return -1;
+ 	}
+ 	return 0;
+ }
 
-	if (!capture.isOpened())
-	{
-		logger->err("Failed to open a video device!");
-		return -1;
-	}
-	return 0;
-}
+ vector<cv::Point> camManager::findObjects(const cv::Mat &src, cv::Mat &original, const COLOR color = BLUE)
+ {
+ 	vector<cv::Point> result;
+ 	vector<vector<cv::Point> > contours;
+ 	vector<cv::Vec4i> hierarchy;
 
-vector<cv::Point> camManager::findObjects(const cv::Mat &src, cv::Mat &original)
-{
-	vector<cv::Point> result;
-    vector<vector<cv::Point> > contours;
-    vector<cv::Vec4i> hierarchy;
+ 	cv::findContours( src, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE );
+ 	for (unsigned int i=0; i < contours.size(); i++)
+ 	{
+ 		cv::RotatedRect minRect = cv::minAreaRect(cv::Mat(contours[i]));
+ 		if (not EliminatedContour(minRect))
+ 		{
+ 			result.push_back(minRect.center);
 
-    cv::findContours( src, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE );
+ 			cv::Scalar paint_color;
+ 			switch(color){
+ 				case RED:
+ 				paint_color = cv::Scalar(0, 0, 255);
+ 				break;
+ 				case BLUE:
+ 				paint_color = cv::Scalar(255, 0, 0);
+ 				break;
+ 				case WHITE:
+ 				paint_color = cv::Scalar(255, 255, 255);
+ 				break;
+ 				default:
+ 				logger->err("Unkown color!");
+ 			}
 
-    for (unsigned int i=0; i < contours.size(); i++)
-    {
-        cv::RotatedRect minRect = cv::minAreaRect(cv::Mat(contours[i]));
-        if (not EliminatedContour(minRect))
-        {
-        	result.push_back(minRect.center);
-        	cv::circle(original, minRect.center, 3, cv::Scalar(255,0,0), -1, 200, 0);
-        	cv::Point2f corners[4];
-        	minRect.points(corners);
-        	cv::rectangle(original, corners[0], corners[3], cv::Scalar(255,0,0));
-        }
-    }
-    return result;
-}
+ 			cv::circle(original, minRect.center, 3, paint_color, -1, 200, 0);
+ 			cv::Point2f corners[4];
+ 			minRect.points(corners);
+ 			cv::ellipse(original, minRect, paint_color);
+ 		}
+ 	}
+ 	return result;
+ }
 
-bool camManager::EliminatedContour(const cv::RotatedRect &minRect)
-{
-	// cout<<"size = "<<minRect->size.area()<<endl;
-	if(minRect.size.area() < 20)
-		return true;
-	return false;
-}
+ bool camManager::EliminatedContour(const cv::RotatedRect &minRect)
+ {
+	// cout<<"size = "<<minRect.size.area()<<endl;
+ 	if(minRect.size.area() < 800)
+ 		return true;
+ 	return false;
+ }
 
 
 
@@ -79,77 +123,104 @@ bool camManager::EliminatedContour(const cv::RotatedRect &minRect)
  * @param  set Color Set to use, this is fetched from trackbars and passed in according to color id
  * @return     processed image	
  */
-cv::Mat & camManager::binaryFiltering(cv::Mat &img, ColorSet set)
-{
-	cv::Mat img_hsv;
-	cv::cvtColor(img, img_hsv, CV_BGR2HSV);
-	set.h_lower = cv::getTrackbarPos("h_lower", "Calib");
-	set.s_lower = cv::getTrackbarPos("s_lower", "Calib");
-	set.v_lower = cv::getTrackbarPos("v_lower", "Calib");
-	set.h_higher = cv::getTrackbarPos("h_higher", "Calib");
-	set.s_higher = cv::getTrackbarPos("s_higher", "Calib");
-	set.v_higher = cv::getTrackbarPos("v_higher", "Calib");
+ cv::Mat & camManager::binaryFiltering(cv::Mat &img, ColorSet set)
+ {
+ 	cv::Mat img_hsv;
+ 	cv::cvtColor(img, img_hsv, CV_BGR2HSV);
+ 	set.h_lower = cv::getTrackbarPos("h_lower", "Calib");
+ 	set.s_lower = cv::getTrackbarPos("s_lower", "Calib");
+ 	set.v_lower = cv::getTrackbarPos("v_lower", "Calib");
+ 	set.h_higher = cv::getTrackbarPos("h_higher", "Calib");
+ 	set.s_higher = cv::getTrackbarPos("s_higher", "Calib");
+ 	set.v_higher = cv::getTrackbarPos("v_higher", "Calib");
 
-	cv::inRange(img_hsv, 
-		cv::Scalar(set.h_lower, set.s_lower, set.v_lower), 
-		cv::Scalar(set.h_higher, set.s_higher, set.v_higher), 
-		img);
+ 	cv::inRange(img_hsv, 
+ 		cv::Scalar(set.h_lower, set.s_lower, set.v_lower), 
+ 		cv::Scalar(set.h_higher, set.s_higher, set.v_higher), 
+ 		img);
 
-	return img;
-}
+ 	return img;
+ }
+
+ cv::Mat & camManager::binaryFiltering(cv::Mat &img, const COLOR color){
+
+ 	cv::Mat img_hsv;
+ 	cv::cvtColor(img, img_hsv, CV_BGR2HSV);
+
+ 	switch (color){
+ 		case RED:
+ 		cv::inRange(img_hsv, 
+ 			cv::Scalar(colorSets.red.h_lower, colorSets.red.s_lower, colorSets.red.v_lower), 
+ 			cv::Scalar(colorSets.red.h_higher, colorSets.red.s_higher, colorSets.red.v_higher), img);
+ 		break;
+ 		case BLUE:
+ 		cv::inRange(img_hsv, 
+ 			cv::Scalar(colorSets.blue.h_lower, colorSets.blue.s_lower, colorSets.blue.v_lower), 
+ 			cv::Scalar(colorSets.blue.h_higher, colorSets.blue.s_higher, colorSets.blue.v_higher), img);
+ 		break;
+ 		case WHITE:
+ 		cv::inRange(img_hsv, 
+ 			cv::Scalar(colorSets.white.h_lower, colorSets.white.s_lower, colorSets.white.v_lower), 
+ 			cv::Scalar(colorSets.white.h_higher, colorSets.white.s_higher, colorSets.white.v_higher), img);
+ 		break;
+ 		default:
+ 		this->logger->log("Unknown color!");
+ 	}
+ 	return img;
+ }
 
 /*
 	loads color matching schema from the yml file. This file is human readable
  */
-void camManager::loadSets()
-{
-	cv::FileStorage ColorSetFile(colorsetPath, cv::FileStorage::READ);
+	void camManager::loadSets()
+	{
+		cv::FileStorage ColorSetFile(colorsetPath, cv::FileStorage::READ);
 
-	colorSets.blue.h_lower = ColorSetFile["blue_h_lower"];
-	colorSets.blue.s_lower = ColorSetFile["blue_s_lower"];
-	colorSets.blue.v_lower = ColorSetFile["blue_v_lower"];
-	colorSets.blue.h_higher = ColorSetFile["blue_h_higher"];
-	colorSets.blue.s_higher = ColorSetFile["blue_s_higher"];
-	colorSets.blue.v_higher = ColorSetFile["blue_v_higher"];
+		colorSets.blue.h_lower = ColorSetFile["blue_h_lower"];
+		colorSets.blue.s_lower = ColorSetFile["blue_s_lower"];
+		colorSets.blue.v_lower = ColorSetFile["blue_v_lower"];
+		colorSets.blue.h_higher = ColorSetFile["blue_h_higher"];
+		colorSets.blue.s_higher = ColorSetFile["blue_s_higher"];
+		colorSets.blue.v_higher = ColorSetFile["blue_v_higher"];
 
-	colorSets.red.h_lower = ColorSetFile["red_h_lower"];
-	colorSets.red.s_lower = ColorSetFile["red_s_lower"];
-	colorSets.red.v_lower = ColorSetFile["red_v_lower"];
-	colorSets.red.h_higher = ColorSetFile["red_h_higher"];
-	colorSets.red.s_higher = ColorSetFile["red_s_higher"];
-	colorSets.red.v_higher = ColorSetFile["red_v_higher"];
-	
-	colorSets.white.h_lower = ColorSetFile["white_h_lower"];
-	colorSets.white.s_lower = ColorSetFile["white_s_lower"];
-	colorSets.white.v_lower = ColorSetFile["white_v_lower"];
-	colorSets.white.h_higher = ColorSetFile["white_h_higher"];
-	colorSets.white.s_higher = ColorSetFile["white_s_higher"];
-	colorSets.white.v_higher = ColorSetFile["white_v_higher"];
+		colorSets.red.h_lower = ColorSetFile["red_h_lower"];
+		colorSets.red.s_lower = ColorSetFile["red_s_lower"];
+		colorSets.red.v_lower = ColorSetFile["red_v_lower"];
+		colorSets.red.h_higher = ColorSetFile["red_h_higher"];
+		colorSets.red.s_higher = ColorSetFile["red_s_higher"];
+		colorSets.red.v_higher = ColorSetFile["red_v_higher"];
 
-	logger->log("Successfully load file");
+		colorSets.white.h_lower = ColorSetFile["white_h_lower"];
+		colorSets.white.s_lower = ColorSetFile["white_s_lower"];
+		colorSets.white.v_lower = ColorSetFile["white_v_lower"];
+		colorSets.white.h_higher = ColorSetFile["white_h_higher"];
+		colorSets.white.s_higher = ColorSetFile["white_s_higher"];
+		colorSets.white.v_higher = ColorSetFile["white_v_higher"];
 
-	ColorSetFile.release();
-}
+		logger->log("Successfully load file");
+		this->loaded = true;
+		ColorSetFile.release();
+	}
 
 
 /**
  * Take one instant picture, used to detect static position, doesn't show the image unless display = 1
  * @return return a cv::Mat image
  */
-cv::Mat camManager::SnapShot()
-{
-	capture >> image;
-	if(display)
-	{
-		cv::imshow("SnapShot", image);
-		int c = 0;
-		while( c != 'q' && c != 27 )
-		{
-			c = cvWaitKey( 250 );
-		}
-	}
-	return image;
-}
+ cv::Mat camManager::SnapShot()
+ {
+ 	capture >> image;
+ 	if(display)
+ 	{
+ 		cv::imshow("SnapShot", image);
+ 		int c = 0;
+ 		while( c != 'q' && c != 27 )
+ 		{
+ 			c = cvWaitKey( 250 );
+ 		}
+ 	}
+ 	return image;
+ }
 
 
 /**
@@ -168,9 +239,17 @@ cv::Mat camManager::SnapShot()
  			continue;
  		}
 
-		cv::Mat binaryImg = image;
-		binaryImg = binaryFiltering(binaryImg, colorSets.blue);
-		findObjects(binaryImg, image);
+ 		cv::Mat binaryImg = image;
+ 		binaryImg = binaryFiltering(binaryImg, BLUE);
+ 		findObjects(binaryImg, image, BLUE);
+
+ 		binaryImg = image;
+ 		binaryImg = binaryFiltering(binaryImg, RED);
+ 		findObjects(binaryImg, image, RED);
+
+ 		binaryImg = image;
+ 		binaryImg = binaryFiltering(binaryImg, WHITE);
+ 		findObjects(binaryImg, image, WHITE);
 
  		if(display)
  			cv::imshow( "object tracing test", image );
@@ -199,19 +278,63 @@ cv::Mat camManager::SnapShot()
  }
 
 
+ Json::Value camManager::DisplayWithColorMatching()
+ {
+ 	for (int i = 0; i < 4; ++i)
+ 	{
+ 		capture.grab();
+ 	}
+ 	capture >> image;
+
+ 		Json::Value result;
+ 		vector<cv::Point> v1, v2, v3;
+
+ 		cv::Mat binaryImg = image;
+ 		binaryImg = binaryFiltering(binaryImg, BLUE);
+ 		v1 = findObjects(binaryImg, image, BLUE);
+ 		// Convert vector to string
+		  std::ostringstream oss;
+		  std::copy(v1.begin(), v1.end(), CommaIterator(oss, ","));
+		  result["data"]["blue"] = oss.str();
+		  // cout << "BLUE: " + res << endl;
+
+ 		binaryImg = image;
+ 		binaryImg = binaryFiltering(binaryImg, RED);
+ 		v2 = findObjects(binaryImg, image, RED);
+ 		// Convert vector to string
+ 		  oss.str("");
+		  std::copy(v2.begin(), v2.end(), CommaIterator(oss, ","));
+		  result["data"]["red"] = oss.str();
+		  // cout << "RED: " + res << endl;
+
+ 		binaryImg = image;
+ 		binaryImg = binaryFiltering(binaryImg, WHITE);
+ 		v3 = findObjects(binaryImg, image, WHITE);
+		// Convert vector to string
+ 		  oss.str("");
+		  std::copy(v3.begin(), v3.end(), CommaIterator(oss, ","));
+		  result["data"]["white"] = oss.str();
+		  // cout << "WHITE: " + res << endl;
+
+ 		if(display)
+ 			cv::imshow( "object tracing test", image );
+
+ 		return result;
+ }
+
  /**
  * @function MatchingMethod
  * @brief Trackbar callback
  */
-void camManager::MatchingMethod(const COLOR color, char *buffer)
+ void camManager::MatchingMethod(const COLOR color, char *buffer, const double threshold)
  {
  	extern cv::Mat img;
  	extern cv::Mat roiImg;
  	extern cv::Mat result;
  	extern cv::Rect rect;
  	extern int select_flag;
-	
-	cv::Point matchLoc;
+
+ 	cv::Point matchLoc;
 
 	// *
 	//  * First methode: take all points which is similar and draw a cercle for each of these points...
@@ -220,65 +343,65 @@ void camManager::MatchingMethod(const COLOR color, char *buffer)
 	//  * Print a cercle for each non zero pixel 
 	//  *
 	//  * 	
-		result = cv::Mat(img.rows-roiImg.rows+1, img.cols-roiImg.cols+1, CV_32FC1);
-		cv::matchTemplate(img, roiImg, result, CV_TM_CCOEFF_NORMED);
-		cv::threshold(result, result, 0.8, 1., CV_THRESH_TOZERO);
+ 	result = cv::Mat(img.rows-roiImg.rows+1, img.cols-roiImg.cols+1, CV_32FC1);
+ 	cv::matchTemplate(img, roiImg, result, CV_TM_CCOEFF_NORMED);
+ 	cv::threshold(result, result, threshold, 1., CV_THRESH_TOZERO);
 
-		while (true) 
-		{
-			double minval, maxval, threshold = 0.8;
-			cv::Point minloc, maxloc;
-			cv::minMaxLoc(result, &minval, &maxval, &minloc, &maxloc);
+ 	while (true) 
+ 	{
+ 		double minval, maxval;
+ 		cv::Point minloc, maxloc;
+ 		cv::minMaxLoc(result, &minval, &maxval, &minloc, &maxloc);
 
-			if (maxval >= threshold)
-			{
-				if(color == 1 && display)
-					cv::rectangle(
-						img, 
-						maxloc, 
-						cv::Point(maxloc.x + roiImg.cols, maxloc.y + roiImg.rows), 
-						CV_RGB(255,0,0), 2
-						);
-				else if(color == 2 && display)
-					cv::rectangle(
-						img, 
-						maxloc, 
-						cv::Point(maxloc.x + roiImg.cols, maxloc.y + roiImg.rows), 
-						CV_RGB(0,0,255), 2
-						);
-				else if (color == 3 && display)
-					cv::rectangle(
-						img, 
-						maxloc, 
-						cv::Point(maxloc.x + roiImg.cols, maxloc.y + roiImg.rows), 
-						CV_RGB(255,255,255), 2
-						);
+ 		if (maxval >= threshold)
+ 		{
+ 			if(color == 1 && display)
+ 				cv::rectangle(
+ 					img, 
+ 					maxloc, 
+ 					cv::Point(maxloc.x + roiImg.cols, maxloc.y + roiImg.rows), 
+ 					CV_RGB(255,0,0), 2
+ 					);
+ 			else if(color == 2 && display)
+ 				cv::rectangle(
+ 					img, 
+ 					maxloc, 
+ 					cv::Point(maxloc.x + roiImg.cols, maxloc.y + roiImg.rows), 
+ 					CV_RGB(0,0,255), 2
+ 					);
+ 			else if (color == 3 && display)
+ 				cv::rectangle(
+ 					img, 
+ 					maxloc, 
+ 					cv::Point(maxloc.x + roiImg.cols, maxloc.y + roiImg.rows), 
+ 					CV_RGB(255,255,255), 2
+ 					);
 
 
-				cv::floodFill(result, maxloc, cv::Scalar(0), 0, cv::Scalar(.1), cv::Scalar(1.));
-				matchLoc = maxloc;
-				if(color == 1){
-					sprintf(buffer, "%s(%d %d) ", buffer, matchLoc.x, matchLoc.y);
+ 			cv::floodFill(result, maxloc, cv::Scalar(0), 0, cv::Scalar(.1), cv::Scalar(1.));
+ 			matchLoc = maxloc;
+ 			if(color == 1){
+ 				sprintf(buffer, "%s(%d %d) ", buffer, matchLoc.x, matchLoc.y);
 						// (*response)["data"] = buffer;
 						// (*response)["error"] = "";
 						// logger->log(buffer);
-				}
-				else if(color == 2){
-					sprintf(buffer, "%s(%d %d) ", buffer, matchLoc.x, matchLoc.y);
+ 			}
+ 			else if(color == 2){
+ 				sprintf(buffer, "%s(%d %d) ", buffer, matchLoc.x, matchLoc.y);
 						// (*response)["data"] = buffer;
 						// (*response)["error"] = "";
 						// logger->log(buffer);
-				}
-				else if(color == 3){
-					sprintf(buffer, "%s(%d %d) ", buffer, matchLoc.x, matchLoc.y);
+ 			}
+ 			else if(color == 3){
+ 				sprintf(buffer, "%s(%d %d) ", buffer, matchLoc.x, matchLoc.y);
 						// (*response)["data"] = buffer;
 						// (*response)["error"] = "";
 						// logger->log(buffer);
-				}
-			}
-			else
-				return;
-		}
+ 			}
+ 		}
+ 		else
+ 			return;
+ 	}
 
 
 	/**
@@ -327,77 +450,77 @@ void camManager::MatchingMethod(const COLOR color, char *buffer)
 	// }
 	}
 
-	Json::Value camManager::testCase()
+	Json::Value camManager::testCase(const double threshold = THRESHOLD)
 	{
 		extern cv::Mat roiImg;
 		extern cv::Mat img;
-			
+
 		Json::Value res;
 
 		/*
 			Une facon pour vider le ring buffer....4-6 pour linux, 2 pour windows, et pas besoin pour mac osx.
 			Ceci est du au creation d'un buffer au niveau de camera, donc c'est peut-etre pas gerable autrement... 
 		 */
- 		for (int i = 0; i < 4; ++i)
- 		{
- 			capture.grab();
- 		}
-		capture >> img;
+			for (int i = 0; i < 4; ++i)
+			{
+				capture.grab();
+			}
+			capture >> img;
 
-		cv::FileStorage redTemplFile(redTemplPath, cv::FileStorage::READ);
-		cv::FileStorage blueTemplFile(blueTemplPath, cv::FileStorage::READ);
-		cv::FileStorage whiteTemplFile(whiteTemplPath, cv::FileStorage::READ);
+			cv::FileStorage redTemplFile(redTemplPath, cv::FileStorage::READ);
+			cv::FileStorage blueTemplFile(blueTemplPath, cv::FileStorage::READ);
+			cv::FileStorage whiteTemplFile(whiteTemplPath, cv::FileStorage::READ);
 
-		redTemplFile["red_roi_img"] >> roiImg;
-		if(!roiImg.empty())
-		{
-			char buffer[355] = "";
-			if(display)
+			redTemplFile["red_roi_img"] >> roiImg;
+			if(!roiImg.empty())
+			{
+				char buffer[355] = "";
+				if(display)
 				cv::imshow("ROI_red", roiImg); /* show the image bounded by the box */
-			logger->log("Test for red pattern search...");
+					logger->log("Test for red pattern search...");
 			// sprintf(buffer, "R:");
-			MatchingMethod(RED, buffer);
-			res["data"]["red"] = buffer;
-			logger->log(buffer);
-		}
+				MatchingMethod(RED, buffer, threshold);
+				res["data"]["red"] = buffer;
+				logger->log(buffer);
+			}
 
-		blueTemplFile["blue_roi_img"] >> roiImg;
-		if(!roiImg.empty())
-		{
-			char buffer[355] = "";
-			if(display)
+			blueTemplFile["blue_roi_img"] >> roiImg;
+			if(!roiImg.empty())
+			{
+				char buffer[355] = "";
+				if(display)
 				cv::imshow("ROI_blue", roiImg); /* show the image bounded by the box */
-			logger->log("Test for blue pattern search...");
+					logger->log("Test for blue pattern search...");
 			// strcat(buffer, "B:");
-			MatchingMethod(BLUE, buffer);
-			res["data"]["blue"] = buffer;
-			logger->log(buffer);
-		}
+				MatchingMethod(BLUE, buffer, threshold);
+				res["data"]["blue"] = buffer;
+				logger->log(buffer);
+			}
 
-		whiteTemplFile["white_roi_img"] >> roiImg;
-		if(!roiImg.empty())
-		{
-			char buffer[355] = "";
-			if(display)
+			whiteTemplFile["white_roi_img"] >> roiImg;
+			if(!roiImg.empty())
+			{
+				char buffer[355] = "";
+				if(display)
 				cv::imshow("ROI_white", roiImg); /* show the image bounded by the box */
-			logger->log("Test for white pattern search...");
+					logger->log("Test for white pattern search...");
 			// strcat(buffer, "W:");
-			MatchingMethod(WHITE, buffer);
-			res["data"]["white"] = buffer;
-			logger->log(buffer);
-		}
-		redTemplFile.release();
-		blueTemplFile.release();
-		whiteTemplFile.release();
+				MatchingMethod(WHITE, buffer, threshold);
+				res["data"]["white"] = buffer;
+				logger->log(buffer);
+			}
+			redTemplFile.release();
+			blueTemplFile.release();
+			whiteTemplFile.release();
 
 
-		if(display)
-		{
- 			cv::imshow( "Snapshot With Pattern Matching", img );
- 			cv::waitKey(30);
+			if(display)
+			{
+				cv::imshow( "Snapshot With Pattern Matching", img );
+				cv::waitKey(30);
+			}
+			return res;
 		}
-		return res;
-	}
 
 
 /**
@@ -431,9 +554,9 @@ void camManager::MatchingMethod(const COLOR color, char *buffer)
             /*
              * Uncomment this to detect RED object. Only for debug.
              */
-            char buffer[200];
-            MatchingMethod(RED, buffer);
-            logger->log(buffer);
+             char buffer[200];
+             MatchingMethod(RED, buffer, THRESHOLD);
+             logger->log(buffer);
  			select_flag = 0; //Uncomment this for SNAPSHOT mode. 
  		}
 

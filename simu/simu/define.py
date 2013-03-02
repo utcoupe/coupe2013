@@ -22,11 +22,6 @@ COLLTYPE_CADEAU			= 8
 COLLTYPE_ROULEAU		= 9
 COLLTYPE_ROBOT   		= 10
 
-#a virer juste pour les tests
-# COLLTYPE_CD		= 6
-# COLLTYPE_LINGO		= 6
-# COLLTYPE_ROULEAU	= 6
-
 
 BLUE				= 0
 RED					= 1
@@ -36,12 +31,6 @@ T_CERISE			= 1
 T_BOUGIE			= 2
 T_CADEAU			= 3
 T_FUNNY				= 4
-#a supprimer c'est juste pour faire les tests
-# T_CD				= 1
-# T_LINGO				= 3
-# T_CARTE				= 5
-# T_BOTTLE			= 5
-
 
 #coeff non modifiés (mais il faut surement ajuster celui pour CD == VERRE dans la simu2013)
 #idem pour le coeff LINGO == CERISE
