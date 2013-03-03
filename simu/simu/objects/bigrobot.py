@@ -111,7 +111,7 @@ class BigRobot(Robot):
 		self.nb_cerise_bonne = 0
 		self.nb_cerise_pourri = 0
 
-		self.send_canal_asserv(kwargs['id_msg'], 1)
+		self.asserv_service.send_response(kwargs['id_msg'], 1)
 		
 	
 	# def _cmd_others_vider_totem(self, **kwargs):
