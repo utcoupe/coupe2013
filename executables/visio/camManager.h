@@ -44,7 +44,7 @@ public:
 
 	void loadSets();
 
-	void DisplayLoopWithColorMatching();
+	Json::Value DisplayLoopWithColorMatching();
 	Json::Value DisplayWithColorMatching();
 
 	void LocatingWithPatternMatching();

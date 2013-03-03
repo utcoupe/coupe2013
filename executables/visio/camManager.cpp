@@ -110,7 +110,7 @@ camManager::camManager(const int id, const int display)
  bool camManager::EliminatedContour(const cv::RotatedRect &minRect)
  {
 	// cout<<"size = "<<minRect.size.area()<<endl;
- 	if(minRect.size.area() < 800)
+ 	if(minRect.size.area() < 1200)
  		return true;
  	return false;
  }
@@ -227,7 +227,7 @@ camManager::camManager(const int id, const int display)
  * Display raw image in a loop from camera. 
  * For debug purpose
  */
- void camManager::DisplayLoopWithColorMatching()
+ Json::Value camManager::DisplayLoopWithColorMatching()
  {
  	while(1)
  	{
@@ -239,17 +239,26 @@ camManager::camManager(const int id, const int display)
  			continue;
  		}
 
+ 		Json::Value result;
+ 		vector<cv::Point> v1, v2, v3;
+
  		cv::Mat binaryImg = image;
  		binaryImg = binaryFiltering(binaryImg, BLUE);
- 		findObjects(binaryImg, image, BLUE);
+ 		v1 = findObjects(binaryImg, image, BLUE);
+ 		// Convert vector to string
+ 		std::ostringstream oss;
+ 		std::copy(v1.begin(), v1.end(), CommaIterator(oss, ","));
+ 		result["data"]["blue"] = oss.str();
+		  // cout << "BLUE: " + res << endl;
 
  		binaryImg = image;
  		binaryImg = binaryFiltering(binaryImg, RED);
- 		findObjects(binaryImg, image, RED);
-
- 		binaryImg = image;
- 		binaryImg = binaryFiltering(binaryImg, WHITE);
- 		findObjects(binaryImg, image, WHITE);
+ 		v2 = findObjects(binaryImg, image, RED);
+ 		// Convert vector to string
+ 		oss.str("");
+ 		std::copy(v2.begin(), v2.end(), CommaIterator(oss, ","));
+ 		result["data"]["red"] = oss.str();
+		  // cout << "RED: " + res << endl;
 
  		if(display)
  			cv::imshow( "object tracing test", image );
@@ -268,7 +277,10 @@ camManager::camManager(const int id, const int display)
 
 			// q for quit
  			case 'q':
- 			return;
+ 			return result;
+
+ 			case 'r':
+ 			return result;
 
  			default:
  			if (c != -1)
@@ -286,40 +298,40 @@ camManager::camManager(const int id, const int display)
  	}
  	capture >> image;
 
- 		Json::Value result;
- 		vector<cv::Point> v1, v2, v3;
+ 	Json::Value result;
+ 	vector<cv::Point> v1, v2, v3;
 
- 		cv::Mat binaryImg = image;
- 		binaryImg = binaryFiltering(binaryImg, BLUE);
- 		v1 = findObjects(binaryImg, image, BLUE);
+ 	cv::Mat binaryImg = image;
+ 	binaryImg = binaryFiltering(binaryImg, BLUE);
+ 	v1 = findObjects(binaryImg, image, BLUE);
  		// Convert vector to string
-		  std::ostringstream oss;
-		  std::copy(v1.begin(), v1.end(), CommaIterator(oss, ","));
-		  result["data"]["blue"] = oss.str();
+ 	std::ostringstream oss;
+ 	std::copy(v1.begin(), v1.end(), CommaIterator(oss, ","));
+ 	result["data"]["blue"] = oss.str();
 		  // cout << "BLUE: " + res << endl;
 
- 		binaryImg = image;
- 		binaryImg = binaryFiltering(binaryImg, RED);
- 		v2 = findObjects(binaryImg, image, RED);
+ 	binaryImg = image;
+ 	binaryImg = binaryFiltering(binaryImg, RED);
+ 	v2 = findObjects(binaryImg, image, RED);
  		// Convert vector to string
- 		  oss.str("");
-		  std::copy(v2.begin(), v2.end(), CommaIterator(oss, ","));
-		  result["data"]["red"] = oss.str();
+ 	oss.str("");
+ 	std::copy(v2.begin(), v2.end(), CommaIterator(oss, ","));
+ 	result["data"]["red"] = oss.str();
 		  // cout << "RED: " + res << endl;
 
- 		binaryImg = image;
- 		binaryImg = binaryFiltering(binaryImg, WHITE);
- 		v3 = findObjects(binaryImg, image, WHITE);
-		// Convert vector to string
- 		  oss.str("");
-		  std::copy(v3.begin(), v3.end(), CommaIterator(oss, ","));
-		  result["data"]["white"] = oss.str();
-		  // cout << "WHITE: " + res << endl;
+ 	// 	binaryImg = image;
+ 	// 	binaryImg = binaryFiltering(binaryImg, WHITE);
+ 	// 	v3 = findObjects(binaryImg, image, WHITE);
+		// // Convert vector to string
+ 	// 	  oss.str("");
+		//   std::copy(v3.begin(), v3.end(), CommaIterator(oss, ","));
+		//   result["data"]["white"] = oss.str();
+		//   // cout << "WHITE: " + res << endl;
 
- 		if(display)
- 			cv::imshow( "object tracing test", image );
+ 	if(display)
+ 		cv::imshow( "object tracing test", image );
 
- 		return result;
+ 	return result;
  }
 
  /**
@@ -551,12 +563,10 @@ camManager::camManager(const int id, const int display)
 
  		if (select_flag == 1){
             cv::imshow("ROI", roiImg); /* show the image bounded by the box */
-            /*
-             * Uncomment this to detect RED object. Only for debug.
-             */
-             char buffer[200];
-             MatchingMethod(RED, buffer, THRESHOLD);
-             logger->log(buffer);
+
+ 			char buffer[200];
+ 			MatchingMethod(RED, buffer, THRESHOLD);
+ 			logger->log(buffer);
  			select_flag = 0; //Uncomment this for SNAPSHOT mode. 
  		}
 
