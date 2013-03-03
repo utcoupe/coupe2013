@@ -9,14 +9,15 @@ Déplacer petit robot: clic droit
 
 Déplacer adversaire: idem + ctrl
 
-IRC:
-voir les canaux dans define.py
-Chaque robot défini les canaux sur les quels il veut se connecter
-
 @author Thomas Recouvreux
 @author Pierre-Henry Fricot
 @author Cédric Bache
-@author Florent Thévenet
+
+Pour la version 2013, nous avons utilisé le nouveau protocole de communication zérobot. Les objets et engines sont également réécrit pour adapter au nouveau reglement.
+@author Siqi LIU <me@siqi.fr>
+@author Florent Thévenet <florent@fthevenet.fr>
+@author Thomas Fuhrmann <tomesman@gmail.com>
+
 """
 
 
@@ -84,7 +85,7 @@ if __name__ == "__main__":
 
         # robots
         bigrobot = BigRobot(engine = engine,
-                            posinit = mm_to_px(250, 250),
+                            posinit = mm_to_px(250, 2000 - 250),
                             team = BLUE,
                             asserv = utcoupe.ASSERV_BIG,
                             others = utcoupe.OTHERS_BIG,
@@ -92,7 +93,7 @@ if __name__ == "__main__":
                             match = match,
                             services = services)
         minirobot = MiniRobot(engine = engine,
-                              posinit = mm_to_px(400, 250),
+                              posinit = mm_to_px(400, 2000 - 250),
                               team = BLUE,
                               asserv = utcoupe.ASSERV_MINI,
                               others = utcoupe.OTHERS_MINI,
