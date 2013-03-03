@@ -2,6 +2,8 @@
 
 import sys
 sys.path.append('../zerobot')
+sys.path.append('../../lib')
 import arduino
+import utcoupe
 
-arduino.run(__file__, identity="gros_asserv")
+arduino.run(__file__, identity=utcoupe.ASSERV_BIG)

@@ -1,5 +1,5 @@
 import sys
-sys.path.append('../../../zerobot/python3')
+sys.path.append('../../lib')
 
 import zerobot
 import serial
