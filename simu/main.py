@@ -16,137 +16,132 @@ Chaque robot défini les canaux sur les quels il veut se connecter
 @author Thomas Recouvreux
 @author Pierre-Henry Fricot
 @author Cédric Bache
+@author Florent Thévenet
 """
 
 
 import sys
 import os
 DIR_PATH = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(os.path.join(DIR_PATH, ".."))
-
+sys.path.append(os.path.join(DIR_PATH, "..", "lib"))
 
 
 import optparse
 import threading
 import time
+import zmq
+
+import zerobot
+import utcoupe
 
 from simu import *
-from py3irc.mypyirc.ircdefine import *
-
 
 if __name__ == "__main__":
-	
-	default = {}
-	default["server_ip"] 		= "localhost"
-	default["server_port"] 		= 6667
+        
+        default = {}
+        default["server_ip"]            = "localhost"
+        default["port_frontend"]        = 5000
+        default["port_backend"]         = 5001
+        default["port_ev_push"]         = 5003
+        default["port_ev_sub"]          = 5004
 
-	usage = "usage: %prog [options]"
-	parser = optparse.OptionParser(usage,version="%prog 0.0")
-	parser.add_option("-S", "--server-ip",
-						action="store", dest="server_ip", default=default["server_ip"],
-						help="ip irc server")
-	parser.add_option("-P", "--server-port",
-						action="store", dest="server_port", type="int", default=default["server_port"],
-						help="port irc server")
-	(options, args) = parser.parse_args()
+        usage = "usage: %prog [options]"
+        parser = optparse.OptionParser(usage,version="%prog 0.0")
+        parser.add_option("-S", "--server-ip",
+                          action="store", dest="server_ip", default=default["server_ip"],
+                          help="ip zerobot server")
+        parser.add_option("-b", "--port-backend",
+                          action="store", dest="port_backend", type="int", default=default["port_backend"],
+                          help="port backend")
+        parser.add_option("-f", "--port-frontend",
+                          action="store", dest="port_frontend", type="int", default=default["port_frontend"],
+                          help="port frontend")
+        parser.add_option("-p", "--port-ev-push",
+                          action="store", dest="port_ev_push", type="int", default=default["port_ev_push"],
+                          help="port events publishing")
+        parser.add_option("-s", "--port-ev-sub",
+                          action="store", dest="port_ev_sub", type="int", default=default["port_ev_sub"],
+                          help="port events subscribtion")
+        (options, args) = parser.parse_args()
 
 
-	
-	engine = Engine()
-	match = Match()
+        engine = Engine()
+        match = Match()
 
-	# debug
-	debug = Debug()
+        # debug
+        debug = Debug()
 
-	# robots
-	bigrobot = BigRobot(
-		engine				= engine,
-		canal_asserv		= CANAL_BIG_ASSERV,
-		canal_others		= CANAL_BIG_OTHERS,
-		canal_visio			= CANAL_BIG_VISIO,
-		canal_extras		= CANAL_BIG_EXTRAS,
-		posinit				= mm_to_px(250,250),
-		team				= BLUE
-	)
-	minirobot = MiniRobot(
-		engine				= engine,
-		canal_asserv		= CANAL_MINI_ASSERV,
-		canal_others		= CANAL_MINI_OTHERS,
-		canal_visio			= CANAL_MINI_VISIO,
-		canal_extras		= CANAL_MINI_EXTRAS,
-		posinit				= mm_to_px(400,250),
-		team				= BLUE,
-		match				= match
-	)
-	bigrobot2 = BigRobot(
-		engine				= engine,
-		canal_asserv		= CANAL_BIG_ASSERV+'2',
-		canal_others		= CANAL_BIG_OTHERS+'2',
-		canal_visio			= CANAL_BIG_VISIO+'2',
-		canal_extras		= CANAL_BIG_EXTRAS+'2',
-		posinit				= mm_to_px(3000-250,250),
-		team				= RED
-	)
-	minirobot2 = MiniRobot(
-		engine				= engine,
-		canal_asserv		= CANAL_MINI_ASSERV+'2',
-		canal_others		= CANAL_MINI_OTHERS+'2',
-		canal_visio			= CANAL_MINI_VISIO+'2',
-		canal_extras		= CANAL_MINI_EXTRAS+'2',
-		posinit				= mm_to_px(3000-400,250),
-		team				= RED,
-		match				= match
-	)
-	robots = (bigrobot, minirobot, bigrobot2, minirobot2)
+        # Store server info
+        server = utcoupe.Server(server = options.server_ip,
+                                frontend = options.port_frontend,
+                                backend = options.port_backend,
+                                ev_push = options.port_ev_push,
+                                ev_sub = options.port_ev_sub)
 
-	# hokuyo
-	hokuyo = Hokuyo(CANAL_HOKUYO, robots)
+        # Create services on demand
+        ctx = zmq.Context(1)
+        services = utcoupe.ServicesManager(server, ctx)
 
-	# ircbot
-	canaux = (
-		CANAL_BIG_ASSERV,CANAL_MINI_ASSERV,CANAL_BIG_ASSERV+'2',CANAL_MINI_ASSERV+'2',
-		CANAL_BIG_OTHERS,CANAL_MINI_OTHERS,CANAL_BIG_OTHERS+'2',CANAL_MINI_OTHERS+'2',
-		CANAL_BIG_VISIO,CANAL_MINI_VISIO,CANAL_BIG_VISIO+'2',CANAL_MINI_VISIO+'2',
-		CANAL_HOKUYO, CANAL_DEBUG,
-		CANAL_BIG_EXTRAS, CANAL_MINI_EXTRAS, CANAL_BIG_EXTRAS+'2', CANAL_MINI_EXTRAS+'2',
-	)
-	ircbot = SimuIrcBot(options.server_ip, options.server_port, canaux)
-	ircbot.add_executer(debug)
-	ircbot.add_executer(hokuyo)
-	for i,robot in enumerate(robots):
-		ircbot.add_executer(robot)
-	
+        # robots
+        bigrobot = BigRobot(engine = engine,
+                            posinit = mm_to_px(250, 250),
+                            team = BLUE,
+                            asserv = utcoupe.ASSERV_BIG,
+                            others = utcoupe.OTHERS_BIG,
+                            visio = utcoupe.VISIO_BIG,
+                            match = match,
+                            services = services)
+        minirobot = MiniRobot(engine = engine,
+                              posinit = mm_to_px(400, 250),
+                              team = BLUE,
+                              asserv = utcoupe.ASSERV_MINI,
+                              others = utcoupe.OTHERS_MINI,
+                              match = match,
+                              services = services)
+        bigrobot2 = BigRobot(engine = engine,
+                             posinit = mm_to_px(3000-250,250),
+                             team = RED,
+                             asserv = utcoupe.ASSERV_BIG_ENEMY,
+                             others = utcoupe.OTHERS_BIG_ENEMY,
+                             visio = utcoupe.VISIO_BIG_ENEMY,
+                             match = match,
+                             services = services)
+        minirobot2 = MiniRobot(engine = engine,
+                               posinit = mm_to_px(3000-400,250),
+                               team = RED,
+                               asserv = utcoupe.ASSERV_MINI_ENEMY,
+                               others = utcoupe.OTHERS_MINI_ENEMY,
+                               match = match,
+                               services = services)
+        robots = (bigrobot, minirobot, bigrobot2, minirobot2)
 
-	engine.init(ircbot.stop,match,debug)
-	match.init(engine)
-	bigrobot.init(engine)
-	minirobot.init(engine)
-	bigrobot2.init(engine)
-	minirobot2.init(engine)
-	try:
-		t = threading.Thread(None,ircbot.start,"simuircbot")
-		t.setDaemon(True)
-		t.start()
-	except Exception as ex:
-		print(ex)
-		
-	load_map("map.xml",engine)
-	
-	engine.add(bigrobot)
-	engine.add(minirobot)
-	engine.add(bigrobot2)
-	engine.add(minirobot2)
+        # hokuyo
+        hokuyo = services.create(utcoupe.HOKUYO, Hokuyo(robots))
 
-	t=threading.Thread(target=engine.start)
-	t.setDaemon(True)
-	t.start()
+        engine.init(services.stop,match,debug)
+        match.init(engine)
+        bigrobot.init(engine)
+        minirobot.init(engine)
+        bigrobot2.init(engine)
+        minirobot2.init(engine)
+        
+        load_map("map.xml",engine)
+        
+        engine.add(bigrobot)
+        engine.add(minirobot)
+        engine.add(bigrobot2)
+        engine.add(minirobot2)
 
-	while not engine.e_stop.is_set():
-		try:
-			engine.e_stop.wait(3)
-			print(match.score(BLUE))
-			print(match.score(RED))
-		except KeyboardInterrupt:
-			engine.stop()
-			break
-	
+        t=threading.Thread(target=engine.start)
+        t.setDaemon(True)
+        t.start()
+
+        while not engine.e_stop.is_set():
+                try:
+                        engine.e_stop.wait(3)
+                        print(match.score(BLUE))
+                        print(match.score(RED))
+                except KeyboardInterrupt:
+                        engine.stop()
+                        break
+

@@ -8,7 +8,7 @@ from geometry import Vec
 
 
 from ..define import *
-from .robot import Robot, MINI
+from .robot import Robot, MINI, Others
 from ..engine.engineobject import EngineObjectPoly,EngineObjectSegment
 from .verre import Verre
 
@@ -56,22 +56,24 @@ class Palette(EngineObjectSegment):
 
 
 class MiniRobot(Robot):
-	def __init__(self, *, engine, canal_asserv, canal_others, canal_extras, canal_visio, posinit, team, match):
+	def __init__(self, *, engine, asserv, others, posinit, team, match, services):
 		Robot.__init__(self,
 			engine 				= engine,
-			canal_asserv		= canal_asserv,
-			canal_others		= canal_others,
-			canal_extras		= canal_extras,
-			canal_visio			= canal_visio,
+			asserv		= asserv,
+                        asserv_obj = None,
+			others		= others,
+                        others_obj = MiniOthers(self),
+                        visio = None,
+                        visio_obj = None,
 			team				= team,
 			posinit				= posinit,
 			mass				= 10,
 			typerobot			= MINI,
-			colltype 			= COLLTYPE_PETIT_ROBOT,
-			poly_points			= mm_to_px((0,0),(HEIGHT_MINI,0),(HEIGHT_MINI,WIDTH_MINI),(0,WIDTH_MINI))
+			poly_points			= mm_to_px((0,0),(HEIGHT_MINI,0),(HEIGHT_MINI,WIDTH_MINI),(0,WIDTH_MINI)),
+                        match = match,
+                        services = services
 		)
 
-		self.match = match
 		
 		self.palette_left = Palette(engine, mm_to_px(HEIGHT_MINI/2, WIDTH_MINI/2), 45)
 		self.palette_right = Palette(engine, mm_to_px(HEIGHT_MINI/2, -WIDTH_MINI/2), -45)
@@ -173,6 +175,7 @@ class MiniRobot(Robot):
 		r = 0 if coeff_engorgement < 1 else 1
 		self.send_canal_asserv(kwargs['id_msg'], r)
 
+<<<<<<< HEAD
 	def _cmd_others_drop_verre(self):
 
 		# Le petit drop les verres en tour de 2, et puis eventuellement un verre seul!
@@ -195,3 +198,8 @@ class MiniRobot(Robot):
 			self.engine.add(Verre(self.engine, pos_drop, "black"))
 
 		self.nb_verres = 0
+=======
+
+class MiniOthers(Others):
+	pass
+>>>>>>> Simu.goto(zerobot)

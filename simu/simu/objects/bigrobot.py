@@ -6,7 +6,7 @@ import random
 
 from geometry import Vec,Segment
 
-from .robot import Robot, BIG
+from .robot import Robot, BIG, Others, Visio
 from ..define import *
 from ..engine.engineobject import EngineObjectPoly
 from .bougie import Bougie
@@ -14,7 +14,7 @@ from .cerise import Cerise
 from .ping_pong import Ping_pong
 
 class BigRobot(Robot):
-	def __init__(self, *, engine, canal_asserv, canal_others, canal_visio, canal_extras, posinit, team):
+	def __init__(self, *, engine, asserv, others, visio, posinit, team, match, services):
 		self.bras = EngineObjectPoly(
 			engine 		= engine,
 			colltype	= COLLTYPE_BRAS,
@@ -35,17 +35,21 @@ class BigRobot(Robot):
 
 		Robot.__init__(self,
 			engine		 		= engine,
-			canal_asserv		= canal_asserv,
-			canal_others		= canal_others,
-			canal_visio			= canal_visio, 
-			canal_extras		= canal_extras,
+			asserv		= asserv,
+                        asserv_obj = None,
+			others		= others,
+                        others_obj = BigOthers(self),
+			visio			= visio,
+                        visio_obj = BigVisio(self),
 			team				= team,
 			posinit				= posinit,
 			mass				= 10,
 			typerobot			= BIG,
 			colltype 			= COLLTYPE_GROS_ROBOT,
 			poly_points			= mm_to_px((0,0),(288,0),(288,314),(0,314)),
-			extension_objects	= [self.rouleau]
+			extension_objects	= [self.rouleau],
+                        match = match,
+                        services = services
 		)
 
 		self.nb_bougie 		= 0
@@ -128,3 +132,9 @@ class BigRobot(Robot):
 		else:
 			self.remove_bras()
 
+
+class BigOthers(Others):
+	pass
+
+class BigVisio(Others):
+	pass

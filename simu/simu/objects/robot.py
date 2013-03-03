@@ -6,12 +6,14 @@ import math
 import time
 
 
-from py3irc.mypyirc.mypyircbot import Executer
-from py3irc.mypyirc.ircutils import *
 from ..define import *
 from ..engine.engineobject import EngineObjectPoly
 #from .cd import Cd
 #from .lingo import Lingo
+
+import sys
+sys.path.append('../../../lib')
+import utcoupe
 
 
 def angle_diff(a, b):
@@ -50,10 +52,9 @@ class GoalANGLE:
 class GoalPOSR(GoalPOS): pass
 class GoalANGLER(GoalANGLE): pass
 
-
-class Robot(EngineObjectPoly, Executer):
-	def __init__(self, *, engine, canal_asserv, canal_others, canal_visio, canal_extras,
-	team, posinit, mass, poly_points, typerobot, colltype, extension_objects=[]):
+class Robot(EngineObjectPoly):
+	def __init__(self, *, engine, asserv, asserv_obj=None, others, others_obj, visio, visio_obj,
+	team, posinit, mass, poly_points, typerobot, extension_objects=[], match, services):
 		color = 'blue' if team == BLUE else 'red'
 		EngineObjectPoly.__init__(self,
 			engine		 	= engine,
@@ -65,9 +66,8 @@ class Robot(EngineObjectPoly, Executer):
 			extension_objects	= extension_objects
 		)
 
-		Executer.__init__(self)
-
 		self.typerobot = typerobot
+		self.match = match
 
 		# quand on clique ça téléporte au lieu d'envoyer un ordre à l'asservissement
 		self.mod_teleport = False
@@ -91,19 +91,17 @@ class Robot(EngineObjectPoly, Executer):
 		self.current_team	= BLUE
 		self.stop			= False
 
-		# être sûr que le canal commance par #
-		self.canal_asserv = canal_ircnormalize(canal_asserv)
-		self.canal_others = canal_ircnormalize(canal_others)
-		self.canal_extras = canal_ircnormalize(canal_extras)
-		self.canal_visio = canal_ircnormalize(canal_visio)
-		
-
-		# rajouts des fonctions utilisées par le bot irc
-		# _cmd_asserv_<cmd> => cmd_<canal_asserv>_<cmd>
-		self.transform("asserv", canal_asserv)
-		self.transform("others", canal_others)
-		self.transform("visio", canal_visio)
-		self.transform("extras", canal_extras)
+		if asserv_obj != None:
+			self.asserv = asserv_obj
+		else:
+			self.asserv = Asserv(self)
+		self.asserv_service = services.create(asserv, self.asserv)
+		self.others = others_obj
+		print(self.asserv, self.others)
+		self.others_service = services.create(others, self.others)
+		if visio != None and visio_obj != None:
+			self.visio = Visio(self)
+			self.visio_service = services.create(visio, self.visio)
 
 		self.body._set_velocity_func(self._my_velocity_func())
 		
@@ -151,7 +149,7 @@ class Robot(EngineObjectPoly, Executer):
 						self.body._set_position((gx,gy))
 						self.goals.pop(0)
 						self.body._set_velocity((0,0))
-						self.send_canal_asserv(current_goal.id_msg, 2)
+						self.asserv_service.send_response(current_goal.id_msg, 2)
 					else:
 						a = math.atan2(dy, dx)
 						vx = abs(v) * math.cos(a)
@@ -165,7 +163,7 @@ class Robot(EngineObjectPoly, Executer):
 						current_goal.start = time.time()
 					elif (time.time() - current_goal.start) > current_goal.delay:
 						self.goals.pop(0)
-						self.send_canal_asserv(current_goal.id_msg, 0)
+						self.asserv_service.send_response(current_goal.id_msg, 0)
 					else:
 						a = self.body.angle
 						v = self.max_speed * current_goal.pwm / 255
@@ -175,139 +173,12 @@ class Robot(EngineObjectPoly, Executer):
 				elif isinstance(current_goal, GoalANGLE):
 					self.body._set_angle(current_goal.a)
 					self.goals.pop(0)
-					self.send_canal_asserv(current_goal.id_msg, 2)
+					self.asserv_service.send_response(current_goal.id_msg, 2)
 				else:
 					raise Exception("type_goal inconnu")
 			else:
 				self.body._set_velocity((0,0))
 		return f
-	
-	
-	##
-	##		ASSERV
-	##
-				
-
-	def _cmd_asserv_id(self,*, id_msg=42, **options):
-		self.send_canal_asserv(id_msg, 'asserv')
-
-	def _cmd_asserv_ping(self, *, id_msg=42, **options):
-		self.send_canal_asserv(id_msg, 'pong')
-	
-	def _cmd_asserv_goto(self, x, y, v, *, id_msg=42, **options):
-		"""
-		Donner l'ordre d'aller à un point
-		@param x mm
-		@param y mm
-		@param v mm/s
-		"""
-		self.goals = []
-		self.goals.append( GoalPOS( id_msg, *mm_to_px(x,y,v*2) ) )
-		self.send_canal_asserv(id_msg, 1)
-	
-	def _cmd_asserv_gotor(self, x, y, v, *, id_msg=42, **options):
-		"""
-		Donner l'ordre d'aller à un point, relativement à la position actuelle
-		@param x mm
-		@param y mm
-		@param v mm/s
-		"""
-		self.goals = []
-		self.goals.append( GoalPOSR( id_msg, *mm_to_px(x,y,v*2) ) )
-		self.send_canal_asserv(id_msg, 1)
-
-	def _cmd_asserv_turn(self, a, v, *, id_msg=42, **options):
-		#print("HELLO", a, self.inv_a(a))
-		#self.goals.append( GoalANGLE( id_msg, math.radians(self.inv_a(a)), mm_to_px(v) ) )
-		self.goals.append( GoalANGLE( id_msg, math.radians(a), mm_to_px(v) ) )
-		self.send_canal_asserv(id_msg, 1)
-
-	def _cmd_asserv_turnr(self, a, v, *, id_msg=42, **options):
-		#self.goals.append( GoalANGLER( id_msg, math.radians(self.inv_a(a)), mm_to_px(v) ) )
-		self.goals.append( GoalANGLER( id_msg, math.radians(a), mm_to_px(v) ) )
-		self.send_canal_asserv(id_msg, 1)
-
-	def _cmd_asserv_cancel(self, *, id_msg=42, **options):
-		self.goals = []
-		self.send_canal_asserv(id_msg, 0)
-
-	def _cmd_asserv_stop(self, *, id_msg=42, **options):
-		self.stop = True
-		self.send_canal_asserv(id_msg, 0)
-
-	def _cmd_asserv_resume(self, *, id_msg=42, **options):
-		self.stop = False
-		self.send_canal_asserv(id_msg, 0)
-	
-	def _cmd_asserv_pos(self, *, id_msg=42, **options):
-		self.send_canal_asserv(id_msg, self.x(), self.y(), self.a())
-
-	def _cmd_asserv_pwm(self, pwm_l, pwm_r, delay, *, id_msg=42, **kwargs):
-		self.goals.append(GoalPWM(id_msg, pwm_l, delay/1000))
-		self.send_canal_asserv(id_msg, 1)
-	
-	##
-	##		EXTRAS
-	##
-	
-	def _cmd_extras_teleport(self, x, y, a, *, id_msg=42, **kwargs):
-		"""
-		Téléporte le robot
-		@param {int:mm} x
-		@param {int:mm} y
-		@param {int:degrees} a
-		"""
-		self.body._set_position(mm_to_px(x,y))
-		self.body._set_angle(math.radians(a))
-		self.send_canal_extras(id_msg, 1)
-	
-	##
-	##		VISIO
-	##
-	def _cmd_visio_ping(self, id_msg=42, **kwargs):
-		self.send_canal_visio(id_msg, "pong")
-		
-	def _cmd_visio_get(self, id_msg=42, **kwargs):
-		"""
-		Récupérer ce que vois la caméra
-		"""
-		cds = filter(lambda o: isinstance(o, Cd), self.engine.objects)
-		lingos = filter(lambda o: isinstance(o, Lingo), self.engine.objects)
-		dist2 = mm_to_px(800)**2
-		def condition(o):
-			""" assez proche et devant nous """
-			v = o.pos() - self.pos()
-			return v.norm2() < dist2 and abs(angle_diff(v.angle(),self.angle())) < math.radians(45)
-		cds = filter(condition, cds)
-		lingos = filter(condition, lingos)
-		cosa = math.cos(self.angle())
-		sina = math.sin(self.angle())
-		def transform(o):
-			""" px -> mm     &&     absolute -> relative """
-			p = o.pos() - self.pos()
-			x = cosa * p.x + sina * p.y
-			y = -sina * p.x + cosa * p.y
-			return tuple(px_to_mm(x,y))
-		cds = map(transform, cds)
-		lingos = map(transform, lingos)
-		self.send_canal_visio(id_msg, str(tuple(cds)).replace(' ',''), str(tuple(lingos)).replace(' ',''))
-
-	##
-	##		SEND_CANAL_X
-	##
-	
-	def send_canal_asserv(self, id_msg, *args):
-		self.send_response(self.canal_asserv, id_msg, self.compute_msg(*args))
-	
-	def send_canal_others(self, id_msg, *args):
-		self.send_response(self.canal_others, id_msg, self.compute_msg(*args))
-		
-	def send_canal_extras(self, id_msg, *args):
-		self.send_response(self.canal_extras, id_msg, self.compute_msg(*args))
-		
-	def send_canal_visio(self, id_msg, *args):
-		self.send_response(self.canal_visio, id_msg, self.compute_msg(*args))
-
 
 	def onEvent(self, event):
 		# selection des teams et des robots
@@ -327,7 +198,7 @@ class Robot(EngineObjectPoly, Executer):
 				self.mod_recul = not self.mod_recul
 			elif KEY_JACK == event.key:
 				self.state_jack = 0 if self.state_jack else 1
-				self.send_canal_others(ID_MSG_JACK, self.state_jack)
+				self.others.send_event('jack', self.state_jack)
 		elif KEYUP == event.type:
 			if KEY_CHANGE_TEAM == event.key:
 				print("équipe bleu")
@@ -343,25 +214,25 @@ class Robot(EngineObjectPoly, Executer):
 			# keydown
 			if KEYDOWN == event.type:
 				if KEY_STOP_RESUME == event.key:
-					self._cmd_asserv_stop(id_msg=42)
+					self.asserv.stop(0)
 					return True
 				elif KEY_CANCEL == event.key:
-					self._cmd_asserv_cancel(id_msg=42)
+					self.asserv.cancel(0)
 					return True
 			# keyup
 			elif KEYUP == event.type:
 				if KEY_STOP_RESUME == event.key:
-					self._cmd_asserv_resume(id_msg=42)
+					self.asserv.resume(0)
 			# mouse
 			elif MOUSEBUTTONDOWN == event.type:
 				p = event.pos
 				p_mm = px_to_mm(p)
 				print(p_mm)
 				if self.mod_teleport:
-					self._cmd_extras_teleport(p_mm[0], p_mm[1], 0)
+					self.extras.teleport(p_mm[0], p_mm[1], 0)
 				else:
 					v = mm_to_px(1000) * (-1 if self.mod_recul else 1)
-					self._cmd_asserv_goto(*px_to_mm(p[0],p[1],v), id_msg=42)
+					self.asserv.goto(0, *px_to_mm(p[0],p[1],v))
 				return True
 		return False
 
@@ -373,3 +244,93 @@ class Robot(EngineObjectPoly, Executer):
 
 	def inv_a(self, a):
 		return -a	
+
+class Asserv:
+	""" Émule l'arduino dédiée à l'asservissement """
+
+	def __init__(self, robot):
+		self.robot = robot
+
+	
+	def id(self, id_msg):
+		return 'asserv'
+
+	def ping(self, id_msg):
+		return 'pong'
+	
+	def goto(self, id_msg, x, y, v):
+		"""
+		Donner l'ordre d'aller à un point
+		@param x mm
+		@param y mm
+		@param v mm/s
+		"""
+		self.robot.goals = []
+		self.robot.goals.append( GoalPOS( id_msg, *mm_to_px(x,y,v*2) ) )
+		return utcoupe.ResponseLater()
+	
+	def gotor(self, id_msg, x, y, v):
+		"""
+		Donner l'ordre d'aller à un point, relativement à la position actuelle
+		@param x mm
+		@param y mm
+		@param v mm/s
+		"""
+		self.robot.goals = []
+		self.robot.goals.append( GoalPOSR( id_msg, *mm_to_px(x,y,v*2) ) )
+		return utcoupe.ResponseLater()
+
+	def turn(self, id_msg, a, v):
+		#print("HELLO", a, self.inv_a(a))
+		#self.goals.append( GoalANGLE( id_msg, math.radians(self.inv_a(a)), mm_to_px(v) ) )
+		self.robot.goals.append( GoalANGLE( id_msg, math.radians(a), mm_to_px(v) ) )
+		return 1
+
+	def turnr(self, id_msg, a, v):
+		#self.goals.append( GoalANGLER( id_msg, math.radians(self.inv_a(a)), mm_to_px(v) ) )
+		self.robot.goals.append( GoalANGLER( id_msg, math.radians(a), mm_to_px(v) ) )
+		return utcoupe.ResponseLater()
+
+	def cancel(self, id_msg):
+		self.robot.goals = []
+		return 0
+
+	def stop(self, id_msg):
+		self.robot.stop = True
+		return 0
+
+	def resume(self, id_msg):
+		self.robot.stop = False
+		return 0
+	
+	def pos(self, id_msg):
+		return (self.robot.x(), self.robot.y(), self.robot.a())
+
+	def pwm(self, id_msg, pwm_l, pwm_r, delay):
+		self.robot.goals.append(GoalPWM(id_msg, pwm_l, delay/1000))
+		return utcoupe.ResponseLater()
+	
+class Visio:
+	"""Émule le programme de visio"""
+
+	def __init__(self, robot):
+		self.robot = robot
+
+	def get_candles(self, id_msg):
+		pass
+
+	def ping(self, arg):
+		return "pong"
+
+class Others:
+	def __init__(self, robot):
+		self.robot = robot
+
+	def goto_ax12(self, id_msg, id_moteur, pos, vitesse):
+		return 1
+
+	def ping(self, id_msg, entier):
+		return entier + 42;
+
+	def id(self, id_msg):
+		return "others"
