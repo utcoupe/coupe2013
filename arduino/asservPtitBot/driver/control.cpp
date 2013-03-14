@@ -407,12 +407,6 @@ void positionControl(int* value_pwm_left, int* value_pwm_right){
 			(*value_pwm_left) = 255;
 		else if ((*value_pwm_left) < -255)
 			(*value_pwm_left) = -255;
-
-		/*Evite les "vibrations" dues aux pwm trop basse sur des moteurs CC*/
-		if ((*value_pwm_left) < PWM_MINI && (*value_pwm_left > 0))//Si la pwm est trop faible mais différente de 0, on la corrige en la mettant au minimum
-			(*value_pwm_left = PWM_MINI);
-		else if ((*value_pwm_left > -PWM_MINI && (*value_pwm_left < 0))//De même dans le negatif
-			(*value_pwm_left = -PWM_MINI); 
 	}
 }
 
