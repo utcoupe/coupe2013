@@ -24,6 +24,7 @@ private:
 
 	ColorSets colorSets;
 	cv::Mat image;
+	cv::Mat drawing;
 	bool loaded;
 	
 	Logger *logger;

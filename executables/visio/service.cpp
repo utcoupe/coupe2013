@@ -60,7 +60,7 @@ public:
 						calibManager *calib = new calibManager();
 						int camId = request["args"][0].asInt();
 						if(camId == 0)
-							calib->yamlSetter( * cam_0 );
+							calib->yamlSetter(* cam_0);
 				// else if(camId == 1)
 				// 	calib->yamlSetter(this->cam_1);
 						cout << "Type b for blue, r for red, w for white. Use trackbars to adjust to the best calibration, then type v to save it.";
@@ -140,9 +140,9 @@ public:
 				
 				if(argc != 4)
 					cout << "Help -> \"visio camID graphic_mode debug_mode\"\n"
-				<< "1 for external cam, 0 for internal cam\n"
-				<< "0 for no graphic_mode, 1 for graphic_mode" 
-				<< "0 for match_mode, 1 for debug_mode"<< endl;
+				<< "\t1 for external cam, 0 for internal cam\n"
+				<< "\t0 for no graphic_mode, 1 for graphic_mode\n" 
+				<< "\t0 for match_mode, 1 for debug_mode"<< endl;
 				
 				Visio visio(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]), "visio", "tcp://*:5001", Service::CONNECT);
 				cout << "connect on port 5001" << endl;

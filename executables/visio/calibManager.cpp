@@ -153,7 +153,7 @@ void calibManager::yamlSetter(camManager &cam)
 	while(1)
 	{
 		cam.capture >> image;
-
+		// cv::normalize(image, image, 0, 256, cv::NORM_MINMAX);
 		if (image.empty())
 		{
 			logger->err("image empty");

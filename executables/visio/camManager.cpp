@@ -92,16 +92,26 @@ camManager::camManager(const int id, const int display)
  				paint_color = cv::Scalar(255, 0, 0);
  				break;
  				case WHITE:
- 				paint_color = cv::Scalar(255, 255, 255);
+ 				paint_color = cv::Scalar(0, 255, 0);
  				break;
  				default:
  				logger->err("Unkown color!");
  			}
 
- 			cv::circle(original, minRect.center, 3, paint_color, -1, 200, 0);
- 			cv::Point2f corners[4];
- 			minRect.points(corners);
- 			cv::ellipse(original, minRect, paint_color);
+ 			if(this->display){
+ 				cv::circle(drawing, minRect.center, 3, paint_color, -1, 200, 0);
+ 				char coord[20];
+ 				sprintf(coord, "(%.3lf, %.3lf)", minRect.center.x, minRect.center.y);
+ 				cv::putText(drawing, coord, minRect.center, cv::FONT_HERSHEY_SIMPLEX, 0.4, cv::Scalar(255, 255, 255));
+ 				if(color == WHITE)
+ 					cv::ellipse(drawing, minRect, paint_color);
+ 				else{
+ 					cv::Point2f rect_points[4]; 
+ 					minRect.points( rect_points );
+ 					for( int j = 0; j < 4; j++ )
+          				line( drawing, rect_points[j], rect_points[(j+1)%4], paint_color, 1, 8 );
+ 				}
+ 			}
  		}
  	}
  	return result;
@@ -109,8 +119,8 @@ camManager::camManager(const int id, const int display)
 
  bool camManager::EliminatedContour(const cv::RotatedRect &minRect)
  {
-	// cout<<"size = "<<minRect.size.area()<<endl;
- 	if(minRect.size.area() < 1200)
+	cout<<"size = "<<minRect.size.area()<<endl;
+ 	if(minRect.size.area() < 400)
  		return true;
  	return false;
  }
@@ -232,6 +242,10 @@ camManager::camManager(const int id, const int display)
  	while(1)
  	{
  		capture >> image;
+ 		// cv::normalize(image, image, 0, 256, cv::NORM_MINMAX);
+ 		blur( image, image, cv::Size(3,3) );
+	 	if(display)
+		 	drawing = cv::Mat::zeros( image.size(), CV_8UC3 );
 
  		if (image.empty())
  		{
@@ -260,8 +274,19 @@ camManager::camManager(const int id, const int display)
  		result["data"]["red"] = oss.str();
 		  // cout << "RED: " + res << endl;
 
- 		if(display)
+ 		binaryImg = image;
+ 		binaryImg = binaryFiltering(binaryImg, WHITE);
+ 		v3 = findObjects(binaryImg, image, WHITE);
+ 		// Convert vector to string
+ 		oss.str("");
+ 		std::copy(v3.begin(), v3.end(), CommaIterator(oss, ","));
+ 		result["data"]["green"] = oss.str();
+		  // cout << "RED: " + res << endl;
+
+ 		if(display){
  			cv::imshow( "object tracing test", image );
+ 			cv::imshow("Drawing", drawing);
+ 		}
 
  		int c = cv::waitKey( 50 );
  		switch (c)
@@ -297,6 +322,9 @@ camManager::camManager(const int id, const int display)
  		capture.grab();
  	}
  	capture >> image;
+ 	blur( image, image, cv::Size(3,3) );
+ 	if(display)
+ 		drawing = cv::Mat::zeros( image.size(), CV_8UC3 );
 
  	Json::Value result;
  	vector<cv::Point> v1, v2, v3;
@@ -319,13 +347,13 @@ camManager::camManager(const int id, const int display)
  	result["data"]["red"] = oss.str();
 		  // cout << "RED: " + res << endl;
 
- 	// 	binaryImg = image;
- 	// 	binaryImg = binaryFiltering(binaryImg, WHITE);
- 	// 	v3 = findObjects(binaryImg, image, WHITE);
-		// // Convert vector to string
- 	// 	  oss.str("");
-		//   std::copy(v3.begin(), v3.end(), CommaIterator(oss, ","));
-		//   result["data"]["white"] = oss.str();
+	binaryImg = image;
+	binaryImg = binaryFiltering(binaryImg, WHITE);
+	v3 = findObjects(binaryImg, image, WHITE);
+	// Convert vector to string
+	oss.str("");
+	std::copy(v3.begin(), v3.end(), CommaIterator(oss, ","));
+	result["data"]["white"] = oss.str();
 		//   // cout << "WHITE: " + res << endl;
 
  	if(display)
