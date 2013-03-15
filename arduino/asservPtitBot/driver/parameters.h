@@ -12,7 +12,6 @@
 
 /* Parametres mecanique du robot */
 #define DIST_MOTOR_AXIS_TO_BACK_MM 122.0 // Distance entre le l'axe des moteurs et l'arriere du robot
-#define PWM_MINI 0 //pwm minimale corrigeant le bug de "vibration" du robot, mettre à 0 pour les brushless
 /*
 const int ENC_RESOLUTION = 500; // Nombre de points par tour d'encodeur
 const int ENC_RADIUS = 34; // Rayon de la roue codeuse
