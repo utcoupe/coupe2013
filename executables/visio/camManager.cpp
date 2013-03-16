@@ -104,12 +104,20 @@ camManager::camManager(const int id, const int display)
  				sprintf(coord, "(%.3lf, %.3lf)", minRect.center.x, minRect.center.y);
  				cv::putText(drawing, coord, minRect.center, cv::FONT_HERSHEY_SIMPLEX, 0.4, cv::Scalar(255, 255, 255));
  				if(color == WHITE)
- 					cv::ellipse(drawing, minRect, paint_color);
+ 					cv::ellipse(drawing, minRect, paint_color, -1);
  				else{
  					cv::Point2f rect_points[4]; 
  					minRect.points( rect_points );
- 					for( int j = 0; j < 4; j++ )
-          				line( drawing, rect_points[j], rect_points[(j+1)%4], paint_color, 1, 8 );
+ 					/// 2.b. Creating rectangles
+					rectangle( drawing,
+					           rect_points[0],
+					           rect_points[2],
+					           paint_color,
+					           -1,
+					           8 );
+
+ 					// for( int j = 0; j < 4; j++ )
+      //     				line( drawing, rect_points[j], rect_points[(j+1)%4], paint_color, 1, 8 );
  				}
  			}
  		}

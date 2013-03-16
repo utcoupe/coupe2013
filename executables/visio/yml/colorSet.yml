@@ -11,9 +11,9 @@ red_v_lower: 93
 red_h_higher: 230
 red_s_higher: 225
 red_v_higher: 183
-white_h_lower: 73
-white_s_lower: 65
-white_v_lower: 203
-white_h_higher: 166
-white_s_higher: 179
+white_h_lower: 59
+white_s_lower: 22
+white_v_lower: 169
+white_h_higher: 154
+white_s_higher: 255
 white_v_higher: 255
