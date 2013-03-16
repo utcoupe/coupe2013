@@ -74,51 +74,62 @@ camManager::camManager(const int id, const int display)
  	vector<cv::Point> result;
  	vector<vector<cv::Point> > contours;
  	vector<cv::Vec4i> hierarchy;
-
+	
  	cv::findContours( src, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE );
+
+	vector<vector<cv::Point> > contours_poly( contours.size() );
+	vector<cv::RotatedRect> boundRect( contours.size() );
+	vector<cv::Point2f>center( contours.size() );
+	vector<float>radius( contours.size() );
+
  	for (unsigned int i=0; i < contours.size(); i++)
  	{
- 		cv::RotatedRect minRect = cv::minAreaRect(cv::Mat(contours[i]));
- 		if (not EliminatedContour(minRect))
- 		{
- 			result.push_back(minRect.center);
+ 		// cv::RotatedRect minRect = cv::minAreaRect(cv::Mat(contours[i]));
 
+
+ 		double area = cv::contourArea(contours[i]);
+ 		cout << "area = "<< area << endl;
+ 		if (area > 400)
+ 		{
+			cv::approxPolyDP( cv::Mat(contours[i]), contours_poly[i], 3, true );
  			cv::Scalar paint_color;
  			switch(color){
  				case RED:
  				paint_color = cv::Scalar(0, 0, 255);
+ 				boundRect[i] = cv::minAreaRect(cv::Mat(contours[i]));
+ 				center[i] = boundRect[i].center;
+ 				result.push_back(center[i]);
  				break;
  				case BLUE:
  				paint_color = cv::Scalar(255, 0, 0);
+ 				boundRect[i] = cv::minAreaRect(cv::Mat(contours[i]));
+ 				center[i] = boundRect[i].center;
+ 				result.push_back(center[i]);
  				break;
  				case WHITE:
  				paint_color = cv::Scalar(0, 255, 0);
+ 				cv::minEnclosingCircle( (cv::Mat)contours_poly[i], center[i], radius[i] );
+ 				result.push_back(center[i]);
  				break;
  				default:
  				logger->err("Unkown color!");
  			}
 
  			if(this->display){
- 				cv::circle(drawing, minRect.center, 3, paint_color, -1, 200, 0);
- 				char coord[20];
- 				sprintf(coord, "(%.3lf, %.3lf)", minRect.center.x, minRect.center.y);
- 				cv::putText(drawing, coord, minRect.center, cv::FONT_HERSHEY_SIMPLEX, 0.4, cv::Scalar(255, 255, 255));
  				if(color == WHITE)
- 					cv::ellipse(drawing, minRect, paint_color, -1);
+ 					circle( drawing, center[i], (int)radius[i], paint_color, -1, 8, 0 );
  				else{
- 					cv::Point2f rect_points[4]; 
- 					minRect.points( rect_points );
+ 					// cv::Point2f rect_points[4]; 
+ 					// minRect.points( rect_points );
  					/// 2.b. Creating rectangles
-					rectangle( drawing,
-					           rect_points[0],
-					           rect_points[2],
-					           paint_color,
-					           -1,
-					           8 );
-
+					rectangle( drawing, boundRect[i].boundingRect().tl(), boundRect[i].boundingRect().br(), paint_color, -1, 8, 0 );
  					// for( int j = 0; j < 4; j++ )
       //     				line( drawing, rect_points[j], rect_points[(j+1)%4], paint_color, 1, 8 );
  				}
+ 				cv::circle(drawing, center[i], 3, paint_color, -1, 200, 0);
+ 				char coord[20];
+ 				sprintf(coord, "(%.2lf,%.2lf)", center[i].x, center[i].y);
+ 				cv::putText(drawing, coord, center[i], cv::FONT_HERSHEY_SIMPLEX, 0.4, cv::Scalar::all(255));
  			}
  		}
  	}
