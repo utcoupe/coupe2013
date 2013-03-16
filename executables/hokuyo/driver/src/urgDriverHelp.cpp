@@ -192,7 +192,10 @@ void UrgDriver::refInit()
 	{
 		double radian = urg.index2rad(ind);
 		radian = ABS(radian);
-		if(radian<TETA_DIAG){
+		if(radian<TETA_GAT){
+			distanceMax[ind]=( DIST_GAT - this->deltaX )/cos(radian);
+		}
+		else if(radian<TETA_DIAG){
 			distanceMax[ind]=( LX - this->deltaX )/cos(radian);
 		}
 		else{

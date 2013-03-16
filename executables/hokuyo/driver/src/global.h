@@ -27,7 +27,8 @@
 	#define TETA_DIAG 0.59 	// en radian, sinon 33.69 degree
 	#define RAD90 1.57
 	#define TOLERANCE 80  	// Tolérence de distance entre deux points du même robot
-							// Représente le diametre de la balise posée sur le robot
+	#define TETA_GAT 0.153  // Angle limite du gateau dans la champ de vision de l'hokuyo (modifier en cas d'erreur dues aux imprecisions)
+	#define DIST_GAT 1300 // Distance entre bord du plateau et début du gateau
 							
 	#define TOL_BORDS 150	//
 
