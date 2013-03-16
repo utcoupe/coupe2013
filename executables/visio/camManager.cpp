@@ -82,7 +82,7 @@ camManager::camManager(const int id, const int display):CAMERA_N(id), display(di
  	{
  		double area = cv::contourArea(contours[i]);
  		cout << "area = "<< area << endl;
- 		if (area > 400)
+ 		if (area > 300 && area < 5500)
  		{
 			cv::approxPolyDP( cv::Mat(contours[i]), contours_poly[i], 3, true );
  			cv::Scalar paint_color;
@@ -109,12 +109,13 @@ camManager::camManager(const int id, const int display):CAMERA_N(id), display(di
  			}
 
  			if(this->display){
- 				if(color == WHITE)
+ 				if(color == WHITE){
  					circle( drawing, center[i], (int)radius[i], paint_color, -1, 8, 0 );
+ 				}
  				else{
 					rectangle( drawing, boundRect[i].boundingRect().tl(), boundRect[i].boundingRect().br(), paint_color, -1, 8, 0 );
  				}
- 				cv::circle(drawing, center[i], 3, paint_color, -1, 200, 0);
+ 				cv::circle(drawing, center[i], 3, cv::Scalar::all(0), -1, 200, 0);
  				char coord[20];
  				sprintf(coord, "(%.2lf,%.2lf)", center[i].x, center[i].y);
  				cv::putText(drawing, coord, center[i], cv::FONT_HERSHEY_SIMPLEX, 0.4, cv::Scalar::all(255));

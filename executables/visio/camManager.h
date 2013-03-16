@@ -16,8 +16,8 @@ class camManager
 {
 
 private:
-	int CAMERA_N;
-	int display;
+	const int CAMERA_N;
+	const int display;
 
 	string colorsetPath;
 	char redTemplPath[80], blueTemplPath[80], whiteTemplPath[80];
