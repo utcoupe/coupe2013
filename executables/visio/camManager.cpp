@@ -38,12 +38,8 @@ public std::iterator<std::output_iterator_tag, void, void, void, void>
 };
 
 
-camManager::camManager(const int id, const int display)
+camManager::camManager(const int id, const int display):CAMERA_N(id), display(display)
 { 
-	NB_OF_OBJECTS_TO_DETECT = 4;
-	
-	CAMERA_N = id; 
-	this->display = display; 
 	logger = new Logger("CAM", this->CAMERA_N);
 
 	colorsetPath = "./yml/colorSet.yml";
@@ -84,9 +80,6 @@ camManager::camManager(const int id, const int display)
 
  	for (unsigned int i=0; i < contours.size(); i++)
  	{
- 		// cv::RotatedRect minRect = cv::minAreaRect(cv::Mat(contours[i]));
-
-
  		double area = cv::contourArea(contours[i]);
  		cout << "area = "<< area << endl;
  		if (area > 400)
@@ -119,12 +112,7 @@ camManager::camManager(const int id, const int display)
  				if(color == WHITE)
  					circle( drawing, center[i], (int)radius[i], paint_color, -1, 8, 0 );
  				else{
- 					// cv::Point2f rect_points[4]; 
- 					// minRect.points( rect_points );
- 					/// 2.b. Creating rectangles
 					rectangle( drawing, boundRect[i].boundingRect().tl(), boundRect[i].boundingRect().br(), paint_color, -1, 8, 0 );
- 					// for( int j = 0; j < 4; j++ )
-      //     				line( drawing, rect_points[j], rect_points[(j+1)%4], paint_color, 1, 8 );
  				}
  				cv::circle(drawing, center[i], 3, paint_color, -1, 200, 0);
  				char coord[20];
@@ -135,16 +123,6 @@ camManager::camManager(const int id, const int display)
  	}
  	return result;
  }
-
- bool camManager::EliminatedContour(const cv::RotatedRect &minRect)
- {
-	cout<<"size = "<<minRect.size.area()<<endl;
- 	if(minRect.size.area() < 400)
- 		return true;
- 	return false;
- }
-
-
 
 /**
  * binary filtering
@@ -441,72 +419,17 @@ camManager::camManager(const int id, const int display)
  			matchLoc = maxloc;
  			if(color == 1){
  				sprintf(buffer, "%s(%d %d) ", buffer, matchLoc.x, matchLoc.y);
-						// (*response)["data"] = buffer;
-						// (*response)["error"] = "";
-						// logger->log(buffer);
  			}
  			else if(color == 2){
  				sprintf(buffer, "%s(%d %d) ", buffer, matchLoc.x, matchLoc.y);
-						// (*response)["data"] = buffer;
-						// (*response)["error"] = "";
-						// logger->log(buffer);
  			}
  			else if(color == 3){
  				sprintf(buffer, "%s(%d %d) ", buffer, matchLoc.x, matchLoc.y);
-						// (*response)["data"] = buffer;
-						// (*response)["error"] = "";
-						// logger->log(buffer);
  			}
  		}
  		else
  			return;
  	}
-
-
-	/**
-	 * Second method: Erase the most similar region at each loop!
-	 */
-
-	// Localizing the best match with minMaxLoc
-	// double minVal, maxVal; 
-	// cv::Point minLoc, maxLoc, matchLoc;
-
-
-
-	// for (int i = 0; i < NB_OF_OBJECTS_TO_DETECT; ++i)
-	// {
-	// 	// Create the result matrix
-	// 	result.create( img.cols - roiImg.cols + 1, img.rows - roiImg.rows + 1, CV_32FC1 );
-	// 	// Do the Matching and Normalize
-	// 	cv::matchTemplate( img, roiImg, result, cv::TM_SQDIFF );
-	// 	cv::normalize( result, result, 0, 1, cv::NORM_MINMAX, -1, cv::Mat() );
-	// 	cv::imshow("result", result);
-	// 	cv::minMaxLoc( result, &minVal, &maxVal, &minLoc, &maxLoc, cv::Mat() );
-	// 	matchLoc = minLoc; 
-	// 	cv::rectangle( 	img, 
-	// 					matchLoc, 
-	// 					cv::Point( matchLoc.x + roiImg.cols, matchLoc.y + roiImg.rows ), 
-	// 					CV_RGB(255, 0, 0), 
-	// 					3, 8, 0 );
-
-
-
-	// 	cv::Rect regionToEliminate = cv::Rect(matchLoc.x, matchLoc.y, roiImg.cols, roiImg.rows);
-	// 	cv::Mat temp = img(regionToEliminate);
-	// 	temp = temp.ones(temp.rows, temp.cols, CV_32FC1);
-
-
-		// The lower the demonimater, the easier tracker will track different objects. As we eliminate larger area.
-		// cv::Rect regionToEliminate = cv::Rect(matchLoc.x - roiImg.cols/8, matchLoc.y-roiImg.rows/8, roiImg.cols/4, roiImg.rows/4);
-		// cv::Rect wholeArea = cv::Rect(cv::Point(0,0), cv::Point(result.cols, result.rows));
-		// regionToEliminate = regionToEliminate & wholeArea;
-
-		// cv::Mat temp = result(regionToEliminate);
-		// temp = temp.ones(temp.rows, temp.cols, CV_32FC1);
-
-	// 	sprintf(buffer, "matchLoc: (%d, %d): %lf", matchLoc.x, matchLoc.y, result.at<double>(matchLoc));
-	// 	logger->log(buffer);
-	// }
 	}
 
 	Json::Value camManager::testCase(const double threshold = THRESHOLD)
