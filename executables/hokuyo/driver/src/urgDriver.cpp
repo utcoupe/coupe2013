@@ -82,8 +82,7 @@ void UrgDriver::sendInfos(Json::Value & res)
 	}
 	os << "]";
 	
-	res["data"] = os.str().c_str();
-	res["data"] = "Coucou";
+	res["data"] = os.str();
 }
 
 /***********************************************************************
@@ -157,7 +156,7 @@ void* UrgDriver::helpfct(void* arg)
  * <h2>Loop</h2>
  * <p>Fonction principale de récupération et d'analyse des données</p>
  * */
-void* UrgDriver::loop(void* arg)
+void* UrgDriver::loop()
 {	
 	// On test la connection
 	if(!urg.isConnected()) {

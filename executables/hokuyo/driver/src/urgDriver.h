@@ -34,7 +34,7 @@ class UrgDriver
 private:
 
 	static UrgDriver* driverObj;
-	void* loop(void* arg);
+	void* loop();
 	bool askValue;
 
 	//

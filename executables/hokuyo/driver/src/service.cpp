@@ -91,6 +91,7 @@ int main(int argc, char *argv[]) {
 	
 	while (!s_interrupted) {
 		hokuyo.read();
+		application->ud->loop();
 	}
 
 	return 0;
