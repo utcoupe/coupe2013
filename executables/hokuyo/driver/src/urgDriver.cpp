@@ -144,7 +144,7 @@ void* UrgDriver::helpfct(void* arg)
 {
 	void* ret = NULL;
 	try {
-		ret = getUrgDriver()->loop(arg);
+		ret = getUrgDriver()->loop();
 	}
 	catch(urgException* e){
 		e->react();
