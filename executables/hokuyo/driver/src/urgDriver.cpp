@@ -67,7 +67,6 @@ UrgDriver::~UrgDriver()
 void UrgDriver::sendInfos(Json::Value & res)
 {
 	std::ostringstream os;
-	cout << "coucou\n";
 	os << "[";
 	bool pass=false;
 	list<coord>::iterator it;
