@@ -158,6 +158,9 @@ void* UrgDriver::helpfct(void* arg)
  * */
 void* UrgDriver::loop()
 {	
+	#if DEBUG
+		cout << "UrgDriver::loop()\n";
+	#endif
 	// On test la connection
 	if(!urg.isConnected()) {
 		throw new urgException(this, urgException::Err_loop_urgNoConnect);
@@ -168,6 +171,7 @@ void* UrgDriver::loop()
 	long n;
 	while(askValue)
 	{
+		cout << "asking Value!\n";
 		long timestamp = 0;
 		std::vector<long> data;
 		n=getData(data,&timestamp);
