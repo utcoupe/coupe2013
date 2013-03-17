@@ -82,7 +82,8 @@ void UrgDriver::sendInfos(Json::Value & res)
 	}
 	os << "]";
 	
-	res["data"] = os.str();
+	res["data"] = os.str().c_str();
+	res["data"] = "Coucou";
 }
 
 /***********************************************************************

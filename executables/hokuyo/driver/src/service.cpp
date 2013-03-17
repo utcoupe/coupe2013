@@ -70,7 +70,6 @@ protected:
 			// On recuprer les positions.
 		else if (request["fct"] == "send"){
 			Json::Value res;
-			cerr << "cocou";
 			application->ud->sendInfos(res);
 			sendResponse(remote_id, request, res);
 		}
