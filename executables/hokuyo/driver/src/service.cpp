@@ -26,7 +26,7 @@ public:
 	: Service(identity, addr, type) {
 
 		application = new MainAppDriver(argc,argv);
-		application->waitHere();
+		// application->waitHere();
 	};
 	
 protected:
