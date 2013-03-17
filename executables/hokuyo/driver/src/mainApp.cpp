@@ -12,16 +12,16 @@
  * */
  
 // Inclusion Libs
-#include "global.h"
+// #include "global.h"
 
-#include "mainAppDriver.h" 
+// #include "mainAppDriver.h" 
 
 
 //! Instance global
-MainAppDriver* application;
+// MainAppDriver* application;
 
 // Exception qui ont besoin parfois d'avoir un accés
-#include "urgException.h"
+// #include "urgException.h"
 
 
 
@@ -32,22 +32,22 @@ MainAppDriver* application;
  * <h1>Main</h1>
  * <p>Fonction d'entrée du programme</p>
  **********************************************************************/
-int main(int argc, char *argv[])
-{	
+// int main(int argc, char *argv[])
+// {	
 	
-	application = new MainAppDriver(argc,argv);
-	application->waitHere();
+// 	application = new MainAppDriver(argc,argv);
+// 	application->waitHere();
 	
 	
-	return 0;
-}
+// 	return 0;
+// }
 
 
 
 
 
 // Fonctions d'interface 
-#include "comThread.h"  // ça c'est ici parce que les fonctions ont besoin
+// #include "comThread.h"  // ça c'est ici parce que les fonctions ont besoin
 						// l'instance global application
 						// Je bougerai ça après
 

@@ -13,8 +13,8 @@ struct CommaIterator
 :
 public std::iterator<std::output_iterator_tag, void, void, void, void>
 {
-	std::ostream *os;
-	std::string comma;
+	ostream *os;
+	string comma;
 	bool first;
 
 	CommaIterator(std::ostream& os, const std::string& comma)
@@ -91,22 +91,20 @@ camManager::camManager(const int id, const int display):CAMERA_N(id), display(di
  				paint_color = cv::Scalar(0, 0, 255);
  				boundRect[i] = cv::minAreaRect(cv::Mat(contours[i]));
  				center[i] = boundRect[i].center;
- 				result.push_back(center[i]);
  				break;
  				case BLUE:
  				paint_color = cv::Scalar(255, 0, 0);
  				boundRect[i] = cv::minAreaRect(cv::Mat(contours[i]));
  				center[i] = boundRect[i].center;
- 				result.push_back(center[i]);
  				break;
  				case WHITE:
  				paint_color = cv::Scalar(0, 255, 0);
  				cv::minEnclosingCircle( (cv::Mat)contours_poly[i], center[i], radius[i] );
- 				result.push_back(center[i]);
  				break;
  				default:
  				logger->err("Unkown color!");
  			}
+ 			result.push_back(center[i]);
 
  			if(this->display){
  				if(color == WHITE){
@@ -351,7 +349,7 @@ camManager::camManager(const int id, const int display):CAMERA_N(id), display(di
 	// Convert vector to string
 	oss.str("");
 	std::copy(v3.begin(), v3.end(), CommaIterator(oss, ","));
-	result["data"]["white"] = oss.str();
+	result["data"]["tennis"] = oss.str();
 		//   // cout << "WHITE: " + res << endl;
 
  	if(display)

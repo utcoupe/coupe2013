@@ -13,7 +13,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
-
+#include "json/json.h"
 #include "delay.h" 
 #include "UrgCtrl.h"
 
@@ -92,7 +92,7 @@ public:
 	void setMutex(pthread_mutex_t m){this->mutex=m;};
 	//
 	void setComPort(string cp){comPort=cp;};
-	void sendInfos();
+	void sendInfos(Json::Value &);
 	//
 	void toString();
 	

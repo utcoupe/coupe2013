@@ -1,4 +1,5 @@
-
+#ifndef MAINAPPDRIVER_H
+#define MAINAPPDRIVER_H
 
 
 #include "urgDriver.h"
@@ -7,7 +8,6 @@
 
 /***********************************************************************
  * \class MainAppDriver
- * 
  * <h1>MainAppDriver</h1>
  * <p>Classe qui gére l'ensemble du driver</p>
  **********************************************************************/
@@ -31,4 +31,4 @@ public:
 };
 
 
-
+#endif

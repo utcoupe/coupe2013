@@ -10,7 +10,10 @@
 #include "urgDriver.h"
 #include "urgException.h" 
 #include "global.h"
-	
+#include "json/json.h"
+#include <string>
+#include <sstream>
+
 using namespace std;
 	
 void UrgDriver::toString() 
@@ -61,22 +64,25 @@ UrgDriver::~UrgDriver()
 /**
  * <p>Création du message</p>
  * */
-void UrgDriver::sendInfos()
+void UrgDriver::sendInfos(Json::Value & res)
 {
-	cout << "[";
+	std::ostringstream os;
+	os << "[";
 	bool pass=false;
 	list<coord>::iterator it;
 	for ( it=robot.begin() ; it!=robot.end() ; it++ )
 	{
 		if(pass){
-			cout << ","; 
+			os << ","; 
 		}
 		else{
 			pass=true;
 		}
-		cout << "(" << (*it).x << "," << (*it).y << ")";
+		os << "(" << (*it).x << "," << (*it).y << ")";
 	}
-	cout << "]";
+	os << "]";
+	
+	res["data"] = os.str();
 }
 
 /***********************************************************************

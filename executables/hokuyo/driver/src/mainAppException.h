@@ -25,6 +25,7 @@ public:
 	
 	// Types d'erreur
 	static const int Err_urgException_react_tropDerr 				= 50;
+	static const int Err_argException_react_tropDerr 				= 51;
 
 	// 
 	mainAppException(MainAppDriver* u,int type);

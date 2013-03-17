@@ -9,7 +9,7 @@
  
 #include "mainAppException.h"
 
-#define MAX_ERROR 10
+#define MAX_ERROR 1
 
 int mainAppException::nbExThrow = 0;
 
@@ -26,7 +26,7 @@ mainAppException::mainAppException(MainAppDriver* mad,int type)
 void mainAppException::react(void)
 {
 	
-	if(mainAppException::nbExThrow > MAX_ERROR) {
+	if(mainAppException::nbExThrow >= MAX_ERROR) {
 		//
 		
 		finalKill();
@@ -35,15 +35,17 @@ void mainAppException::react(void)
 	switch(this->typeErr)
 	{
 		//
-		case mainAppException::Err_urgException_react_tropDerr :{
+		case mainAppException::Err_urgException_react_tropDerr :
 		
 			cerr << "Comportement à définir" << endl;
 				finalKill();
-		break;}
+		break;
+		case mainAppException::Err_argException_react_tropDerr :
+			cerr << "Il faut passer l'argument couleur par 1:rouge, 0:bleu" << endl;
+				finalKill();
+		break;
 		
 	}	
-
-	
 }
 
 

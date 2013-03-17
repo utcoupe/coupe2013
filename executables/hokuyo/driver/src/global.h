@@ -13,8 +13,8 @@
 #define NB_MAX_ROBOT 4
 
 // Tag des paramétres à passer 
-#define TAG_PORTCOM	"-com"
-#define TAG_COLOR	"-col"
+#define TAG_PORTCOM	"-port"
+#define TAG_COLOR	"-color"
 
 // --- Définitions ---
 	struct coord {

@@ -22,9 +22,11 @@ void UrgDriver::connectHokuyo()
 	{
 		if(!urg.isConnected()) {
 			if(!urg.connect(comPort.c_str())) {
+				cout << "Trying failed with port: " << comPort.c_str() << endl;
 				throw new urgException(this,urgException::Err_connectHokuyo_urgNoConnect);
 			}
 			else {
+				cout << "Connected!" << endl;
 				scanMsec = urg.scanMsec();
 				urg.setCaptureMode(AutoCapture);
 			}
@@ -55,12 +57,10 @@ void UrgDriver::deconnectHokuyo()
  **********************************************************************/
 long UrgDriver::getData(vector<long>& data, long* timestamp)
 {
-	
 	int h = 10;
 	while(h > 0)
 	{
 		h--;	
-
 		int n = urg.capture(data,timestamp);
 		if(n <= 0){ delay(scanMsec); continue; }
 			
@@ -97,7 +97,6 @@ string UrgDriver::hokuyoFindPortCom(int nbOfPortToTest, int firstPortToTest)
 		device.str(""); 
 		device << "/dev/ttyACM";
 		device << port; 
-			
 		if( urg.connect(device.str().c_str()) ) {
 			return device.str();
 		}
@@ -107,7 +106,7 @@ string UrgDriver::hokuyoFindPortCom(int nbOfPortToTest, int firstPortToTest)
 	// Erreur possible pas de port trouver
 	// Solution possible agrandir le nombre de port sur lesquel rechercher
 		
-	return string("");
+	return "";
 }
 
 
@@ -185,21 +184,18 @@ void UrgDriver::refInit()
 {	 
 	long timestamp = 0;
 	std::vector<long> data;
-	getData(data,&timestamp);
 
+	this->connectHokuyo();
+
+	getData(data,&timestamp);
 	distanceMax = new long[data.size()];
 	for(int ind=indexMin ; ind<indexMax ; ind++)
 	{
 		double radian = urg.index2rad(ind);
 		radian = ABS(radian);
-		// if(radian<TETA_GAT){
-		// 	distanceMax[ind]=( DIST_GAT - this->deltaX )/cos(radian);
-		// }
-		// else 
-
 
 		/**
-		 * deltaX, deltaY positive, car la balise sort de la table, on rajoute une distance a LX, LY.
+		 * deltaX, deltaY negative si la balise sort de la table, on retire une distance a LX, LY.
 		 */
 		if(radian<TETA_DIAG){
 			distanceMax[ind]=( LX - this->deltaX )/cos(radian);
@@ -231,7 +227,7 @@ void UrgDriver::calculLangleScanne()
 }
 
 /***********************************************************************
- * 
+ * Dangereux... On donne la couleur manuellement!
  **********************************************************************/
 short UrgDriver::hokuyoFindColor()
 {

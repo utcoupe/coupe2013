@@ -48,7 +48,7 @@ void setRed(void)
  * <p>Dit à l'hokuyo que notre robot est sur la couleur violet</p>  
  **********************************************************************/
 // #define QH_SET_PURPLECOLOR 3
-void setPurple(void)
+void setBlue(void)
 {
 	application->ud->stop();
 	application->ud->updateParamWithColor(BLEU);
