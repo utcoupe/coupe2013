@@ -171,12 +171,15 @@ void* UrgDriver::loop()
 	long n;
 	while(askValue)
 	{
-		cout << "asking Value!\n";
 		long timestamp = 0;
 		std::vector<long> data;
 		n=getData(data,&timestamp);
 		
+		#if DEBUG
+			cout << "n = " << n;
+		#endif
 		// C'est ici que l'on traite les données
+		
 		interpretData(data,n);	
 	}
 
