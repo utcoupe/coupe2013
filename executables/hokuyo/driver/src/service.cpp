@@ -88,10 +88,9 @@ int main(int argc, char *argv[]) {
 	
 	Hokuyo hokuyo(argc, argv, "hokuyo", "tcp://*:5001", Service::CONNECT);
 	cout << "connect on port 5001" << endl;
-	
+
 	while (!s_interrupted) {
 		hokuyo.read();
-		application->ud->loop();
 	}
 
 	return 0;
