@@ -225,6 +225,9 @@ void UrgDriver::calculLangleScanne()
 	this->deg1 =  (radDelX * 180.0 / M_PI);
 	// this->deg2 = ((this->radMin + radScan) * 180.0 / M_PI);
 	this->deg2 = ((radDelX + radScan) * 180.0 / M_PI);
+	#if DEBUG
+		cout << "deg1 = " << deg1 << "deg2 = " << deg2 << endl;
+	#endif
 }
 
 /***********************************************************************

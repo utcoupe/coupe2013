@@ -48,7 +48,7 @@ void MainAppDriver::initUrgDriver()
 {
 		//! --- Start Hukuyo ---
 		ud = UrgDriver::getUrgDriver();
-
+		
 			// On récupére le port com
 		Argument<string>* portcom = am->getArg(TAG_PORTCOM,ArgManager::GET_STRING);
 		if(portcom->isValid()){
