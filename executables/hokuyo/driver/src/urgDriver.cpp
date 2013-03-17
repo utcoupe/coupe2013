@@ -176,7 +176,7 @@ void* UrgDriver::loop()
 		n=getData(data,&timestamp);
 		
 		#if DEBUG
-			cout << "n = " << n << "data.size() = " << data.size() << endl;
+			cout << "n = " << n << endl;
 		#endif
 		// C'est ici que l'on traite les données
 		
