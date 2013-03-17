@@ -39,7 +39,7 @@ protected:
 		else if (request["fct"] == "help") {
 			Json::Value data(
 				"-> ping(): pong \n "
-				"-> send(): recuperer les positions des robots.\n"
+				"-> send_pos(): recuperer les positions des robots.\n"
 				"-> setRed(): le red c'est la maison!\n"
 				"-> setBlue(): le blue c'est la maison!\n"
 				);
@@ -68,7 +68,7 @@ protected:
 			sendResponse(remote_id, request, data);
 		}
 			// On recuprer les positions.
-		else if (request["fct"] == "send"){
+		else if (request["fct"] == "send_pos"){
 			Json::Value res;
 			application->ud->sendInfos(res);
 			sendResponse(remote_id, request, res);
