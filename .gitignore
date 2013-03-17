@@ -15,4 +15,4 @@ doc
 *~
 *.pyc
 *.exe
-
+.DS_Store
