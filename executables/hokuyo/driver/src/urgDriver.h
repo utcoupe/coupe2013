@@ -8,7 +8,6 @@
 #define URGDRIVER_H
   
 #include "global.h"
-#include "protocole.h"
 
 #include <list>
 #include <string>
@@ -114,13 +113,15 @@ public:
 	void defineRange(double minDeg,double maxDeg);
 	void defineRangeIndex(double minDeg,double maxDeg);
 	//
-	void setDelta(bool autoSearch, int dX=-40, int dY=0);
+	void setDelta(bool autoSearch, int dX=-40, int dY=-40);
 	void calculLangleScanne();
 	
 	//! Fonctions compute
 	bool checkPointBot(coord p1, coord p2);
 	coord computeBotLocation(const list<coord> & bot);
 	void interpretData(const vector<long> & data, int n);
+	long distanceAuBord(coord c);
+	bool inGateau(coord c);
 };
 
  

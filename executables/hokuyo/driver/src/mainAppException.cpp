@@ -51,5 +51,5 @@ void mainAppException::react(void)
 void mainAppException::finalKill()
 {
 	cerr << "KILL VIOLENT - il n'y a plus rien à faire pour sauver le process" << endl;
-	a->cm->autoKill();
+	// a->cm->autoKill();
 }

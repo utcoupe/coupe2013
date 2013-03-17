@@ -192,14 +192,20 @@ void UrgDriver::refInit()
 	{
 		double radian = urg.index2rad(ind);
 		radian = ABS(radian);
-		if(radian<TETA_GAT){
-			distanceMax[ind]=( DIST_GAT - this->deltaX )/cos(radian);
-		}
-		else if(radian<TETA_DIAG){
+		// if(radian<TETA_GAT){
+		// 	distanceMax[ind]=( DIST_GAT - this->deltaX )/cos(radian);
+		// }
+		// else 
+
+
+		/**
+		 * deltaX, deltaY positive, car la balise sort de la table, on rajoute une distance a LX, LY.
+		 */
+		if(radian<TETA_DIAG){
 			distanceMax[ind]=( LX - this->deltaX )/cos(radian);
 		}
 		else{
-			distanceMax[ind]=( LY - this->deltaX )/cos(RAD90-radian);	
+			distanceMax[ind]=( LY - this->deltaY )/cos(RAD90-radian);	
 		}
 	}
 }
@@ -217,10 +223,11 @@ void UrgDriver::calculLangleScanne()
 	//cout << radDelX << endl;
 	//cout << radDelY << endl;
 	
-	radScan = (radScan - radDelX) - radDelY;
+	radScan = radScan - radDelX - radDelY;
 
 	this->deg1 =  (radDelX * 180.0 / M_PI);
-	this->deg2 = ((this->radMin + radScan) * 180.0 / M_PI);
+	// this->deg2 = ((this->radMin + radScan) * 180.0 / M_PI);
+	this->deg2 = ((radDelX + radScan) * 180.0 / M_PI);
 }
 
 /***********************************************************************
@@ -230,7 +237,7 @@ short UrgDriver::hokuyoFindColor()
 {
 	short colorDeduction = -10;
 	//
-	defineRange(-90.0,90.0);
+	defineRange(0,180.0);
 	UpdateRange();
 	//
 	long timestamp = 0;
@@ -241,11 +248,11 @@ short UrgDriver::hokuyoFindColor()
 		getData(data,&timestamp);
 		
 		// Coté Rouge
-		defineRangeIndex(70,90);
+		defineRangeIndex(0,20);
 		for(int j = indexMin; j < indexMax; ++j) 
 		{
 			long l = data[j];
-			if( l>(LY-100) && l>(LY+100) ){
+			if( l>(-100) && l<(100) ){
 				if(colorDeduction == ROUGE){
 					return ROUGE;
 				}else{
@@ -255,10 +262,10 @@ short UrgDriver::hokuyoFindColor()
 		}
 					
 		// Coté Violet
-		defineRangeIndex(-90,-70);
+		defineRangeIndex(0,-20);
 		for(int j = indexMin; j < indexMax; ++j) {
 			long l = data[j];
-			if( l>(LY-100) && l>(LY+100) ){
+			if( l>(-100) && l<(100) ){
 				if(colorDeduction == BLEU){
 					return BLEU;
 				}else{

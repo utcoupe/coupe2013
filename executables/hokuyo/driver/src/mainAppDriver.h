@@ -3,7 +3,7 @@
 
 #include "urgDriver.h"
 #include "argManager.h"
-#include "comManager.h"
+// #include "comManager.h"
 
 /***********************************************************************
  * \class MainAppDriver
@@ -18,13 +18,13 @@ public:
 
 	// Déclaration des Managers
 	ArgManager* am;
-	ComManager* cm;
+	// ComManager* cm;
 	UrgDriver * ud;
 	
 	MainAppDriver(int argc, char *argv[]);
 
 	void initArgManager(int argc, char *argv[]);	
-	void initComManager();
+	// void initComManager();
 	void initUrgDriver();
 	
 	void waitHere();

@@ -54,16 +54,16 @@ int main(int argc, char *argv[])
 /***********************************************************************
  * 
  **********************************************************************/
-void MainAppDriver::initComManager()
-{
-	//! --- Start Com ---
-	cm = ComManager::getComManager();
-	cm->addKill(QH_KILL);
-	cm->addFunction(QH_GETDATA,&send);
-	cm->addFunction(QH_SET_REDCOLOR,&setRed);
-	cm->addFunction(QH_SET_PURPLECOLOR,&setPurple);
-	cm->addFunction(QH_PING,&ping);
-	cm->addFunction(QH_IDENT,&ident);
-	cm->setMutex(ud->getMutex());					// Partage des mutex
-	cm->start();
-}
+// void MainAppDriver::initComManager()
+// {
+// 	//! --- Start Com ---
+// 	cm = ComManager::getComManager();
+// 	cm->addKill(QH_KILL);
+// 	cm->addFunction(QH_GETDATA,&send);
+// 	cm->addFunction(QH_SET_REDCOLOR,&setRed);
+// 	cm->addFunction(QH_SET_PURPLECOLOR,&setPurple);
+// 	cm->addFunction(QH_PING,&ping);
+// 	cm->addFunction(QH_IDENT,&ident);
+// 	cm->setMutex(ud->getMutex());					// Partage des mutex
+// 	cm->start();
+// }

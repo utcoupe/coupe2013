@@ -9,6 +9,7 @@
 
 #include "urgDriver.h"
 #include "urgException.h" 
+#include "global.h"
 	
 using namespace std;
 	

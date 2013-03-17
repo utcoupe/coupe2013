@@ -34,5 +34,7 @@
 
 	#define ABS(a)	   (((a) < 0) ? -(a) : (a))
 
+	#define ROUGE 0
+	#define BLEU 1
 
 #endif  //GLOBAL_H

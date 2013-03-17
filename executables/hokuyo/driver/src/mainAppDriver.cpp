@@ -15,7 +15,7 @@ MainAppDriver::MainAppDriver(int argc, char *argv[])
 	
 	initArgManager(argc,argv);
 	initUrgDriver();
-	initComManager();
+	// initComManager();
 	
 	
 	
@@ -80,5 +80,5 @@ void MainAppDriver::initUrgDriver()
 void MainAppDriver::waitHere()
 {	
 	ud->waitHere();    
-	cm->waitHere();
+	// cm->waitHere();
 }

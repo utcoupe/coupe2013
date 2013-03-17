@@ -54,8 +54,12 @@ bool UrgDriver::checkPointBot(coord p1, coord p2)
 
 
 
-long distanceAuBord(coord c) {
-	
+long UrgDriver::distanceAuBord(coord c) {
+
+	// Si c'est hors table, on retourne une valeur toute petite pour que c soit supprime.
+	if(c.x > LX || c.x < 0 || c.y > LY || c.y < 0)
+		return -1000000;
+
 	int dx;
 	if( c.x > LX/2 ) {
 		dx=LX-c.x;
@@ -78,7 +82,14 @@ long distanceAuBord(coord c) {
 	
 }
 
-
+/**
+ * [UrgDriver::inGateau description]
+ * @param  c data, troisieme range du gateau fait 200 en rayon. On laisse un peu de marge. 
+ * @return   
+ */
+bool UrgDriver::inGateau(coord c){
+	return sqrt(pow((c.x - LX/2), 2) + pow(c.y, 2)) < 210;
+}
 
 
 
@@ -105,7 +116,13 @@ void UrgDriver::interpretData(const std::vector<long> & data, int n)
 			double radian = urg.index2rad(j);
 			radian = ABS(radian);
 			c.x = l*cos(radian)  + deltaX; 
-			c.y = l*sin(radian)  + deltaY;
+			// Cette annee, on place l'hokuyo sur cote loin de gateau, on prend la sysmetrie du c.y
+			c.y = LY - (l*sin(radian)  + deltaY);
+
+			// si c est dans le gateau, on l'enleve.
+			if(inGateau(c))
+				continue;
+
 			if (color==BLEU) {
 				c.x = LX - c.x;
 			}
@@ -120,10 +137,10 @@ void UrgDriver::interpretData(const std::vector<long> & data, int n)
 			}
 			else
 			{
-				// if(checkPointBot(bot.front(), c))
-				// {
+				if(checkPointBot(bot.front(), c))
+				{
 					bot.push_front(c);
-				// }
+				}
 				else
 				{
 					coord res = computeBotLocation(bot);
@@ -150,7 +167,7 @@ void UrgDriver::interpretData(const std::vector<long> & data, int n)
 
 
 	
-	// Erreur si plus de quatres robots 
+	// Erreur si plus de quatres robots, on efface le robot le plus proche du bord.
 	while(robot.size()>NB_MAX_ROBOT) 
 	{
 		
