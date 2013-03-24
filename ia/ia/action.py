@@ -1,4 +1,3 @@
-
 from geometry import Vec
 import threading
 

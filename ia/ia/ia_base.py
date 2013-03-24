@@ -41,16 +41,16 @@ class IaBase:
 
         # création du graph de déplacement
         ng = NavGraph(utcoupe.RAYON_BIGROBOT, utcoupe.FILENAME_MAP)
-        ng.add_dynamic_obstacle(ConvexPoly().initFromCircle(self.init_pos['enemy1'],utcoupe.RAYON_ENEMY,8))
-        ng.add_dynamic_obstacle(ConvexPoly().initFromCircle(self.init_pos['enemy2'],utcoupe.RAYON_ENEMY,8))
-        ng.add_dynamic_obstacle(ConvexPoly().initFromCircle(self.init_pos['mini'],utcoupe.RAYON_MINIROBOT,8))
+        ng.add_dynamic_obstacle(ConvexPoly().initFromCircle(self.init_pos['enemy1'],R_ENEMY,8))
+        ng.add_dynamic_obstacle(ConvexPoly().initFromCircle(self.init_pos['enemy2'],R_ENEMY,8))
+        ng.add_dynamic_obstacle(ConvexPoly().initFromCircle(self.init_pos['mini'],R_MINIROBOT,8))
         ng.update()
         
         # robot
         bigrobot = Robot(self.init_pos['big'], ng)
 
         # Créateur de clients zerobot
-        self.zfactory = utcoupe.ClientsFactory('IA', server)
+        self.zfactory = utcoupe.ClientsFactory(server)
 
         # création de l'asserv
         asserv = SmartAsserv(self.zfactory.get_client(utcoupe.ASSERV_BIG))
@@ -70,9 +70,9 @@ class IaBase:
         
         # création du graph de déplacement
         ng = NavGraph(utcoupe.RAYON_MINIROBOT, utcoupe.FILENAME_MAP)
-        ng.add_dynamic_obstacle(ConvexPoly().initFromCircle(self.init_pos['enemy1'],utcoupe.RAYON_ENEMY,8))
-        ng.add_dynamic_obstacle(ConvexPoly().initFromCircle(self.init_pos['enemy2'],utcoupe.RAYON_ENEMY,8))
-        ng.add_dynamic_obstacle(ConvexPoly().initFromCircle(self.init_pos['big'],utcoupe.RAYON_BIGROBOT,8))
+        ng.add_dynamic_obstacle(ConvexPoly().initFromCircle(self.init_pos['enemy1'],R_ENEMY,8))
+        ng.add_dynamic_obstacle(ConvexPoly().initFromCircle(self.init_pos['enemy2'],R_ENEMY,8))
+        ng.add_dynamic_obstacle(ConvexPoly().initFromCircle(self.init_pos['big'],R_BIGROBOT,8))
         ng.update()
 
         #robot
@@ -87,7 +87,7 @@ class IaBase:
         minirobot.set_actionneurs(petits_actionneurs)
 
 	#Hokuyo
-        hokuyo = self.zfactory.get_client(utcoupe.HOKUYO)
+        hokuyo = self.zfactory.get_client(utcoupe.HUKUYO)
 
         #####
         ## Gamestate // Est-ce qu'on garde ce truc ? Son rôle est pas clair
