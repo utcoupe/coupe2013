@@ -124,11 +124,11 @@ void UrgDriver::defineRange(double minDeg,double maxDeg)
  **********************************************************************/
 void UrgDriver::defineRangeIndex(double minDeg,double maxDeg)
 {
-	indexMin = urg.deg2index(int(minDeg));
-	indexMax = urg.deg2index(int(maxDeg));
+	indexMin = urg.deg2index(minDeg);
+	indexMax = urg.deg2index(maxDeg);
 
 	#if DEBUG 
-	cout << "defineRangeIndex(" << int(minDeg) << "," << int(maxDeg) << ")\n";
+	cout << "defineRangeIndex(" << minDeg << "," << maxDeg << ")\n";
 	cout << "defineRangeIndex -> indexMin: " << indexMin << " indexMax: " << indexMax << endl;
 	#endif
 }
@@ -228,8 +228,8 @@ void UrgDriver::calculLangleScanne()
 	radScan = radScan - radDelX - radDelY;
 
 	this->deg1 =  (radDelX * 180.0 / M_PI);
-	// this->deg2 = ((this->radMin + radScan) * 180.0 / M_PI);
-	this->deg2 = ((radDelX + radScan) * 180.0 / M_PI);
+	this->deg2 = ((this->radMin + radScan) * 180.0 / M_PI);
+	// this->deg2 = ((radDelX + radScan) * 180.0 / M_PI);
 	#if DEBUG
 		cout << "deg1 = " << deg1 << "deg2 = " << deg2 << endl;
 	#endif
