@@ -124,11 +124,13 @@ void UrgDriver::defineRange(double minDeg,double maxDeg)
  **********************************************************************/
 void UrgDriver::defineRangeIndex(double minDeg,double maxDeg)
 {
-	indexMin = urg.deg2index(minDeg);
-	indexMax = urg.deg2index(maxDeg);
-	
-	cout << "defineRangeIndex(" << minDeg << "," << maxDeg << ")\n";
+	indexMin = urg.deg2index(int(minDeg));
+	indexMax = urg.deg2index(int(maxDeg));
+
+	#if DEBUG 
+	cout << "defineRangeIndex(" << int(minDeg) << "," << int(maxDeg) << ")\n";
 	cout << "defineRangeIndex -> indexMin: " << indexMin << " indexMax: " << indexMax << endl;
+	#endif
 }
 
 /***********************************************************************
