@@ -8,6 +8,75 @@ import utcoupe
 
 import time
 
+#point_acces = quand le robot est arrivé à ce point, il déclenche l'action
+
+class ActionCadeau(Action):
+	def __init__(self, ia, robot, enemies, point_acces):
+		Action.__init__(self, ia, robot, enemies, point_acces)
+		
+	def run(self):
+		print("\nACTION CADEAU\n")
+		self.robot.asserv.turn(self.ia.a(90))	#block et block_level à virer dans l'asserv,utilisé pour irc
+		#permet d'être sûr que le robot est en face du cadeau avant d'aller le taper
+		time.sleep(0.5)
+		
+		#avance
+		self.robot.asserv.pwm(100,100,500)			# !!!!!! valeur à tester, mise totalement arbitrairement
+		#commande pwm : puissance roue droite, puissance roue gauche, temps
+		#doit avancer de 100mm (car point_acces le position à 100+rayon_minirobot de l'action
+		time.sleep(0.5)
+		
+		#recul
+		self.robot.asserv.pwm(-100,-100,500)			# !!!!!! valeur à tester, mise totalement arbitrairement
+		
+		#fini
+		self.clean()
+
+		print("Cadeau headshot !\n")
+	
+	def __repr__(self):	#surcharge du print
+		return "ActionCadeau(%s, %s)" % (self.point_acces, self.score)
+		
+		
+
+class ActionGetCerise(Action):
+		
+	DIRECTION_RIGHT		= 0	# il faudra tourner de 90° à droite
+	DIRECTION_LEFT		= 1 # il faudra tourner de 90° à gauche (-90°)
+	DIRECTION_FRONT		= 2 # pas besoin de tourner
+	
+	def __init__(self, ia, robot, enemies, point_acces, direction):
+		Action.__init__(self, ia, robot, enemies, point_acces)
+		self.direction = direction
+		
+	def run(self):
+		print("\nACTION RECUPERER CERISE\n")
+		self.robot.asserv.turn(self.ia.a(90))
+		#permet d'être sûr que le robot est en face de l'objet
+		time.sleep(0.5)
+		
+		if self.direction != self.DIRECTION_FRONT:
+			# le robot se tourne face à l'assiette
+			angle = 90 if self.direction==self.DIRECTION_LEFT else -90
+			asserv.turn(angle)
+		
+		#avance
+		self.robot.asserv.pwm(100,100,100)			# !!!!!! valeur à tester, mise totalement arbitrairement		
+		time.sleep(0.5)
+		
+		#recul
+		self.robot.asserv.pwm(-100,-100,100)			# !!!!!! valeur à tester, mise totalement arbitrairement
+		
+		#fini
+		self.clean()
+
+		print("Cerise done !\n")
+	
+	def __repr__(self):	#surcharge du print
+		return "ActionGetCerise(%s, %s)" % (self.point_acces, self.score)
+		
+		
+
 class ActionTotem(Action):
 
 	DIRECTION_HAUT		= 0	# il faudra aller vers le bas (dy < 0) pour aller vider le totem
@@ -23,7 +92,6 @@ class ActionTotem(Action):
 		angle = 90 if self.direction==self.DIRECTION_HAUT else -90
 		asserv.turn(angle, block=True, block_level=2)
 
-		
 		# avancer
 		asserv.pwm(100,100,1000, block=True, block_level=2)
 
@@ -184,7 +252,7 @@ class ActionLingo(Action):
 
 
 def get_actions_bigrobot(ia, robot, enemies):
-	actions = []
+	actions = []	
 
 	#actions.append(ActionBouteille(ia, robot, enemies, ia.p((640, 2000 - R_BIGROBOT - 100))))
 	#actions.append(ActionBouteille(ia, robot, enemies, (ia.x(1883), 2000 - R_BIGROBOT - 100)))
