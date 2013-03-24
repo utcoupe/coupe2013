@@ -142,7 +142,8 @@ class GameState:
 			elif ID_MSG_POS == id_msg:
 				self.on_msg_pos(canal,params)
 
-	def on_msg_pos(self, args):
+	def on_msg_pos(self, resp):
+		args = resp.data
 		print("Callback asserv %s" % args)
 		if len(args) >= 3:
 			# transformation des strings en int
@@ -161,7 +162,8 @@ class GameState:
 			robot_to_update.a = args[2]
 	
 
-	def on_msg_hokyo(self, args):
+	def on_msg_hokyo(self, resp):
+		args = resp.data
 		if len(args) == 1:
 			lpos = eval(args[0])
 			#print(lpos)
@@ -215,6 +217,7 @@ class GameState:
 		"""
 
 	def on_msg_us(self, args):
+		args = resp.data
 		if len(args) == 1:
 			dist = int(args[0])
 			if dist < 200:

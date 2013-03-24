@@ -111,11 +111,12 @@ class IaBase:
         print("Attente de la connection au serveur Zerobot...")
         #self.ircbot.e_welcome.wait()
         try:
-            self.gamestate.bigrobot.asserv.ping(0, timeout = 10)
+            self.gamestate.bigrobot.asserv.ping(0, timeout = 10, cb_fct=self.start_after)
         except Exception:
             print("Impossible de se connecter à l'asserv")
             quit()
-        
+
+    def start_after(self, resp):
         #print("Get latency big asserv")
         #print(self.gamestate.bigrobot.asserv.get_latency())
         #print("Get latency mini asserv")
