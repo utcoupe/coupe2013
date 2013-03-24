@@ -162,6 +162,7 @@ void UrgDriver::setDelta(bool autoSearch, int dX, int dY)
 void UrgDriver::updateParamWithColor(short color)
 {	
 	this->color = color;
+	cout << "UrgDriver::updateParamWithColor, deg1 = " << deg1 << "deg2" << deg2 << endl;
 	if(this->color == ROUGE) {
 		defineRange(deg1,deg2);
 		defineRangeIndex(deg1,deg2);
