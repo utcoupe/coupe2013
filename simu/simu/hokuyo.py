@@ -10,7 +10,7 @@ class Hokuyo:
 	def setBlue(self, id_msg):
 		pass
 
-	def send_pos(self, **kwargs):
+	def send_pos(self, id_msg):
 		lr = filter(lambda r: r.x() > 0 and r.y() > 0, self.robots)
 		reponse = str(tuple(map(lambda r: (r.x(),r.y()), self.robots)))
 		reponse = reponse.replace(" ","")

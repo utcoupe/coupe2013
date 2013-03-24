@@ -127,7 +127,6 @@ class IaBase:
         #print("Ping hokuyo")
         #print(self.gamestate.hokuyo.get_latency())                         # A DECOMMENTER HOKUYO
         #input("appuyez sur une touche pour démarrer")
-        print("I was here")
         self.loopsetup()
         while 1:
             start_main_loop = time.time()
