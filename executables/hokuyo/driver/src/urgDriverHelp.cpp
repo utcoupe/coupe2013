@@ -106,7 +106,7 @@ string UrgDriver::hokuyoFindPortCom(int nbOfPortToTest, int firstPortToTest)
 	// Erreur possible pas de port trouver
 	// Solution possible agrandir le nombre de port sur lesquel rechercher
 		
-	return "";
+	return string("");
 }
 
 
@@ -191,8 +191,6 @@ void UrgDriver::refInit()
 	long timestamp = 0;
 	std::vector<long> data;
 
-	this->connectHokuyo();
-
 	getData(data,&timestamp);
 	distanceMax = new long[data.size()];
 	for(int ind=indexMin ; ind<indexMax ; ind++)
@@ -228,8 +226,8 @@ void UrgDriver::calculLangleScanne()
 	radScan = radScan - radDelX - radDelY;
 
 	this->deg1 =  (radDelX * 180.0 / M_PI);
-	this->deg2 = ((this->radMin + radScan) * 180.0 / M_PI);
-	// this->deg2 = ((radDelX + radScan) * 180.0 / M_PI);
+	// this->deg2 = ((this->radMin + radScan) * 180.0 / M_PI);
+	this->deg2 = ((radDelX + radScan) * 180.0 / M_PI);
 	#if DEBUG
 		cout << "deg1 = " << deg1 << "deg2 = " << deg2 << endl;
 	#endif

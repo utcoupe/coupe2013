@@ -46,7 +46,7 @@ void MainAppDriver::initArgManager(int argc, char *argv[])
  **********************************************************************/
 void MainAppDriver::initUrgDriver()
 {
-		//! --- Start Hukuyo ---
+		//! --- Start Hokuyo ---
 		ud = UrgDriver::getUrgDriver();
 		
 			// On récupére le port com
