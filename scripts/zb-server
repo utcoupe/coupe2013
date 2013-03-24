@@ -1,0 +1,3 @@
+cd ../lib/zerobot/python3/scripts
+python3 server.py
+

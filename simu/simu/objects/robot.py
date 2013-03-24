@@ -258,6 +258,9 @@ class Asserv:
 	def ping(self, id_msg):
 		return 'pong'
 	
+	def reset(self, id_msg):
+		pass
+
 	def goto(self, id_msg, x, y, v):
 		"""
 		Donner l'ordre d'aller à un point

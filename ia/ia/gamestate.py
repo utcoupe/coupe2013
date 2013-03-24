@@ -24,7 +24,7 @@ class GameState:
 
 		self.hokuyo				= hokuyo
 
-		self.objects			= []
+		self.objects			= [enemy1, enemy2]
 
 		self.event_bigrobot_pos_update = threading.Event()
 		self.event_minirobot_pos_update = threading.Event()
@@ -33,7 +33,10 @@ class GameState:
 		self.event_bigrobot_visio_update = threading.Event()
 		self.event_minirobot_visio_update = threading.Event()
 
-		
+		self.bigrobot = bigrobot
+		self.minirobot = minirobot
+		self.enemy1 = enemy1
+		self.enemy2 = enemy2
 
 		self.sums = {}
 		self.sums['update_big_ng'] = {'t':0, 'n':0}
@@ -118,14 +121,14 @@ class GameState:
 		
 
 	def ask_hokyo_for_pos(self):
-		self.hokuyo.get(handler=self.on_msg_hokyo)
+		self.hokuyo.send_pos(cb_fct=self.on_msg_hokyo)
 
 	def ask_asserv_for_pos(self, robot):
-		robot.asserv.get_pos(handler=self.on_msg_pos)
+		robot.asserv.get_pos(cb_fct=self.on_msg_pos)
 
 	def ask_visio_for_objects(self):
 		self.objects = []
-		self.bigrobot.visio.getcandles(cb=self.on_msg_visio)
+		self.bigrobot.visio.get_by_color(cb_fct=self.on_msg_visio)
 	
 	def on_msg(self, canal, auteur, msg):
 		msg_split = msg.split(SEP)
@@ -160,7 +163,7 @@ class GameState:
 				(self.__class__.__name__, currentframe().f_code.co_filename, currentframe().f_lineno))
 	
 
-	def on_msg_hokyo(self, n, canal, args, options):
+	def on_msg_hokyo(self, args):
 		if len(args) == 1:
 			lpos = eval(args[0])
 			#print(lpos)
@@ -194,7 +197,10 @@ class GameState:
 			self.send_error(canal, "Error %s.on_msg_hokyo (%s:%d) : pas assez de paramètres " %
 				(self.__class__.__name__, currentframe().f_code.co_filename, currentframe().f_lineno))
 
-	def on_msg_visio(self, n, canal, args, options):
+	def on_msg_visio(self, args):
+		#TODO
+		# format des données : { 'blue' : ((x,y),), 'red': ((x,y),), 'green' : ((x,y),) }
+		"""
 		if len(args) == 2:
 			if canal == self.canal_big_visio:
 				event = self.event_bigrobot_visio_update
@@ -211,6 +217,7 @@ class GameState:
 		else:
 			self.send_error(canal, "Error %s.on_msg_visio (%s:%d) : pas assez de paramètres " %
 				(self.__class__.__name__, currentframe().f_code.co_filename, currentframe().f_lineno))
+		"""
 
 	def on_msg_us(self, n, canal, args, kwargs):
 		if len(args) == 1:
