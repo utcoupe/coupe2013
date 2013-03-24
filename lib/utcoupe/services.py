@@ -62,30 +62,38 @@ class EmulService(zerobot.Service):
         err = None
         r = None
         try:
+            # Get the requested function
             if request.fct=='help':
                 f = self.help
             elif request.fct=='stop':
                 f = self.stop
+            elif request.fct=='ping':
+                f = self.ping
             else:
                 f = getattr(self.exposed_obj, request.fct)
-                if request.fct.startswith('_'):
-                    raise Exception("Method %s is protected" % request.fct)
-                args,kwargs = request.args, request.kwargs
-                if args and kwargs:
-                    r = f(request.uid, *args, **kwargs)
-                elif kwargs:
-                    r = f(request.uid, **kwargs)
-                else:
-                    r = f(request.uid, *args)
-                if isinstance(r, ResponseLater):
-                    self.waiting_calls[request.uid] = remote_id
-                    return
+
+            # Now call it
+            if request.fct.startswith('_'):
+                raise Exception("Method %s is protected" % request.fct)
+            args,kwargs = request.args, request.kwargs
+            if args and kwargs:
+                r = f(request.uid, *args, **kwargs)
+            elif kwargs:
+                r = f(request.uid, **kwargs)
+            else:
+                r = f(request.uid, *args)
+            if isinstance(r, ResponseLater):
+                self.waiting_calls[request.uid] = remote_id
+                return
         except Exception as ex:
             err = {}
             err['tb'] = traceback.format_exc()
             err['error'] = str(ex)
         response = zerobot.Response(request.uid, r, err)
         self.send_multipart([remote_id, response.pack()])
+
+    def ping(self, uid, entier):
+        return int(entier)+42
 
     def send_response(self, id_msg, resp):
         if id_msg in self.waiting_calls:

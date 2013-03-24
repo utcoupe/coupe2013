@@ -29,3 +29,6 @@ class ClientsFactory:
                              ctx = self.ctx)
         client.start()
         return client
+
+    def stop(self):
+        raise Exception('Not implemented yet')
