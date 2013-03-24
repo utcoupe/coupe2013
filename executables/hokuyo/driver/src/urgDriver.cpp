@@ -105,7 +105,6 @@ UrgDriver* UrgDriver::getUrgDriver()
  * */
 void UrgDriver::start()
 {
-	// 
 	askValue=true;
 	
 	// Création du thread
