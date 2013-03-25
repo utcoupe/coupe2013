@@ -25,7 +25,8 @@ class thRead(threading.Thread):
 				p.stdout.flush()
 				r = p.stdout.readline()
 				
-				#r="[(-0.79,1500),(0.79,1500),(-0.3,2000),(0.3,2000),(1.57,1000)]"
+				# r="[(-0.79,1500),(0.79,1500),(-0.3,2000),(0.3,2000),(1.57,1000)]"
+				r = r[2:]
 				listC = eval(r)
 				print listC
 				print "Data in"				
@@ -69,7 +70,7 @@ def drawZone(canv):
 		y = MAX_VAL - y 
 		
 		
-		#print  teta, " - ", lon, " - ", x, " - ", y
+		# print  teta, " - ", lon, " - ", x, " - ", y
 		
 		x = x / sizeFact
 		y = y / sizeFact
@@ -113,7 +114,7 @@ canv.create_line(((Center[0]-2000)/sizeFact,Center[1]/sizeFact,(Center[0]-2000)/
 canv.create_line(((Center[0]+2000)/sizeFact,Center[1]/sizeFact,(Center[0]+2000)/sizeFact,(Center[1]-3000)/sizeFact),fill="red",width=2)
 
 root.mainloop()
-
+	
 
 cmd='1.9\n'			
 p.stdin.write(cmd.encode("utf-8"))

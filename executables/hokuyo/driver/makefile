@@ -1,10 +1,10 @@
 # Compilers options
-C++_FLAG = -Wall -Werror `urg-config --cflags` `sdl-config --cflags`  `urg-config --libs` `sdl-config --libs` -lc -lpthread 
+C++_FLAG = -g `urg-config --cflags` `sdl-config --cflags`  `urg-config --libs` `sdl-config --libs` `pkg-config jsoncpp --cflags --libs` -lc -lpthread -lzmq
 
-O_FILE = comManager.o argManager.o urgDriver.o urgDriverHelp.o urgException.o urgDriverCompute.o mainAppException.o mainAppDriver.o
+O_FILE = argManager.o urgDriver.o urgDriverHelp.o urgException.o urgDriverCompute.o mainAppException.o mainAppDriver.o
 
-hokuyo : src/mainApp.cpp $(O_FILE)
-	g++ -o hokuyo src/mainApp.cpp $(O_FILE)  $(C++_FLAG)
+hokuyo : src/service.cpp $(O_FILE)
+	g++ -o hokuyo src/service.cpp $(O_FILE)  $(C++_FLAG)
 
 urgException.o : src/urgException.cpp
 	g++ -o urgException.o -c src/urgException.cpp $(C++_FLAG)
@@ -21,8 +21,8 @@ urgDriverHelp.o : src/urgDriverHelp.cpp
 urgDriver.o : src/urgDriver.cpp
 	g++ -o urgDriver.o -c src/urgDriver.cpp $(C++_FLAG)
 
-comManager.o : src/comManager.cpp
-	g++ -o comManager.o -c src/comManager.cpp $(C++_FLAG)
+# comManager.o : src/comManager.cpp
+# 	g++ -o comManager.o -c src/comManager.cpp $(C++_FLAG)
 
 argManager.o : src/argManager.cpp
 	g++ -o argManager.o -c src/argManager.cpp $(C++_FLAG)

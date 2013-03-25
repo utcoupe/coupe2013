@@ -19,7 +19,7 @@
 using namespace std; 
 using namespace qrk;
 
-const char* device = "/dev/ttyACM0";
+const char* device = "/dev/ttyACM1";
 
 
 int main() {
@@ -61,7 +61,7 @@ int main() {
 		int n = urg.capture(data, &timestamp);
 		if (n <= 0) {
 			delay(scan_msec);
-			cout << id << SEP << "[]" << endl;
+			cout << SEP << "[]" << endl;
 		}
 		else {
 			cout << id << SEP << "[";

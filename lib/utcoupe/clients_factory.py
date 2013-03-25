@@ -20,15 +20,12 @@ class ClientsFactory:
         self.ctx = zmq.Context() if ctx is None else ctx
         self.clients = {}
 
-    def get_client(self, service, *, async=True):
+    def get_client(self, service, *, async=False):
         client_type = zerobot.AsyncClient if async else zerobot.Client
 
         client = client_type("%s-%s" % (self.factory_id, service),
                              self.server["frontend"], service,
                              ev_sub_addr = self.server["ev_sub"],
                              ctx = self.ctx)
-        client.start(False)
+        client.start()
         return client
-
-    def stop(self):
-        raise Exception('Not implemented yet')
