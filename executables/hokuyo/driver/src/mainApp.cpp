@@ -45,7 +45,6 @@ int main(int argc, char *argv[])
 
 
 
-
 // Fonctions d'interface 
 #include "comThread.h"  // ça c'est ici parce que les fonctions ont besoin
 						// l'instance global application
@@ -58,12 +57,12 @@ void MainAppDriver::initComManager()
 {
 	//! --- Start Com ---
 	cm = ComManager::getComManager();
-	cm->addKill(QH_KILL);
-	cm->addFunction(QH_GETDATA,&send);
-	cm->addFunction(QH_SET_REDCOLOR,&setRed);
-	cm->addFunction(QH_SET_PURPLECOLOR,&setPurple);
-	cm->addFunction(QH_PING,&ping);
-	cm->addFunction(QH_IDENT,&ident);
+	cm->addKill(Q_KILL);
+	cm->addFunction(Q_GETDATA,&send);
+	cm->addFunction(Q_SET_REDCOLOR,&setRed);
+	cm->addFunction(Q_SET_PURPLECOLOR,&setPurple);
+	cm->addFunction(Q_PING,&ping);
+	cm->addFunction(Q_IDENT,&ident);
 	cm->setMutex(ud->getMutex());					// Partage des mutex
 	cm->start();
 }

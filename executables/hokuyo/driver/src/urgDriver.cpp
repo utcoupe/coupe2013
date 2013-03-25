@@ -14,7 +14,7 @@ using namespace std;
 	
 void UrgDriver::toString() 
 {
-	cout << "--- URG DRIVER CONFIG ---" << endl << endl;
+	/*cout << "--- URG DRIVER CONFIG ---" << endl << endl;
 	if(color==ROUGE) {
 		cout << "Color ROUGE"<< endl;
 	}
@@ -25,7 +25,7 @@ void UrgDriver::toString()
 	cout << "Com Port" << comPort << endl;	
 
 	cout << "radMin" << radMin << endl;
-	cout << "radMax" << radMax << endl;	
+	cout << "radMax" << radMax << endl;	*/
 
 /*
 	for(int i=indexMin ; i<indexMax ; i++) 

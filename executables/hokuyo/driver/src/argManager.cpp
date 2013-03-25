@@ -53,10 +53,12 @@ void ArgManager::analyse(int argc, char *argv[])
 		acParam++;
 		string argTag = string(argv[acParam]);	
 		absArgument* arg = getArg(argTag);
+        #if DEBUG
 		if(arg==NULL){
 			cerr << "Erreur argument " << argTag << " : tag non valide" << endl;
 			stopProcess();
 		}
+        #endif
 		
 		Argument<string>* strArg = dynamic_cast<Argument<string>* >(arg);
 		Argument<int>* intArg = dynamic_cast<Argument<int>* >(arg);
@@ -79,8 +81,10 @@ void ArgManager::analyse(int argc, char *argv[])
 			intArg->setValue(atoi(strInt.c_str()));
 		}
 		else
-		{
+        {
+#if DEBUG
 			cerr << "Erreur argument " << argTag << " : type non valide" << endl;
+#endif
 			stopProcess();
 		}
 		

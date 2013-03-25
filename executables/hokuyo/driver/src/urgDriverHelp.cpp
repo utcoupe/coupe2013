@@ -130,10 +130,6 @@ void UrgDriver::defineRangeIndex(double minDeg,double maxDeg)
 	indexMin = urg.deg2index(minDeg);
 	indexMax = urg.deg2index(maxDeg);
 
-	#if DEBUG 
-	cout << "defineRangeIndex(" << minDeg << "," << maxDeg << ")\n";
-	cout << "defineRangeIndex -> indexMin: " << indexMin << " indexMax: " << indexMax << endl;
-	#endif
 }
 
 /***********************************************************************
@@ -169,9 +165,6 @@ void UrgDriver::setDelta(bool autoSearch, int dX, int dY)
 void UrgDriver::updateParamWithColor(short color)
 {	
 	this->color = color;
-	#if DEBUG	
-	cout << "\n\nUrgDriver::updateParamWithColor, deg1 = " << deg1 << "deg2" << deg2 << endl;
-	#endif
 	if(this->color == ROUGE) {
 		defineRange(deg1,deg2);
 		defineRangeIndex(deg1,deg2);
@@ -229,9 +222,6 @@ void UrgDriver::calculLangleScanne()
 	this->deg1 =  (radDelX * 180.0 / M_PI);
 	// this->deg2 = ((this->radMin + radScan) * 180.0 / M_PI);
 	this->deg2 = ((radDelX + radScan) * 180.0 / M_PI);
-	#if DEBUG
-		cout << "deg1 = " << deg1 << "deg2 = " << deg2 << endl;
-	#endif
 }
 
 /***********************************************************************

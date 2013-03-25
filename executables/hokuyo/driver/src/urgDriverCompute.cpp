@@ -124,10 +124,6 @@ void UrgDriver::interpretData(const std::vector<long> & data, int n)
 			if (color==BLEU) {
 				c.x = LX - c.x;
 			}
-		
-			#if DEBUG
-				cerr << "X = " << c.x << " Y = " << c.y << endl;
-			#endif 
 				
 			if(bot.empty())
 			{
