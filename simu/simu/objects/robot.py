@@ -258,6 +258,9 @@ class Asserv:
 	def ping(self, id_msg):
 		return 'pong'
 	
+	def reset(self, id_msg):
+		pass
+
 	def goto(self, id_msg, x, y, v):
 		"""
 		Donner l'ordre d'aller à un point
@@ -303,7 +306,7 @@ class Asserv:
 		self.robot.stop = False
 		return 0
 	
-	def pos(self, id_msg):
+	def get_pos(self, id_msg):
 		return (self.robot.x(), self.robot.y(), self.robot.a())
 
 	def pwm(self, id_msg, pwm_l, pwm_r, delay):
@@ -316,7 +319,16 @@ class Visio:
 	def __init__(self, robot):
 		self.robot = robot
 
-	def get_candles(self, id_msg):
+	def get_by_color(self, id_msg, cam_id=0):
+		return {'blue': (), 'red': (), 'green': ()}
+
+	def calib(self, id_msg, cam_id=0):
+		pass
+
+	def get_by_pattern(self, id_msg, cam_id=0):
+		return {'blue': (), 'red': (), 'green': ()}
+
+	def set_ROI(self, id_msg, cam_id=0):
 		pass
 
 	def ping(self, arg):

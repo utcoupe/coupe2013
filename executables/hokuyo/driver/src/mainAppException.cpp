@@ -9,7 +9,7 @@
  
 #include "mainAppException.h"
 
-#define MAX_ERROR 1
+#define MAX_ERROR 10
 
 int mainAppException::nbExThrow = 0;
 
@@ -26,7 +26,7 @@ mainAppException::mainAppException(MainAppDriver* mad,int type)
 void mainAppException::react(void)
 {
 	
-	if(mainAppException::nbExThrow >= MAX_ERROR) {
+	if(mainAppException::nbExThrow > MAX_ERROR) {
 		//
 		
 		finalKill();
@@ -46,6 +46,8 @@ void mainAppException::react(void)
 		break;
 		
 	}	
+
+	
 }
 
 
@@ -53,5 +55,5 @@ void mainAppException::react(void)
 void mainAppException::finalKill()
 {
 	cerr << "KILL VIOLENT - il n'y a plus rien à faire pour sauver le process" << endl;
-	// a->cm->autoKill();
+	a->cm->autoKill();
 }

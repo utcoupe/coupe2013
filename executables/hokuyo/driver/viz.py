@@ -15,7 +15,7 @@ radbot=robotSize/sizeFact
 
 separator='+'
 
-p = Popen(["./hokuyo","-col","1"], stdout=PIPE, stdin=PIPE)
+p = Popen(["./hokuyo","-color","1"], stdout=PIPE, stdin=PIPE)
 
 
 class thRead(threading.Thread):

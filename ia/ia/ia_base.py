@@ -14,6 +14,7 @@ from .gamestate import GameState
 from .robot import Robot
 from .graph import NavGraph
 from .action import Action
+from .smartasserv import SmartAsserv
 from .actions import *
 
 JACK_OUT = 1        # jack arraché
@@ -40,19 +41,19 @@ class IaBase:
 
         # création du graph de déplacement
         ng = NavGraph(utcoupe.RAYON_BIGROBOT, utcoupe.FILENAME_MAP)
-        ng.add_dynamic_obstacle(ConvexPoly().initFromCircle(self.init_pos['enemy1'],utcoupe.RAYON_ENEMY,8))
-        ng.add_dynamic_obstacle(ConvexPoly().initFromCircle(self.init_pos['enemy2'],utcoupe.RAYON_ENEMY,8))
-        ng.add_dynamic_obstacle(ConvexPoly().initFromCircle(self.init_pos['mini'],utcoupe.RAYON_MINIROBOT,8))
+        ng.add_dynamic_obstacle(ConvexPoly().initFromCircle(self.init_pos['enemy1'],R_ENEMY,8))
+        ng.add_dynamic_obstacle(ConvexPoly().initFromCircle(self.init_pos['enemy2'],R_ENEMY,8))
+        ng.add_dynamic_obstacle(ConvexPoly().initFromCircle(self.init_pos['mini'],R_MINIROBOT,8))
         ng.update()
         
         # robot
         bigrobot = Robot(self.init_pos['big'], ng)
 
         # Créateur de clients zerobot
-        self.zfactory = utcoupe.ClientsFactory('IA', server)
+        self.zfactory = utcoupe.ClientsFactory(server)
 
         # création de l'asserv
-        asserv = self.zfactory.get_client(utcoupe.ASSERV_BIG)
+        asserv = SmartAsserv(self.zfactory.get_client(utcoupe.ASSERV_BIG))
         bigrobot.set_asserv(asserv)
 
         # création de la visio
@@ -69,16 +70,16 @@ class IaBase:
         
         # création du graph de déplacement
         ng = NavGraph(utcoupe.RAYON_MINIROBOT, utcoupe.FILENAME_MAP)
-        ng.add_dynamic_obstacle(ConvexPoly().initFromCircle(self.init_pos['enemy1'],utcoupe.RAYON_ENEMY,8))
-        ng.add_dynamic_obstacle(ConvexPoly().initFromCircle(self.init_pos['enemy2'],utcoupe.RAYON_ENEMY,8))
-        ng.add_dynamic_obstacle(ConvexPoly().initFromCircle(self.init_pos['big'],utcoupe.RAYON_BIGROBOT,8))
+        ng.add_dynamic_obstacle(ConvexPoly().initFromCircle(self.init_pos['enemy1'],R_ENEMY,8))
+        ng.add_dynamic_obstacle(ConvexPoly().initFromCircle(self.init_pos['enemy2'],R_ENEMY,8))
+        ng.add_dynamic_obstacle(ConvexPoly().initFromCircle(self.init_pos['big'],R_BIGROBOT,8))
         ng.update()
 
         #robot
         minirobot = Robot(self.init_pos['mini'], ng)
         
         # création de l'asserv
-        asserv = self.zfactory.get_client(utcoupe.ASSERV_MINI)
+        asserv = SmartAsserv(self.zfactory.get_client(utcoupe.ASSERV_MINI))
         minirobot.set_asserv(asserv)
         
         #creation des actionneurs
@@ -86,12 +87,15 @@ class IaBase:
         minirobot.set_actionneurs(petits_actionneurs)
 
 	#Hokuyo
-        hokuyo = self.zfactory.get_client(utcoupe.HOKUYO)
+        hokuyo = self.zfactory.get_client(utcoupe.HUKUYO)
 
         #####
         ## Gamestate // Est-ce qu'on garde ce truc ? Son rôle est pas clair
         #####
         self.gamestate = GameState(bigrobot, minirobot, enemy1, enemy2, hokuyo)
+        minirobot.asserv.configure(self)
+        bigrobot.asserv.configure(self)
+
 
         #####
         ## Statistiques
@@ -102,13 +106,19 @@ class IaBase:
 
     def reset(self):
         self.gamestate.reset()
-        self.debug.reset()
 
     def start(self):
-        print("Attente de la connection au serveur IRC...")
-        self.ircbot.e_welcome.wait()
-        print("Get latency big asserv")
-        print(self.gamestate.bigrobot.asserv.get_latency())
+        print("Attente de la connection au serveur Zerobot...")
+        #self.ircbot.e_welcome.wait()
+        try:
+            self.gamestate.bigrobot.asserv.ping(0, timeout = 10, cb_fct=self.start_after)
+        except Exception:
+            print("Impossible de se connecter à l'asserv")
+            quit()
+
+    def start_after(self, resp):
+        #print("Get latency big asserv")
+        #print(self.gamestate.bigrobot.asserv.get_latency())
         #print("Get latency mini asserv")
         #print(self.gamestate.bigrobot.asserv.get_latency())             # A DECOMMENTER
         #print("Get latency big visio")
@@ -136,13 +146,16 @@ class IaBase:
             time.sleep(delay)
 
     def stop(self):
-        self.ircbot.stop()
+        self.zfactory.stop()
         print("Exit")
 
     def loopsetup(self):
-        self.debug.reset()
         self.gamestate.reset()
-        self.gamestate.hokuyo.setcolor(self.team)
+        
+        if self.team:
+            self.gamestate.hokuyo.setRed()
+        else:
+            self.gamestate.hokuyo.setBlue()
         # premier rafraichissement
         self.gamestate.ask_update()
         self.gamestate.wait_update()
