@@ -33,7 +33,6 @@ urgException::urgException(UrgDriver* u,int type)
 void urgException::react(void)
 {
 	try{	
-		cout << "reacting...\n";
 		if(urgException::nbExThrow > MAX_ERROR) {
 			throw new mainAppException(application,mainAppException::Err_urgException_react_tropDerr);
 		}
@@ -68,7 +67,10 @@ void urgException::react(void)
  **********************************************************************/
 void urgException::connectUrgDevice()
 {
+	cerr << "Tentative de correction" << endl;
+	cerr << "Nouvelle tentative de connection avec les même paramétres" << endl;
 	this->ud->connectHokuyo();
+	cerr << "Connection OK, lancement de l'analyse" << endl;
 	this->ud->start();
 }
 

@@ -1,4 +1,3 @@
-
 import sys
 import os
 FILE_DIR  = os.path.dirname(os.path.abspath(__file__))
@@ -24,7 +23,7 @@ class GameState:
 
 		self.hokuyo				= hokuyo
 
-		self.objects			= []
+		self.objects			= [enemy1, enemy2]
 
 		self.event_bigrobot_pos_update = threading.Event()
 		self.event_minirobot_pos_update = threading.Event()
@@ -33,7 +32,10 @@ class GameState:
 		self.event_bigrobot_visio_update = threading.Event()
 		self.event_minirobot_visio_update = threading.Event()
 
-		
+		self.bigrobot = bigrobot
+		self.minirobot = minirobot
+		self.enemy1 = enemy1
+		self.enemy2 = enemy2
 
 		self.sums = {}
 		self.sums['update_big_ng'] = {'t':0, 'n':0}
@@ -118,14 +120,15 @@ class GameState:
 		
 
 	def ask_hokyo_for_pos(self):
-		self.hokuyo.get(handler=self.on_msg_hokyo)
+		self.hokuyo.send_pos(cb_fct=self.on_msg_hokyo)
 
 	def ask_asserv_for_pos(self, robot):
-		robot.asserv.get_pos(handler=self.on_msg_pos)
+		robot.asserv.get_pos(cb_fct=self.on_msg_pos)
+		print("Got asserv info")
 
 	def ask_visio_for_objects(self):
 		self.objects = []
-		self.bigrobot.visio.getcandles(cb=self.on_msg_visio)
+		self.bigrobot.visio.get_by_color(cb_fct=self.on_msg_visio)
 	
 	def on_msg(self, canal, auteur, msg):
 		msg_split = msg.split(SEP)
@@ -139,7 +142,9 @@ class GameState:
 			elif ID_MSG_POS == id_msg:
 				self.on_msg_pos(canal,params)
 
-	def on_msg_pos(self, n, canal, args, options):
+	def on_msg_pos(self, resp):
+		args = resp.data
+		print("Callback asserv %s" % args)
 		if len(args) >= 3:
 			# transformation des strings en int
 			args = tuple(map(int, args))
@@ -155,12 +160,10 @@ class GameState:
 			# update
 			robot_to_update.update_pos(args[0:2])
 			robot_to_update.a = args[2]
-		else:
-			print("Error %s.on_msg_pos (%s:%d) : pas assez de paramètres " %
-				(self.__class__.__name__, currentframe().f_code.co_filename, currentframe().f_lineno))
 	
 
-	def on_msg_hokyo(self, n, canal, args, options):
+	def on_msg_hokyo(self, resp):
+		args = resp.data
 		if len(args) == 1:
 			lpos = eval(args[0])
 			#print(lpos)
@@ -190,11 +193,11 @@ class GameState:
 							robots[i].update_pos(lpos[j])
 				#print(robots)
 			self.event_hokuyo_update.set()
-		else:
-			self.send_error(canal, "Error %s.on_msg_hokyo (%s:%d) : pas assez de paramètres " %
-				(self.__class__.__name__, currentframe().f_code.co_filename, currentframe().f_lineno))
 
-	def on_msg_visio(self, n, canal, args, options):
+	def on_msg_visio(self, args):
+		#TODO
+		# format des données : { 'blue' : ((x,y),), 'red': ((x,y),), 'green' : ((x,y),) }
+		"""
 		if len(args) == 2:
 			if canal == self.canal_big_visio:
 				event = self.event_bigrobot_visio_update
@@ -211,8 +214,10 @@ class GameState:
 		else:
 			self.send_error(canal, "Error %s.on_msg_visio (%s:%d) : pas assez de paramètres " %
 				(self.__class__.__name__, currentframe().f_code.co_filename, currentframe().f_lineno))
+		"""
 
-	def on_msg_us(self, n, canal, args, kwargs):
+	def on_msg_us(self, args):
+		args = resp.data
 		if len(args) == 1:
 			dist = int(args[0])
 			if dist < 200:
@@ -223,15 +228,6 @@ class GameState:
 				if self.us_detect:
 					self.bigrobot.resume()
 				self.us_detect = False
-		else:
-			self.send_error(canal, "Error %s.on_msg_us (%s:%d) : pas assez de paramètres " %
-				(self.__class__.__name__, currentframe().f_code.co_filename, currentframe().f_lineno))
-
-	def send_error(self, canal, msg):
-		if self.ircbot:
-			self.ircbot.send_error(canal, msg)
-		else:
-			print("ERROR", msg)
 	
 	def robots(self):
 		return (self.bigrobot, self.minirobot, self.enemy1, self.enemy2)

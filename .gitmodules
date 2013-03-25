@@ -1,3 +1,6 @@
 [submodule "lib/zerobot"]
 	path = lib/zerobot
 	url = git@github.com:utcoupe/zerobot.git
+[submodule "executables/zerobot-qtspy"]
+	path = executables/zerobot-qtspy
+	url = git@github.com:utcoupe/zerobot-qtspy.git

@@ -9,11 +9,7 @@
 
 #include "urgDriver.h"
 #include "urgException.h" 
-#include "global.h"
-#include "json/json.h"
-#include <string>
-#include <sstream>
-
+	
 using namespace std;
 	
 void UrgDriver::toString() 
@@ -64,25 +60,22 @@ UrgDriver::~UrgDriver()
 /**
  * <p>Création du message</p>
  * */
-void UrgDriver::sendInfos(Json::Value & res)
+void UrgDriver::sendInfos()
 {
-	std::ostringstream os;
-	os << "[";
+	cout << "[";
 	bool pass=false;
 	list<coord>::iterator it;
 	for ( it=robot.begin() ; it!=robot.end() ; it++ )
 	{
 		if(pass){
-			os << ","; 
+			cout << ","; 
 		}
 		else{
 			pass=true;
 		}
-		os << "(" << (*it).x << "," << (*it).y << ")";
+		cout << "(" << (*it).x << "," << (*it).y << ")";
 	}
-	os << "]";
-	
-	res["data"] = os.str();
+	cout << "]";
 }
 
 /***********************************************************************
@@ -144,7 +137,7 @@ void* UrgDriver::helpfct(void* arg)
 {
 	void* ret = NULL;
 	try {
-		ret = getUrgDriver()->loop();
+		ret = getUrgDriver()->loop(arg);
 	}
 	catch(urgException* e){
 		e->react();
@@ -156,11 +149,8 @@ void* UrgDriver::helpfct(void* arg)
  * <h2>Loop</h2>
  * <p>Fonction principale de récupération et d'analyse des données</p>
  * */
-void* UrgDriver::loop()
+void* UrgDriver::loop(void* arg)
 {	
-	#if DEBUG
-		cout << "UrgDriver::loop()\n";
-	#endif
 	// On test la connection
 	if(!urg.isConnected()) {
 		throw new urgException(this, urgException::Err_loop_urgNoConnect);
@@ -175,11 +165,7 @@ void* UrgDriver::loop()
 		std::vector<long> data;
 		n=getData(data,&timestamp);
 		
-		#if DEBUG
-			cout << "n = " << n << endl;
-		#endif
 		// C'est ici que l'on traite les données
-		
 		interpretData(data,n);	
 	}
 

@@ -29,7 +29,10 @@ absArgument* ArgManager::getArg(string tag)
 {
 	for ( it=arguments.begin() ; it!=arguments.end() ; it++ )
 	{
+		#if DEBUG
 		cout << "getTag() = " << (*it)->getTag() << " tag = " << tag << endl;
+		#endif
+
 		if(!(*it)->getTag().compare(tag))
 		{
 			return (*it);
@@ -45,7 +48,7 @@ void ArgManager::analyse(int argc, char *argv[])
 	// Lecture des paramétres
 	int nbParam = (argc-1)/2;
 	int acParam = 0;
-	while(acParam <= nbParam && nbParam>0)
+	while(acParam<nbParam && nbParam>0)
 	{
 		acParam++;
 		string argTag = string(argv[acParam]);	
@@ -59,16 +62,20 @@ void ArgManager::analyse(int argc, char *argv[])
 		Argument<int>* intArg = dynamic_cast<Argument<int>* >(arg);
 		if(strArg)
 		{	
+			#if DEBUG
 			cout << "if(strArg) ok" << " Value = " << string(argv[acParam+1]);
+			#endif
 			strArg->validArg();
-			strArg->setValue(string(argv[++acParam]));
+			strArg->setValue(string(argv[acParam+1]));
 		}
 		else if(intArg)
 		{
-			// cout << "acParam = " << acParam << "argc = "<< argc << endl;
-			// cout << "if(intArg) ok" << " Value = " << string(argv[acParam+1]) << endl;
+			#if DEBUG
+			cout << "acParam = " << acParam << "argc = "<< argc << endl;
+			cout << "if(intArg) ok" << " Value = " << string(argv[acParam+1]) << endl;
+			#endif
 			intArg->validArg();
-			string strInt = string(argv[++acParam]);
+			string strInt = string(argv[acParam+1]);
 			intArg->setValue(atoi(strInt.c_str()));
 		}
 		else
@@ -76,7 +83,7 @@ void ArgManager::analyse(int argc, char *argv[])
 			cerr << "Erreur argument " << argTag << " : type non valide" << endl;
 			stopProcess();
 		}
-
+		
 	}
 }
 
@@ -84,7 +91,9 @@ void ArgManager::analyse(int argc, char *argv[])
 //!
 void ArgManager::stopProcess()
 {
+	#if DEBUG
 	cerr << "Hokuyo Should stop here\n";
+	#endif
 }
 
 

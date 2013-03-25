@@ -8,12 +8,13 @@
 #define URGDRIVER_H
   
 #include "global.h"
+#include "protocole.h"
 
 #include <list>
 #include <string>
 #include <vector>
 #include <iostream>
-#include "json/json.h"
+
 #include "delay.h" 
 #include "UrgCtrl.h"
 
@@ -34,7 +35,7 @@ class UrgDriver
 private:
 
 	static UrgDriver* driverObj;
-	void* loop();
+	void* loop(void* arg);
 	bool askValue;
 
 	//
@@ -92,7 +93,7 @@ public:
 	void setMutex(pthread_mutex_t m){this->mutex=m;};
 	//
 	void setComPort(string cp){comPort=cp;};
-	void sendInfos(Json::Value &);
+	void sendInfos();
 	//
 	void toString();
 	
@@ -113,7 +114,7 @@ public:
 	void defineRange(double minDeg,double maxDeg);
 	void defineRangeIndex(double minDeg,double maxDeg);
 	//
-	void setDelta(bool autoSearch, int dX=-40, int dY=-40);
+	void setDelta(bool autoSearch, int dX=-40, int dY=0);
 	void calculLangleScanne();
 	
 	//! Fonctions compute

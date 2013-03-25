@@ -57,10 +57,12 @@ void UrgDriver::deconnectHokuyo()
  **********************************************************************/
 long UrgDriver::getData(vector<long>& data, long* timestamp)
 {
+	
 	int h = 10;
 	while(h > 0)
 	{
 		h--;	
+
 		int n = urg.capture(data,timestamp);
 		if(n <= 0){ delay(scanMsec); continue; }
 			
@@ -97,6 +99,7 @@ string UrgDriver::hokuyoFindPortCom(int nbOfPortToTest, int firstPortToTest)
 		device.str(""); 
 		device << "/dev/ttyACM";
 		device << port; 
+			
 		if( urg.connect(device.str().c_str()) ) {
 			return device.str();
 		}
@@ -106,7 +109,7 @@ string UrgDriver::hokuyoFindPortCom(int nbOfPortToTest, int firstPortToTest)
 	// Erreur possible pas de port trouver
 	// Solution possible agrandir le nombre de port sur lesquel rechercher
 		
-	return "";
+	return string("");
 }
 
 
@@ -124,9 +127,13 @@ void UrgDriver::defineRange(double minDeg,double maxDeg)
  **********************************************************************/
 void UrgDriver::defineRangeIndex(double minDeg,double maxDeg)
 {
-	cout << "defineRangeIndex(" << minDeg << "," << maxDeg << ")\n";
 	indexMin = urg.deg2index(minDeg);
 	indexMax = urg.deg2index(maxDeg);
+
+	#if DEBUG 
+	cout << "defineRangeIndex(" << minDeg << "," << maxDeg << ")\n";
+	cout << "defineRangeIndex -> indexMin: " << indexMin << " indexMax: " << indexMax << endl;
+	#endif
 }
 
 /***********************************************************************
@@ -162,6 +169,9 @@ void UrgDriver::setDelta(bool autoSearch, int dX, int dY)
 void UrgDriver::updateParamWithColor(short color)
 {	
 	this->color = color;
+	#if DEBUG	
+	cout << "\n\nUrgDriver::updateParamWithColor, deg1 = " << deg1 << "deg2" << deg2 << endl;
+	#endif
 	if(this->color == ROUGE) {
 		defineRange(deg1,deg2);
 		defineRangeIndex(deg1,deg2);
@@ -185,19 +195,13 @@ void UrgDriver::refInit()
 {	 
 	long timestamp = 0;
 	std::vector<long> data;
-
-	this->connectHokuyo();
-
 	getData(data,&timestamp);
+
 	distanceMax = new long[data.size()];
 	for(int ind=indexMin ; ind<indexMax ; ind++)
 	{
 		double radian = urg.index2rad(ind);
 		radian = ABS(radian);
-
-		/**
-		 * deltaX, deltaY negative si la balise sort de la table, on retire une distance a LX, LY.
-		 */
 		if(radian<TETA_DIAG){
 			distanceMax[ind]=( LX - this->deltaX )/cos(radian);
 		}
