@@ -41,7 +41,7 @@ protected:
 				"\t necessite aussi activer la camera. \n "
 				"-> get_by_pattern(CAM_ID), permet de retourner les positions des patterns de trois couleurs. \n"
 				"-> set_ROI(CAM_ID), permet de selectionner la zone d'interet.\n"
-				"-> get_by_color(CAM_ID), permet de trouver les objets par couleurs.\n"
+				"-> get_by_color(int x, int y, int angle), permet de trouver les objets par couleurs. (x,y,angle), position actuelle du robot. \n"
 				);
 			sendResponse(remote_id, request, data);
 		}
@@ -109,7 +109,7 @@ protected:
 				sendResponse(remote_id, request, res);
 			}
 			else{
-				Json::Value res = this->cam_0->DisplayWithColorMatching();
+				Json::Value res = this->cam_0->DisplayWithColorMatching(request["args"][0].asInt(), request["args"][1].asInt(), request["args"][2].asInt());
 				sendResponse(remote_id, request, res);
 			}
 		}

@@ -30,8 +30,12 @@ private:
 	
 	Logger *logger;
 
+	static cv::Point POS_BOUGIE[20];
+	static cv::Point POS_GATEAU;
+
 	bool EliminatedContour(const cv::RotatedRect &minRect);
-	string vec2flags(const vector<cv::Point> v[], const cv::Point &, int);
+	string vec2flags(vector<cv::Point> v[], const cv::Point &, int);
+	void checkTennis(int i, vector<cv::Point> & v, const cv::Point & mostLeft);
 
 public:
 	static int flags[20];
