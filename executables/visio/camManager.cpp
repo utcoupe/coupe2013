@@ -2,6 +2,7 @@
 #include <opencv/highgui.h>
 #include <vector>
 #include <cstring>
+#include <cmath>
 #include "camManager.h"
 #include "helper.h"
 
@@ -47,6 +48,13 @@ camManager::camManager(const int id, const int display):CAMERA_N(id), display(di
 	sprintf(blueTemplPath, "./yml/blueTemplPath_%d.yml", CAMERA_N);
 	sprintf(whiteTemplPath, "./yml/whiteTemplPath_%d.yml", CAMERA_N);
 	loaded = false;
+
+
+	// Initialize all candles to not detected (-1). 
+	for (int i = 0; i < 20; ++i)
+	{
+		flags[i] = -1;
+	}
 }
 
 /**
@@ -70,13 +78,13 @@ camManager::camManager(const int id, const int display):CAMERA_N(id), display(di
  	vector<cv::Point> result;
  	vector<vector<cv::Point> > contours;
  	vector<cv::Vec4i> hierarchy;
-	
+
  	cv::findContours( src, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE );
 
-	vector<vector<cv::Point> > contours_poly( contours.size() );
-	vector<cv::RotatedRect> boundRect( contours.size() );
-	vector<cv::Point2f>center( contours.size() );
-	vector<float>radius( contours.size() );
+ 	vector<vector<cv::Point> > contours_poly( contours.size() );
+ 	vector<cv::RotatedRect> boundRect( contours.size() );
+ 	vector<cv::Point2f>center( contours.size() );
+ 	vector<float>radius( contours.size() );
 
  	for (unsigned int i=0; i < contours.size(); i++)
  	{
@@ -84,7 +92,7 @@ camManager::camManager(const int id, const int display):CAMERA_N(id), display(di
  		cout << "area = "<< area << endl;
  		if (area > 300 && area < 5500)
  		{
-			cv::approxPolyDP( cv::Mat(contours[i]), contours_poly[i], 3, true );
+ 			cv::approxPolyDP( cv::Mat(contours[i]), contours_poly[i], 3, true );
  			cv::Scalar paint_color;
  			switch(color){
  				case RED:
@@ -111,7 +119,7 @@ camManager::camManager(const int id, const int display):CAMERA_N(id), display(di
  					circle( drawing, center[i], (int)radius[i], paint_color, -1, 8, 0 );
  				}
  				else{
-					rectangle( drawing, boundRect[i].boundingRect().tl(), boundRect[i].boundingRect().br(), paint_color, -1, 8, 0 );
+ 					rectangle( drawing, boundRect[i].boundingRect().tl(), boundRect[i].boundingRect().br(), paint_color, -1, 8, 0 );
  				}
  				cv::circle(drawing, center[i], 3, cv::Scalar::all(0), -1, 200, 0);
  				char coord[20];
@@ -240,8 +248,8 @@ camManager::camManager(const int id, const int display):CAMERA_N(id), display(di
  		capture >> image;
  		// cv::normalize(image, image, 0, 256, cv::NORM_MINMAX);
  		blur( image, image, cv::Size(3,3) );
-	 	if(display)
-		 	drawing = cv::Mat::zeros( image.size(), CV_8UC3 );
+ 		if(display)
+ 			drawing = cv::Mat::zeros( image.size(), CV_8UC3 );
 
  		if (image.empty())
  		{
@@ -276,7 +284,7 @@ camManager::camManager(const int id, const int display):CAMERA_N(id), display(di
  		// Convert vector to string
  		oss.str("");
  		std::copy(v3.begin(), v3.end(), CommaIterator(oss, ","));
- 		result["data"]["green"] = oss.str();
+ 		result["data"]["tennis"] = oss.str();
 		  // cout << "RED: " + res << endl;
 
  		if(display){
@@ -311,7 +319,7 @@ camManager::camManager(const int id, const int display):CAMERA_N(id), display(di
  }
 
 
- Json::Value camManager::DisplayWithColorMatching()
+ Json::Value camManager::DisplayWithColorMatching(int x, int y, int angle)
  {
  	for (int i = 0; i < 4; ++i)
  	{
@@ -323,40 +331,80 @@ camManager::camManager(const int id, const int display):CAMERA_N(id), display(di
  		drawing = cv::Mat::zeros( image.size(), CV_8UC3 );
 
  	Json::Value result;
- 	vector<cv::Point> v1, v2, v3;
+ 	vector<cv::Point> v[3];
 
  	cv::Mat binaryImg = image;
  	binaryImg = binaryFiltering(binaryImg, BLUE);
- 	v1 = findObjects(binaryImg, image, BLUE);
+ 	v[0] = findObjects(binaryImg, image, BLUE);
  		// Convert vector to string
  	std::ostringstream oss;
- 	std::copy(v1.begin(), v1.end(), CommaIterator(oss, ","));
+ 	std::copy(v[0].begin(), v[0].end(), CommaIterator(oss, ","));
  	result["data"]["blue"] = oss.str();
 		  // cout << "BLUE: " + res << endl;
 
  	binaryImg = image;
  	binaryImg = binaryFiltering(binaryImg, RED);
- 	v2 = findObjects(binaryImg, image, RED);
+ 	v[1] = findObjects(binaryImg, image, RED);
  		// Convert vector to string
  	oss.str("");
- 	std::copy(v2.begin(), v2.end(), CommaIterator(oss, ","));
+ 	std::copy(v[1].begin(), v[1].end(), CommaIterator(oss, ","));
  	result["data"]["red"] = oss.str();
 		  // cout << "RED: " + res << endl;
 
-	binaryImg = image;
-	binaryImg = binaryFiltering(binaryImg, WHITE);
-	v3 = findObjects(binaryImg, image, WHITE);
+ 	binaryImg = image;
+ 	binaryImg = binaryFiltering(binaryImg, WHITE);
+ 	v[2] = findObjects(binaryImg, image, WHITE);
 	// Convert vector to string
-	oss.str("");
-	std::copy(v3.begin(), v3.end(), CommaIterator(oss, ","));
-	result["data"]["tennis"] = oss.str();
+ 	oss.str("");
+ 	std::copy(v[2].begin(), v[2].end(), CommaIterator(oss, ","));
+ 	result["data"]["tennis"] = oss.str();
 		//   // cout << "WHITE: " + res << endl;
+ 	cv::Point robot_pos(x, y);
+ 	result["data"]["flags"] = vec2flags(v, robot_pos, angle);
 
  	if(display)
  		cv::imshow( "object tracing test", image );
 
  	return result;
  }
+
+
+/**
+ * This function converts an array of vecteurs to into flags, which is a String representing the color and position of each candle.
+ * value of flags: -1, not detected; 01 red with tennis, 00 red without tennis, 11 blue with tennis, 10 blue without tennis.
+ * 
+ * @param  v   an array of vecteurs of points, BLUE=v[0], RED, Tennis. 
+ * @param  pos current position of robot. angle, current angle of robot
+ * @return     a string in form of "-1, -1, 00, 01, 00, 11, -1, 01, etc...", there will be 20 entry.
+ * We are counting candles in the following order:
+ * 										  GATEAU, front view
+ * From 2nd level, blue: 				1, 2, 3, 4, 5, 6, 7, 8,               2nd level, red
+ * 		1st level, blue:	9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20     1st level, red
+ */
+ string camManager::vec2flags(const vector<cv::Point> v[], const cv::Point & pos, int angle){
+	// Angle of view in degree
+ 	const int ANGLE_VU = 30;
+	// Angle of inclinaition of the camera
+ 	const int ANGLE_INCLINAISON = 30;
+	// Height of robot in mm
+ 	const int HAUTEUR_ROBOT = 200;
+	// Distance entre cam et robot en mm
+ 	const int DIS_CAM_ROBOT = 100;
+
+ 	const cv::Point CAMERA_POS = pos + cv::Point(cos(angle) * DIS_CAM_ROBOT, sin(angle) * DIS_CAM_ROBOT);
+
+ 	static const vector< int[2] > POS_BOUGIE = {
+ 		{1054, 59}, {1084, 172}
+ 		// , {1143, 274}, {1226, 357},
+ 		// {1328, 416}, {1441, 446}, {1559, 446}, {1672, 416},
+ 		// {1774, 357}, {1857, 274}, {1916, 172}, {1946, 59},
+ 		// {1157, 68}, {1209, 194}, {1306, 291}, {1432, 343},
+ 		// {1568, 343}, {1694, 291}, {1791, 194}, {1843, 68}
+ 	};
+
+
+
+ 	}
 
  /**
  * @function MatchingMethod
@@ -429,14 +477,14 @@ camManager::camManager(const int id, const int display):CAMERA_N(id), display(di
  		else
  			return;
  	}
-	}
+ }
 
-	Json::Value camManager::testCase(const double threshold = THRESHOLD)
-	{
-		extern cv::Mat roiImg;
-		extern cv::Mat img;
+ Json::Value camManager::testCase(const double threshold = THRESHOLD)
+ {
+ 	extern cv::Mat roiImg;
+ 	extern cv::Mat img;
 
-		Json::Value res;
+ 	Json::Value res;
 
 		/*
 			Une facon pour vider le ring buffer....4-6 pour linux, 2 pour windows, et pas besoin pour mac osx.

@@ -3,6 +3,7 @@
 
 #include <opencv/cv.h>
 #include <opencv/highgui.h>
+#include <string>
 #include "logger.h"
 #include "colorsets.h"
 #include "helper.h"
@@ -30,9 +31,10 @@ private:
 	Logger *logger;
 
 	bool EliminatedContour(const cv::RotatedRect &minRect);
-
+	string vec2flags(const vector<cv::Point> v[], const cv::Point &, int);
 
 public:
+	static int flags[20];
 	int NB_OF_OBJECTS_TO_DETECT;
 	enum COLOR {RED = 1, BLUE, WHITE};
 	
@@ -46,7 +48,7 @@ public:
 	void loadSets();
 
 	Json::Value DisplayLoopWithColorMatching();
-	Json::Value DisplayWithColorMatching();
+	Json::Value DisplayWithColorMatching(int, int, int);
 
 	void LocatingWithPatternMatching();
 

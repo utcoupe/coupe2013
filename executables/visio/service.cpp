@@ -4,7 +4,7 @@
 #include <ctime>
 
 #include "json/json.h"
-#include "../../../../lib/zerobot/cpp/service.hpp"
+#include "../../lib/zerobot/cpp/service.hpp"
 
 #include "camManager.h"
 #include "logger.h"
