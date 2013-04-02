@@ -123,8 +123,8 @@ class GameState:
 		self.hokuyo.send_pos(cb_fct=self.on_msg_hokyo)
 
 	def ask_asserv_for_pos(self, robot):
-		robot.asserv.get_pos(cb_fct=self.on_msg_pos)
-		print("Got asserv info")
+		cb = lambda y: self.on_msg_pos(y, robot)
+		robot.asserv.get_pos(cb_fct=cb)
 
 	def ask_visio_for_objects(self):
 		self.objects = []
@@ -142,17 +142,17 @@ class GameState:
 			elif ID_MSG_POS == id_msg:
 				self.on_msg_pos(canal,params)
 
-	def on_msg_pos(self, resp):
+	def on_msg_pos(self, resp, robot):
 		args = resp.data
-		print("Callback asserv %s" % args)
+		print(args, robot)
 		if len(args) >= 3:
 			# transformation des strings en int
 			args = tuple(map(int, args))
 			# choix du robot à update
-			if canal == self.canal_big_asserv:
+			if robot == self.bigrobot:
 				robot_to_update = self.bigrobot
 				self.event_bigrobot_pos_update.set()
-			elif canal == self.canal_mini_asserv:
+			elif robot == self.minirobot:
 				robot_to_update = self.minirobot
 				self.event_minirobot_pos_update.set()
 			else:

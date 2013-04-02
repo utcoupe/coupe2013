@@ -12,10 +12,10 @@ class SmartAsserv:
                 pass
 
         def s_goto(self, x, y, speed):
-                raise Exception('Not implemented yet')
+                return self.client.goto(x, y, speed)
 
         def s_gotor(self, x, y, speed):
-                raise Exception('Not implemented yet')
+                return self.client.goto(x, y, speed)
 
         def __getattr__(self, key):
                 return self.client.__getattr__(key)

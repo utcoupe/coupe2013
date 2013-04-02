@@ -338,6 +338,9 @@ class Others:
 	def __init__(self, robot):
 		self.robot = robot
 
+	def detect_ax12(self, id_msg):
+                return [1, 2, 3, 4, -1, -1 , -1, -1, -1, -1, -1, -1, -1]
+
 	def goto_ax12(self, id_msg, id_moteur, pos, vitesse):
 		return 1
 
