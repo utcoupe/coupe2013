@@ -63,6 +63,7 @@ class ActionGetCerise(Action):
 		#avance
 		self.robot.asserv.pwm(100,100,100)			# !!!!!! valeur à tester, mise totalement arbitrairement		
 		time.sleep(0.5)
+		self.robot.actionneurs.cerise.get()
 		
 		#recul
 		self.robot.asserv.pwm(-100,-100,100)			# !!!!!! valeur à tester, mise totalement arbitrairement
@@ -76,179 +77,122 @@ class ActionGetCerise(Action):
 		return "ActionGetCerise(%s, %s)" % (self.point_acces, self.score)
 		
 		
-
-class ActionTotem(Action):
-
-	DIRECTION_HAUT		= 0	# il faudra aller vers le bas (dy < 0) pour aller vider le totem
-	DIRECTION_BAS		= 1 # il faudra eller vers le haut (dy > 0) pour aller vider le totem
-	
-	def __init__(self, ia, robot, enemies, point_acces, direction):
+class ActionVerre(Action):
+	def __init__(self, ia, robot, enemies, point_acces):
 		Action.__init__(self, ia, robot, enemies, point_acces)
-		self.direction = direction
-
+		
 	def run(self):
-		asserv = self.robot.asserv
-		# tourner face au totem
-		angle = 90 if self.direction==self.DIRECTION_HAUT else -90
-		asserv.turn(angle, block=True, block_level=2)
-
-		# avancer
-		asserv.pwm(100,100,1000, block=True, block_level=2)
-
-		# reculer
-		point = Vec(self.point_acces)
-		point[1] += -10 if self.direction==self.DIRECTION_HAUT else 10
-		asserv.goto(point, block=True, block_level=2)
+		print("\nACTION VERRE\n")
+		
+		#va chercher le premier verre
+		self.recupFirst()
+		
+		#va chercher le deuxième verre sur la même ligne
+		self.recupSecond()
+		
+		#retourne dans l'air de jeu pour y déposer les 2 verres
+		self.recupRetour()
 		
 		#fini
 		self.clean()
 
-		print("YOUHOU le totem")
+		print("Verre récup !\n")
+		
+		
+	def recupFirst(self):	#action qui permet de récupérer le premier verre
+		# on considère que le point d'entrée pour déclencher l'action se situe à 50 du verre
+		self.robot.asserv.turn(self.ia.a(90))
+		self.robot.actionneurs.pince.pos(PINCE_BAS)		#actionneur à coder qui fera descendre la pince pour l'avoir en bas
+		
+		#avance (de 52mm afin d'être sûr qu'on soit sur le verre)
+		self.robot.asserv.pwm(100,100,100)	 	#!!!!!! valeur à tester, mise totalement arbitrairement
+		
+		#saisi le verre
+		self.robot.actionneurs.pince.get()
+		self.robot.actionneurs.pince.pos(PINCE_HAUT)	#on lève la pince
+		
+		#faire l'appel vers la fonction recupSecond pour pouvoir récupérer le second verre	
+		
+	def recupSecond(self):		#action qui permet de récupérer le second verre (avec le premier déjà récup)
+		#on part de la position où le robot a récupéré le premier verre
+		#avance vers le verre suivant (distance = 300)
+#On suppose que la position PINCE_HAUT permet de placer le verre à une hauteur de 90, soit 10 au-dessus des verres
+		self.robot.asserv.sgoto(pos.x+300, pos.y, 100)	 	#permet d'aller au verre suivant
+		self.robot.actionneurs.pince.drop()	#lâche le verre
+		self.robot.actionneurs.pince.pos(PINCE_MED)	#descend la pince pour pouvoir récupérer les 2 verres
+		self.robot.actionneurs.pince.pos(PINCE_HAUT)
+		
+	def recupRetour(self):
+		#permet de retourner dans notre zone de jeu (avec ou sans verre)
+		
+		#tourne de 180°
+		self.robot.asserv.turn_r(180, 75)	#angle, vitesse
+		#!!! régler la vitesse pour tourner doucement, histoire de ne pas perdre de verres
+		self.robot.asserv.sgoto(50,pos.y, 100)	#retourne à l'air de jeu
+		self.robot.actionneurs.pince.pos(PINCE_BAS)
+		self.robot.actionneurs.pince.drop()
+	
+	def __repr__(self):	#surcharge du print
+		return "ActionVerre(%s, %s)" % (self.point_acces, self.score)
+		
+#implémenter l'essaye de récupération des verres ennemis si jamais on a le temps
+
+class ActionShootCerise(Action):
+	
+	def __init__(self, ia, robot, enemies, point_acces):
+		Action.__init__(self, ia, robot, enemies, point_acces)
+
+	def run(self):
+		
+		#active le tir de cerises
+		self.robot.actionneurs.cerise.shoot() 
+		
+		#fini
+		self.clean()
+
+		print("Shoot de cerise done !")
 		
 	def __repr__(self):
-		return "ActionTotem(%s, %s)" % (self.point_acces, self.score)
-
-class ActionTotemHaut(Action):
-	def __init__(self, ia, robot, enemies, point_acces):
-		Action.__init__(self, ia, robot, enemies, point_acces)
-
-	def run(self):
-		print("\nACTION TOTEM ENCULEEEEE\n")
-
-		self.robot.asserv.turn(self.ia.a(90), block=True, block_level=2)
-		time.sleep(0.5)
-		point = (1400, 1000-125-R_BIGROBOT+40)
-		point2 = (400, 900)
-		self.robot.asserv.goto(self.ia.p(point), block=True, block_level=2)
-		self.robot.asserv.turn(self.ia.a(180), block=True, block_level=2)
-		time.sleep(0.5)
-		self.robot.actionneurs.tourner(0, 50)
-		self.robot.actionneurs.tourner(2, -50)#, block=True, block_level=2)
-		time.sleep(1)
+		return "ActionShootCerise(%s, %s)" % (self.point_acces, self.score)	
 		
-		self.robot.asserv.gotor((300,0), block=True, block_level=2) # permet de vider le totem 
-		self.robot.asserv.goto(self.ia.p(point2), block=True, block_level=2)
-		self.robot.asserv.turn(self.ia.a(180), block=True, block_level=2)
-		self.robot.asserv.pwm(100, 100, 700, block=True, block_level=2)
-
-		self.robot.asserv.pwm(-100,-100, 800, block=True, block_level=2)
-		self.robot.actionneurs.ouvrir_peignes() # On protège les peignes
+class ActionBougie(Action):
 		
-		#self.robot.actionneurs.tourner(0, -70)
-		#self.robot.actionneurs.tourner(1, 70)
-		self.clean()
-
-	def compute_score(self, p):
-		super().compute_score(p)
-		#if len(self.robot.actions) > 3:
-		#	self.score += 10000
-		self.score = -MAX_DIST
-
-class ActionTotemBas(Action):
-	def __init__(self, ia, robot, enemies, point_acces):
+	def __init__(self, ia, robot, enemies, point_acces, color_bougie):
 		Action.__init__(self, ia, robot, enemies, point_acces)
-
-	def run(self):
-		print("\nACTION TOTEM ENCULEEEEE\n")
-
-		self.robot.asserv.turn(self.ia.a(90), block=True, block_level=2)
-		time.sleep(0.5)
-		self.robot.asserv.goto(self.ia.p((1400, 1000+125+R_BIGROBOT-40)), block=True, block_level=2)
-		self.robot.asserv.turn(self.ia.a(180), block=True, block_level=2)
-		time.sleep(0.5)
-		self.robot.actionneurs.tourner(0, 50)
-		self.robot.actionneurs.tourner(2, -50)#, block=True, block_level=2)
-		time.sleep(1)
-
-		self.robot.asserv.gotor((450,0), block=True, block_level=2) # permet de vider le totem 
-		self.robot.asserv.goto(self.ia.p((590, 960)), block=True, block_level=2)
-		self.robot.asserv.turn(self.ia.a(180), block=True, block_level=2)
-		self.robot.asserv.pwm(100, 100, 1200, block=True, block_level=2)
-
-		self.robot.asserv.pwm(-100,-100, 800, block=True, block_level=2)
-		self.robot.actionneurs.ouvrir_peignes() # On protège les peignes
-
-		self.clean()
-
-class ActionFinalize(Action):
-	"""
-	Revenir à la zone de dépot et reculer un peu pour décharger les objects mangés par le robot
-	"""
-
-	def __init__(self, ia, robot, enemies, point_access):
-		super().__init__(ia, robot, enemies, point_access)
-
-	def run(self):
-		ax12 = self.robot.actionneurs
-
-		self.robot.asserv.turn(self.ia.a(180), block=True, block_level=2)
-
-		self.robot.asserv.pwm(100, 100, 500, block=True, block_level=2)
-
-		self.robot.asserv.pwm(-30, -30, 2000, block=True, block_level=2)
-		time.sleep(80)
-		self.clean()
-
-	def compute_score(self, p):
-		temps = time.time() - self.ia.t_begin_match
-		if (temps > 70):
-			super().compute_score(p)
-			self.score = -MAX_DIST
+		if (color_bougie >= 100):
+			bras_gauche = 1
 		else:
-			self.score = MAX_DIST
-
-	def __repr__(self):
-		return "ActionFinalize(%s, %s)" % (self.point_acces, self.score)
-
-
-class ActionBouteille(Action):
-	def __init__(self, ia, robot, enemies, point_acces):
-		Action.__init__(self, ia, robot, enemies, point_acces)
-
-	def run(self):
-		print("\nACTION BOUTEILLE BIIIIITCH\n")
-
-		self.robot.asserv.turn(-90, block=True, block_level=2)
-		time.sleep(0.5)
-		self.robot.asserv.pwm(-100,-100,1500, block=True, block_level=2)
-		self.robot.asserv.pwm(100,100,1000, block=True, block_level=2)
-		#self.robot.asserv.goto(self.point_acces)
-
-		self.clean()
-
-	def __repr__(self):
-		return "ActionBouteille(%s, %s)" % (self.point_acces, self.score)
-
-class ActionLingo(Action):
-	"""
-	Attrapper le ligno à côté de la zone de départ
-	"""
-	def __init__(self, ia, robot, enemies, point_acces):
-		super().__init__(ia, robot, enemies, point_acces)
+			bras_gauche = 0
+		if (color_bougie%100 >= 10):
+			bras_haut = 1
+		else:
+			bras_haut = 0
+		if (color_bougie%10):
+			bras_droite = 1
+		else:
+			bras_droite = 0
+			
+# EXPLICATION
+# color_bougie est composé comme suit : bras_gauche bras_haut bras_droite
+# Pour chacun, on a 1 si on veut activer le bras et 0 sinon
+# Donc pour activer le bras gauche et le bras droite, on envoit : color_bougie = 101
+# Les if permettent d'initialiser les valeurs depuis color_bougie
 
 	def run(self):
-
-		asserv = self.robot.asserv
-
-		# tourne
-		asserv.turn(self.ia.a(180), block=True, block_level=2)
-		time.sleep(0.5)
-
-		# avance
-		asserv.pwm(100,100,700, block=True, block_level=2)
-
-		# recule
-		asserv.pwm(-100,-100,700, block=True, block_level=2)
-
-		# retour au point de départ
-		asserv.goto(self.point_acces, block=True, block_level=2)
 		
+		#tape les bougies (en foncion de la couleur)
+		self.robot.actionneurs.bougie(bras_gauche, bras_haut, bras_droite)
+		
+		#fini
 		self.clean()
-		print("LINGO POUR LES NOOBS LOL")
 
+		print("Bougie soufflée !")
+		
 	def __repr__(self):
-		return "ActionLingo(%s, %s)" % (self.point_acces, self.score)
+		return "ActionBougie(%s, %s)" % (self.point_acces, self.score)	
 
+
+# Il y a encore les get_action à changer
 
 
 def get_actions_bigrobot(ia, robot, enemies):
@@ -264,9 +208,6 @@ def get_actions_bigrobot(ia, robot, enemies):
 	#actions.append(ActionTotem3(ia, robot, enemies, ia.p((2200,1000+125+R_BIGROBOT+60)), ActionTotem.DIRECTION_BAS))
 
 	return actions
-
-
-	
 
 def get_actions_minirobot(ia, robot, enemies):
 	actions = []

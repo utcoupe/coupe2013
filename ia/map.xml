@@ -4,6 +4,6 @@
 <size width="3000" height="2000" w_tiles="100" />
 
 <!-- gateau -->
-<circle x="1500" y="0" rayon="500" n="8">
+<circle x="1500" y="0" rayon="500" n="8" />
 
 </map>

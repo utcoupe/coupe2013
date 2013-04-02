@@ -6,7 +6,8 @@ sys.path.append('.')
 import utcoupe
 import executable
 
-args = {'executable_path':['driver/hokuyo', '-color', '0', '-port', '/dev/ttyACM0'],
+args = {'executable_path':['driver/hokuyo', '-color', '1'],
         'identity':utcoupe.HOKUYO,
-        'protocol_file':'driver/src/protocole.h'}
+        'protocol_file':'driver/src/protocole.h',
+        'protocol_prefix': 'Q_'}
 executable.run(**args);
