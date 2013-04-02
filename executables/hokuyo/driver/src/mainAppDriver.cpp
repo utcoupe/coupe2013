@@ -12,13 +12,7 @@
  * @param arg - parametres du main à passer
  **********************************************************************/
 MainAppDriver::MainAppDriver(int argc, char *argv[])
-{
-	if(argc < 5){
-		cout << "Execution type: ./hokuyo -color 0 -port /dev/ttyACM1\n";
-		cout << "\t 0 pour red, 1 pour bleu\n";
-		throw mainAppException(this, mainAppException::Err_urgException_react_tropDerr);
-	}
-	
+{	
 	initArgManager(argc,argv);
 	initUrgDriver();
 	initComManager();
