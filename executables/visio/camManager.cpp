@@ -548,6 +548,13 @@ void camManager::checkTennis(int i, vector<cv::Point> & v, const cv::Point & mos
 
 	if(seeCount)
 		throw camException("Nb de bougies insuffisant");
+
+	string res(""+flags[0]);
+	for (int i = 1; i < 20; ++i)
+	{
+		res += "," + flags[i];
+	}
+	return res;
 }
 
  /**

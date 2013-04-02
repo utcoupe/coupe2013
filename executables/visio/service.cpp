@@ -9,6 +9,7 @@
 #include "camManager.h"
 #include "logger.h"
 #include "calibManager.h"
+#include "camException.h"
 
 using namespace std;
 
@@ -109,8 +110,14 @@ protected:
 				sendResponse(remote_id, request, res);
 			}
 			else{
-				Json::Value res = this->cam_0->DisplayWithColorMatching(request["args"][0].asInt(), request["args"][1].asInt(), request["args"][2].asInt());
-				sendResponse(remote_id, request, res);
+				try{
+					Json::Value res = this->cam_0->DisplayWithColorMatching(request["args"][0].asInt(), request["args"][1].asInt(), request["args"][2].asInt());
+					sendResponse(remote_id, request, res);
+				}
+				catch (camException ex){
+					Json::Value res = this->cam_0->DisplayWithColorMatching(request["args"][0].asInt(), request["args"][1].asInt(), request["args"][2].asInt());
+					sendResponse(remote_id, request, res);
+				}
 			}
 		}
 
