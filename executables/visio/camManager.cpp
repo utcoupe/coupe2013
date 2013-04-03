@@ -4,6 +4,7 @@
 #include <cstring>
 #include <cmath>
 #include <algorithm>
+#include <limits>
 #include "camException.h"
 #include "camManager.h"
 #include "helper.h"
@@ -456,24 +457,43 @@ void camManager::checkTennis(int i, vector<cv::Point> & v, const cv::Point & mos
  	int seeCount = 0;
 	int maxIndex = -1;
  	
+	double max = 0;
+	double minDis = std::numeric_limits<double>::max;
+
+	// Find the nearest candle. Mark it as "en face"
+	for (int i = 0; i < 20; ++i)
+	{
+		cv::Point vec1 = POS_BOUGIE[i] - CAMERA_POS;
+		cv::Point vec2 = pos - CAMERA_POS; 
+		if(norm(vec1) < minDis){
+			minDis = norm(vec1);
+			maxIndex = i;
+			max = abs(vec1.ddot(vec2)/(norm(vec1)*norm(vec2)) > cos(ANGLE_VU));
+		}
+	}
+
  	// refresh detected flag. =1 if robot see it, 0 otherwise.
  	bool see[20] = {0};
+
+ 	// Beginning from the one marked "en face", test the linearity, and take the one most aligned with the robot.
  	for (int i = 0; i < 20; ++i)
  	{
  		cv::Point vec1 = POS_BOUGIE[i] - CAMERA_POS;
  		cv::Point vec2 = pos - CAMERA_POS; 
 
- 		double max = 0;
 
  		// test if in view angle
  		// maxIndex is the candle most in line with cam and robot. Probably the one that the robot is facing!
  		if(double arccosine = abs(vec1.ddot(vec2)/(norm(vec1)*norm(vec2)) > cos(ANGLE_VU))){
- 			if(arccosine > max){
+ 			cv::Point vec3 = POS_BOUGIE[i] - POS_BOUGIE[maxIndex];
+
+ 			// We eliminate the possibility of setting candles on the farside as "en face". 300 is the demi rayon. This should be large enough as filter
+ 			if(arccosine > max && norm(vec1)<(minDis+300)){
  				max = arccosine;
  				maxIndex = i;
  			}
 
- 			cv::Point vec3 = POS_BOUGIE[i] - POS_BOUGIE[maxIndex];
+ 			// Begining from left to right, if there is a candle more "en face", we would have already set that one as "en face". We assume that the robot will see at most three candles to the right of the candle "en face". 295 is the distance of 2.5 candles
  			if(norm(vec3) < 295){
  				seeCount++;
  				see[i] = true;
@@ -514,12 +534,8 @@ void camManager::checkTennis(int i, vector<cv::Point> & v, const cv::Point & mos
 				}
 			}
 		}
-	}
 
-
-	// Traiter 2eme rangee	
-	for (int i = 0; i < 20; ++i)
-	{
+		// Traiter 2eme rangee
 		if(see[i] && flags[i] == -1){
 			if (v[1].empty() || (!v[0].empty() && v[0].back().x < v[1].back().x))
 			{
@@ -547,7 +563,7 @@ void camManager::checkTennis(int i, vector<cv::Point> & v, const cv::Point & mos
 	}
 
 	if(seeCount)
-		throw camException("Nb de bougies insuffisant");
+		throw camException("Nb de bougies detecte insuffisant");
 
 	string res(""+flags[0]);
 	for (int i = 1; i < 20; ++i)
