@@ -8,7 +8,7 @@
  
 #include "global.h"
 #include "urgDriver.h"
-#include <unistd.h>
+	
 using namespace std;
 
 
@@ -55,10 +55,11 @@ bool UrgDriver::checkPointBot(coord p1, coord p2)
 
 
 long UrgDriver::distanceAuBord(coord c) {
-	
-// Si c'est hors table, on retourne une valeur toute petite pour que c soit supprime.
+
+	// Si c'est hors table, on retourne une valeur toute petite pour que c soit supprime.
 	if(c.x > LX || c.x < 0 || c.y > LY || c.y < 0)
-		return -1000;
+		return -1000000;
+
 	int dx;
 	if( c.x > LX/2 ) {
 		dx=LX-c.x;
@@ -102,6 +103,10 @@ void UrgDriver::interpretData(const std::vector<long> & data, int n)
 	robot.clear();
 	list<coord> bot;			// Un robot peut étre composé de plusieurs points
 	
+	#if DEBUG
+	cout << "indexMin = " << indexMin << " indexMax = " << indexMax << endl;
+	#endif
+	
 	for(int j = indexMin; j < indexMax; ++j) {
 		long l = data[j];
 		
@@ -114,16 +119,22 @@ void UrgDriver::interpretData(const std::vector<long> & data, int n)
 			coord c;
 			double radian = urg.index2rad(j);
 			radian = ABS(radian);
-			c.x = l*cos(radian)  + deltaX; 
+			// Origine en haut a gauche.
+			c.x = LX - (l*cos(radian)  + deltaX); 
 			// Cette annee, on place l'hokuyo sur cote loin de gateau, on prend la sysmetrie du c.y
 			c.y = LY - (l*sin(radian)  + deltaY);
 
 			// si c est dans le gateau, on l'enleve.
 			if(inGateau(c))
 				continue;
+
 			if (color==BLEU) {
 				c.x = LX - c.x;
 			}
+		
+			#if DEBUG
+				cerr << "X = " << c.x << " Y = " << c.y << endl;
+			#endif 
 				
 			if(bot.empty())
 			{

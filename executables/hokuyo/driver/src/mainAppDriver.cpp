@@ -12,10 +12,16 @@
  * @param arg - parametres du main à passer
  **********************************************************************/
 MainAppDriver::MainAppDriver(int argc, char *argv[])
-{	
+{
+	if(argc < 3){
+		cout << "Execution type: ./hokuyo -color 0\n";
+		cout << "\t 0 pour red, 1 pour bleu\n";
+		throw mainAppException(this, 50);
+	}
+
 	initArgManager(argc,argv);
 	initUrgDriver();
-	initComManager();
+	// initComManager();
 	
 	
 	
@@ -40,11 +46,9 @@ void MainAppDriver::initArgManager(int argc, char *argv[])
  **********************************************************************/
 void MainAppDriver::initUrgDriver()
 {
-	
 		//! --- Start Hokuyo ---
 		ud = UrgDriver::getUrgDriver();
 		
-
 			// On récupére le port com
 		Argument<string>* portcom = am->getArg(TAG_PORTCOM,ArgManager::GET_STRING);
 		if(portcom->isValid()){
@@ -59,20 +63,17 @@ void MainAppDriver::initUrgDriver()
 			ud->updateParamWithColor(argColor->getValue());
 		}
 		else{
-			//ud->updateParamWithColor(ud->hokuyoFindColor());
-			// Dangereux, on passe ce parametre manuellement
+			// ud->updateParamWithColor(ud->hokuyoFindColor());
 			throw mainAppException(this, mainAppException::Err_argException_react_tropDerr);
 		}
-		
-		ud->refInit();
 
-			
+			// On test la connection
+		ud->refInit();
 		#if DEBUG
 			ud->toString();
 		#endif
 
 		ud->start();
-
 
 }
 
@@ -82,5 +83,5 @@ void MainAppDriver::initUrgDriver()
 void MainAppDriver::waitHere()
 {	
 	ud->waitHere();    
-	cm->waitHere();
+	// cm->waitHere();
 }
