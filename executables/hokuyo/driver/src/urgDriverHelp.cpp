@@ -22,11 +22,11 @@ void UrgDriver::connectHokuyo()
 	{
 		if(!urg.isConnected()) {
 			if(!urg.connect(comPort.c_str())) {
-				cout << "Trying failed with port: " << comPort.c_str() << endl;
+				cerr << "Trying failed with port: " << comPort.c_str() << endl;
 				throw new urgException(this,urgException::Err_connectHokuyo_urgNoConnect);
 			}
 			else {
-				cout << "Connected!" << endl;
+				cerr << "Connected!" << endl;
 				scanMsec = urg.scanMsec();
 				urg.setCaptureMode(AutoCapture);
 			}
@@ -128,8 +128,8 @@ void UrgDriver::defineRangeIndex(double minDeg,double maxDeg)
 	indexMax = urg.deg2index(maxDeg);
 
 	#if DEBUG 
-	cout << "defineRangeIndex(" << minDeg << "," << maxDeg << ")\n";
-	cout << "defineRangeIndex -> indexMin: " << indexMin << " indexMax: " << indexMax << endl;
+	cerr << "defineRangeIndex(" << minDeg << "," << maxDeg << ")\n";
+	cerr << "defineRangeIndex -> indexMin: " << indexMin << " indexMax: " << indexMax << endl;
 	#endif
 }
 
@@ -166,7 +166,7 @@ void UrgDriver::setDelta(bool autoSearch, int dX, int dY)
 void UrgDriver::updateParamWithColor(short color)
 {	
 	this->color = color;
-	cout << "\n\nUrgDriver::updateParamWithColor, deg1 = " << deg1 << "deg2" << deg2 << endl;
+	cerr << "\n\nUrgDriver::updateParamWithColor, deg1 = " << deg1 << "deg2" << deg2 << endl;
 	if(this->color == ROUGE) {
 		defineRange(deg1,deg2);
 		defineRangeIndex(deg1,deg2);
@@ -220,8 +220,8 @@ void UrgDriver::calculLangleScanne()
 	double radDelX = atan( (double)ABS(deltaX) / (double)(LY-deltaY) ); 
 	double radDelY = atan( (double)ABS(deltaY) / (double)(LX-deltaX) );
 	
-	//cout << radDelX << endl;
-	//cout << radDelY << endl;
+	//cerr << radDelX << endl;
+	//cerr << radDelY << endl;
 	
 	radScan = radScan - radDelX - radDelY;
 
@@ -229,7 +229,7 @@ void UrgDriver::calculLangleScanne()
 	// this->deg2 = ((this->radMin + radScan) * 180.0 / M_PI);
 	this->deg2 = ((radDelX + radScan) * 180.0 / M_PI);
 	#if DEBUG
-		cout << "deg1 = " << deg1 << "deg2 = " << deg2 << endl;
+		cerr << "deg1 = " << deg1 << "deg2 = " << deg2 << endl;
 	#endif
 }
 

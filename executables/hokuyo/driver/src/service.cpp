@@ -51,7 +51,7 @@ protected:
 			application->ud->stop();
 			application->ud->updateParamWithColor(ROUGE);
 			application->ud->start();
-			cout << "hokuyo cote red\n";
+			cerr << "hokuyo cote red\n";
 
 			Json::Value data("hokuyo cote red");
 			sendResponse(remote_id, request, data);
@@ -62,13 +62,13 @@ protected:
 			application->ud->stop();
 			application->ud->updateParamWithColor(BLEU);
 			application->ud->start();
-			cout << "hokuyo cote blue\n";
+			cerr << "hokuyo cote blue\n";
 
 			Json::Value data("hokuyo cote blue");
 			sendResponse(remote_id, request, data);
 		}
 			// On recuprer les positions.
-		else if (request["fct"] == "send_pos"){
+		else if (request["fct"] == "get_data"){
 			Json::Value res;
 			application->ud->sendInfos(res);
 			sendResponse(remote_id, request, res);
@@ -87,7 +87,7 @@ private:
 int main(int argc, char *argv[]) {
 	
 	Hokuyo hokuyo(argc, argv, "hokuyo", "tcp://*:5001", Service::CONNECT);
-	cout << "connect on port 5001" << endl;
+	cerr << "connect on port 5001" << endl;
 
 	while (!s_interrupted) {
 		hokuyo.read();

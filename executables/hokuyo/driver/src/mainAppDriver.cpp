@@ -14,8 +14,8 @@
 MainAppDriver::MainAppDriver(int argc, char *argv[])
 {
 	if(argc < 3){
-		cout << "Execution type: ./hokuyo -color 0\n";
-		cout << "\t 0 pour red, 1 pour bleu\n";
+		cerr << "Execution type: ./hokuyo -color 0\n";
+		cerr << "\t 0 pour red, 1 pour bleu\n";
 		throw mainAppException(this, 50);
 	}
 

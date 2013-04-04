@@ -33,7 +33,7 @@ urgException::urgException(UrgDriver* u,int type)
 void urgException::react(void)
 {
 	try{	
-		cout << "reacting...\n";
+		cerr << "reacting...\n";
 		if(urgException::nbExThrow > MAX_ERROR) {
 			throw new mainAppException(application,mainAppException::Err_urgException_react_tropDerr);
 		}

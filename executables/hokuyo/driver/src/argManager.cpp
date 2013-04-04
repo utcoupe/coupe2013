@@ -29,7 +29,7 @@ absArgument* ArgManager::getArg(string tag)
 {
 	for ( it=arguments.begin() ; it!=arguments.end() ; it++ )
 	{
-		cout << "getTag() = " << (*it)->getTag() << " tag = " << tag << endl;
+		cerr << "getTag() = " << (*it)->getTag() << " tag = " << tag << endl;
 		if(!(*it)->getTag().compare(tag))
 		{
 			return (*it);
@@ -59,14 +59,14 @@ void ArgManager::analyse(int argc, char *argv[])
 		Argument<int>* intArg = dynamic_cast<Argument<int>* >(arg);
 		if(strArg)
 		{	
-			cout << "if(strArg) ok" << " Value = " << string(argv[acParam+1]);
+			cerr << "if(strArg) ok" << " Value = " << string(argv[acParam+1]);
 			strArg->validArg();
 			strArg->setValue(string(argv[++acParam]));
 		}
 		else if(intArg)
 		{
-			// cout << "acParam = " << acParam << "argc = "<< argc << endl;
-			// cout << "if(intArg) ok" << " Value = " << string(argv[acParam+1]) << endl;
+			// cerr << "acParam = " << acParam << "argc = "<< argc << endl;
+			// cerr << "if(intArg) ok" << " Value = " << string(argv[acParam+1]) << endl;
 			intArg->validArg();
 			string strInt = string(argv[++acParam]);
 			intArg->setValue(atoi(strInt.c_str()));

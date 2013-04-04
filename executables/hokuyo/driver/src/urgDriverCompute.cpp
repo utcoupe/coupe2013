@@ -97,21 +97,21 @@ bool UrgDriver::inGateau(coord c){
 void UrgDriver::interpretData(const std::vector<long> & data, int n)
 {	
 	#if DEBUG
-		cout << endl << endl << endl;
+		cerr << endl << endl << endl;
 	#endif
 	
 	robot.clear();
 	list<coord> bot;			// Un robot peut étre composé de plusieurs points
 	
 	#if DEBUG
-	cout << "indexMin = " << indexMin << " indexMax = " << indexMax << endl;
+	cerr << "indexMin = " << indexMin << " indexMax = " << indexMax << endl;
 	#endif
 	
 	for(int j = indexMin; j < indexMax; ++j) {
 		long l = data[j];
 		
 		#if DEBUG 
-			cout << " : Angle = " << urg.index2deg(j) << " | " << l << "/" << distanceMax[j] << endl;
+			cerr << " : Angle = " << urg.index2deg(j) << " | " << l << "/" << distanceMax[j] << endl;
 		#endif
 		
 		if(l>minLength && l<distanceMax[j])

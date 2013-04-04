@@ -18,23 +18,23 @@ using namespace std;
 	
 void UrgDriver::toString() 
 {
-	cout << "--- URG DRIVER CONFIG ---" << endl << endl;
+	cerr << "--- URG DRIVER CONFIG ---" << endl << endl;
 	if(color==ROUGE) {
-		cout << "Color ROUGE"<< endl;
+		cerr << "Color ROUGE"<< endl;
 	}
 	else {
-		cout << "Color VIOLET"<< endl;
+		cerr << "Color VIOLET"<< endl;
 	}
 	
-	cout << "Com Port" << comPort << endl;	
+	cerr << "Com Port" << comPort << endl;	
 
-	cout << "radMin" << radMin << endl;
-	cout << "radMax" << radMax << endl;	
+	cerr << "radMin" << radMin << endl;
+	cerr << "radMax" << radMax << endl;	
 
 /*
 	for(int i=indexMin ; i<indexMax ; i++) 
 	{
-		cout << "[" << urg.index2deg(i) << ";" << distanceMax[i] << "]" << "__";
+		cerr << "[" << urg.index2deg(i) << ";" << distanceMax[i] << "]" << "__";
 	}
 */
 
@@ -83,6 +83,11 @@ void UrgDriver::sendInfos(Json::Value & res)
 	os << "]";
 	
 	res["data"] = os.str();
+
+	// Used for viz.py
+	#if DEBUG
+	cout << os.str();
+	#endif
 }
 
 /***********************************************************************
@@ -158,7 +163,7 @@ void* UrgDriver::helpfct(void* arg)
 void* UrgDriver::loop()
 {	
 	#if DEBUG
-		cout << "UrgDriver::loop()\n";
+		cerr << "UrgDriver::loop()\n";
 	#endif
 	// On test la connection
 	if(!urg.isConnected()) {
@@ -175,7 +180,7 @@ void* UrgDriver::loop()
 		n=getData(data,&timestamp);
 		
 		#if DEBUG
-			cout << "n = " << n << endl;
+			cerr << "n = " << n << endl;
 		#endif
 		// C'est ici que l'on traite les données
 		
