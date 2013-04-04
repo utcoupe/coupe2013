@@ -128,7 +128,6 @@ void speedControl(int* value_pwm_left, int* value_pwm_right){
 }
 
 double currentEcart;
-float rapport = PWM_MIN;
 PID pid4AngleControl(&currentEcart,&pwm,&consigne,KP_ANGLE,KI_ANGLE,KD_ANGLE);
 /* Calcule les pwm a appliquer pour un asservissement en angle
  * <> value_pwm_left : la pwm a appliquer sur la roue gauche [-255,255]
@@ -201,18 +200,16 @@ void angleControl(int* value_pwm_left, int* value_pwm_right){
 		(*value_pwm_left) = -pwm;
 
 		/*Evite les "vibrations" dues aux pwm trop basse sur des moteurs CC, tout en conservant un eventuel rapport entre les pwm*/
-		if((*value_pwm_left) != 0 && (*value_pwm_right) != 0){
-			rapport = PWM_MIN/min(abs(*value_pwm_right),abs(*value_pwm_left));
-			if (abs(*value_pwm_left) < PWM_MIN)
-				(*value_pwm_left) = (*value_pwm_left)*rapport;
+		/* [0;255] transformé en [PWM_MINI;255], de même dans le negatif*/
+		if((*value_pwm_left) > 0)
+			(*value_pwm_left) = (*value_pwm_left)*((255-PWM_MINI)/255)+PWM_MINI;
+		else if (*value_pwm_left < 0)
+			(*value_pwm_left) = (*value_pwm_left)*((255-PWM_MINI)/255)-PWM_MINI;
 
-			if (abs(*value_pwm_right) < PWM_MIN)
-				(*value_pwm_right) = (*value_pwm_right)*rapport;
-		}
-		else if((*value_pwm_left) != 0 && abs(*value_pwm_left) < PWM_MIN)
-			(*value_pwm_left) = ((*value_pwm_left)*PWM_MIN)/abs(*value_pwm_left);
-		else if((*value_pwm_right) != 0 && abs(*value_pwm_right) < PWM_MIN)
-			(*value_pwm_right) = ((*value_pwm_right)*PWM_MIN)/abs(*value_pwm_right);
+		if((*value_pwm_right) > 0)
+			(*value_pwm_right) = (*value_pwm_right)*((255-PWM_MINI)/255)+PWM_MINI;
+		else if (*value_pwm_right < 0)
+			(*value_pwm_right) = (*value_pwm_right)*((255-PWM_MINI)/255)-PWM_MINI;
 
 		// Débordement
 		if ((*value_pwm_right) > 255)
@@ -424,18 +421,16 @@ void positionControl(int* value_pwm_left, int* value_pwm_right){
 		(*value_pwm_left) = output4Delta-output4Alpha;
 		
 		/*Evite les "vibrations" dues aux pwm trop basse sur des moteurs CC, tout en conservant un eventuel rapport entre les pwm*/
-		if((*value_pwm_left) != 0 && (*value_pwm_right) != 0){
-			rapport = PWM_MIN/min(abs(*value_pwm_right),abs(*value_pwm_left));
-			if (abs(*value_pwm_left) < PWM_MIN)
-				(*value_pwm_left) = (*value_pwm_left)*rapport;
+		/* [0;255] transformé en [PWM_MINI;255], de même dans le negatif*/
+		if((*value_pwm_left) > 0)
+			(*value_pwm_left) = (*value_pwm_left)*((255-PWM_MINI)/255)+PWM_MINI;
+		else if (*value_pwm_left < 0)
+			(*value_pwm_left) = (*value_pwm_left)*((255-PWM_MINI)/255)-PWM_MINI;
 
-			if (abs(*value_pwm_right) < PWM_MIN)
-				(*value_pwm_right) = (*value_pwm_right)*rapport;
-		}
-		else if((*value_pwm_left) != 0 && abs(*value_pwm_left) < PWM_MIN)
-			(*value_pwm_left) = ((*value_pwm_left)*PWM_MIN)/abs(*value_pwm_left);
-		else if((*value_pwm_right) != 0 && abs(*value_pwm_right) < PWM_MIN)
-			(*value_pwm_right) = ((*value_pwm_right)*PWM_MIN)/abs(*value_pwm_right);
+		if((*value_pwm_right) > 0)
+			(*value_pwm_right) = (*value_pwm_right)*((255-PWM_MINI)/255)+PWM_MINI;
+		else if (*value_pwm_right < 0)
+			(*value_pwm_right) = (*value_pwm_right)*((255-PWM_MINI)/255)-PWM_MINI;
 
 		// Débordement
 		if ((*value_pwm_right) > 255)
