@@ -194,10 +194,74 @@ class ActionBougie(Action):
 
 # Il y a encore les get_action à changer
 
+#définition des positions des items suivant leurs couleurs (afin d'alléger les get_actions)
+
+def position_verre(team):
+	verre_nous[]	#tableau listant la positions de nos verres
+	verre_ennemis[]	#tableau listant la position des verres ennemis
+	if team == red:
+		verre_nous[0] = (900,950)
+		verre_nous[1] = (1200,950)
+		verre_nous[2] = (1050,1200)
+		verre_nous[3] = (1350,1200)
+		verre_nous[4] = (900,1450)
+		verre_nous[5] = (1200,1450)
+		verre_ennemis[0] = (2100,950)
+		verre_ennemis[1] = (1800,950)
+		verre_ennemis[2] = (1950,1200)
+		verre_ennemis[3] = (1650,1200)
+		verre_ennemis[4] = (2100,1450)
+		verre_ennemis[5] = (1800,1450)	
+	else: #team == bleu
+		verre_ennemis[0] = (900,950)
+		verre_ennemis[1] = (1200,950)
+		verre_ennemis[2] = (1050,1200)
+		verre_ennemis[3] = (1350,1200)
+		verre_ennemis[4] = (900,1450)
+		verre_ennemis[5] = (1200,1450)
+		verre_nous[0] = (2100,950)
+		verre_nous[1] = (1800,950)
+		verre_nous[2] = (1950,1200)
+		verre_nous[3] = (1650,1200)
+		verre_nous[4] = (2100,1450)
+		verre_nous[5] = (1800,1450)
+	return verre_nous, verre_ennemis
+	
+def position_assiette(team):
+	
+	assiette_nous[]	#tableau listant la positions de nos assiettes
+	#assiette_ennemis[]	#tableau listant la position des assiettes ennemis
+	if team == red:
+		assiette_nous[0] = (200,250)
+		assiette_nous[1] = (200,1000)
+		assiette_nous[2] = (200,1750)
+	else:
+		assiette_nous[0] = (2800,250)
+		assiette_nous[1] = (2800,1000)
+		assiette_nous[2] = (2800,1750)
+	return assiette_nous
+		
+def position_cadeau(team):
+	cadeau_nous[]
+	if team == red:
+		cadeau_nous[0] = (525,2000)
+		cadeau_nous[1] = (1125,2000)
+		cadeau_nous[2] = (1725,2000)
+		cadeau_nous[3] = (2325,2000)
+	else:
+		cadeau_nous[0] = (675,2000)
+		cadeau_nous[1] = (1275,2000)
+		cadeau_nous[2] = (1875,2000)
+		cadeau_nous[3] = (2475,2000)
+	return cadeau_nous
+
+#définition des constantes des rayons
+DIAM_ASSIETTE = 240 # 170/2*sqrt(2)
+DIAM_VERRE = 80
 
 def get_actions_bigrobot(ia, robot, enemies):
 	actions = []	
-
+	
 	#actions.append(ActionBouteille(ia, robot, enemies, ia.p((640, 2000 - R_BIGROBOT - 100))))
 	#actions.append(ActionBouteille(ia, robot, enemies, (ia.x(1883), 2000 - R_BIGROBOT - 100)))
 	#actions.append(ActionLingo(ia, robot, enemies, ia.p((400, 900))))
