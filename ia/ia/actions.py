@@ -77,60 +77,17 @@ class ActionGetCerise(Action):
 		return "ActionGetCerise(%s, %s)" % (self.point_acces, self.score)
 		
 		
-class ActionVerre(Action):
+class ActionVerre(Action): #ouvrir les pinces au départ
+"""En mode buldo, on garde les pinces ouvertes, on se rend à la position et on avance toujours tout droit pour retrouner
+à la zone de départ (et normalement le robot devrait récup 2 verres"""
 	def __init__(self, ia, robot, enemies, point_acces):
 		Action.__init__(self, ia, robot, enemies, point_acces)
 		
 	def run(self):
 		print("\nACTION VERRE\n")
 		
-		#va chercher le premier verre
-		self.recupFirst()
-		
-		#va chercher le deuxième verre sur la même ligne
-		self.recupSecond()
-		
-		#retourne dans l'air de jeu pour y déposer les 2 verres
-		self.recupRetour()
-		
-		#fini
-		self.clean()
-
-		print("Verre récup !\n")
-		
-		
-	def recupFirst(self):	#action qui permet de récupérer le premier verre
-		# on considère que le point d'entrée pour déclencher l'action se situe à 50 du verre
 		self.robot.asserv.turn(self.ia.a(90))
-		self.robot.actionneurs.pince.pos(PINCE_BAS)		#actionneur à coder qui fera descendre la pince pour l'avoir en bas
-		
-		#avance (de 52mm afin d'être sûr qu'on soit sur le verre)
-		self.robot.asserv.pwm(100,100,100)	 	#!!!!!! valeur à tester, mise totalement arbitrairement
-		
-		#saisi le verre
-		self.robot.actionneurs.pince.get()
-		self.robot.actionneurs.pince.pos(PINCE_HAUT)	#on lève la pince
-		
-		#faire l'appel vers la fonction recupSecond pour pouvoir récupérer le second verre	
-		
-	def recupSecond(self):		#action qui permet de récupérer le second verre (avec le premier déjà récup)
-		#on part de la position où le robot a récupéré le premier verre
-		#avance vers le verre suivant (distance = 300)
-#On suppose que la position PINCE_HAUT permet de placer le verre à une hauteur de 90, soit 10 au-dessus des verres
-		self.robot.asserv.sgoto(pos.x+300, pos.y, 100)	 	#permet d'aller au verre suivant
-		self.robot.actionneurs.pince.drop()	#lâche le verre
-		self.robot.actionneurs.pince.pos(PINCE_MED)	#descend la pince pour pouvoir récupérer les 2 verres
-		self.robot.actionneurs.pince.pos(PINCE_HAUT)
-		
-	def recupRetour(self):
-		#permet de retourner dans notre zone de jeu (avec ou sans verre)
-		
-		#tourne de 180°
-		self.robot.asserv.turn_r(180, 75)	#angle, vitesse
-		#!!! régler la vitesse pour tourner doucement, histoire de ne pas perdre de verres
 		self.robot.asserv.sgoto(50,pos.y, 100)	#retourne à l'air de jeu
-		self.robot.actionneurs.pince.pos(PINCE_BAS)
-		self.robot.actionneurs.pince.drop()
 	
 	def __repr__(self):	#surcharge du print
 		return "ActionVerre(%s, %s)" % (self.point_acces, self.score)
@@ -196,23 +153,29 @@ class ActionBougie(Action):
 
 #définition des positions des items suivant leurs couleurs (afin d'alléger les get_actions)
 
-def position_verre(team):
-	verre_nous[]	#tableau listant la positions de nos verres
-	verre_ennemis[]	#tableau listant la position des verres ennemis
-	if team == red:
+#def position_verre(team):
+verre_nous[]	#tableau listant la positions de nos verres
+verre_ennemis[]	#tableau listant la position des verres ennemis
+"""On part du principe qu'en mode buldo, on va pour choper le premier verre (celui le plus éloigné)
+et qu'on revient vers notre zone de départ et qu'on chope le deuxième au passage (donc ça fait seulement 3 positions"""
+	"""if team == red:
 		verre_nous[0] = (900,950)
 		verre_nous[1] = (1200,950)
 		verre_nous[2] = (1050,1200)
 		verre_nous[3] = (1350,1200)
 		verre_nous[4] = (900,1450)
-		verre_nous[5] = (1200,1450)
-		verre_ennemis[0] = (2100,950)
-		verre_ennemis[1] = (1800,950)
-		verre_ennemis[2] = (1950,1200)
-		verre_ennemis[3] = (1650,1200)
-		verre_ennemis[4] = (2100,1450)
-		verre_ennemis[5] = (1800,1450)	
-	else: #team == bleu
+		verre_nous[5] = (1200,1450)"""
+verre_nous[0] = (1200 + R_VERRE + 20,950)
+verre_nous[1] = (1350 + R_VERRE + 20,1200)
+verre_nous[2] = (1200 + R_VERRE + 20,1450)
+
+verre_ennemis[0] = (2100,950)
+verre_ennemis[1] = (1800,950)
+verre_ennemis[2] = (1950,1200)
+verre_ennemis[3] = (1650,1200)
+verre_ennemis[4] = (2100,1450)
+verre_ennemis[5] = (1800,1450)	
+	"""else: #team == bleu
 		verre_ennemis[0] = (900,950)
 		verre_ennemis[1] = (1200,950)
 		verre_ennemis[2] = (1050,1200)
@@ -224,40 +187,40 @@ def position_verre(team):
 		verre_nous[2] = (1950,1200)
 		verre_nous[3] = (1650,1200)
 		verre_nous[4] = (2100,1450)
-		verre_nous[5] = (1800,1450)
-	return verre_nous, verre_ennemis
+		verre_nous[5] = (1800,1450)"""
+	#return verre_nous, verre_ennemis
 	
-def position_assiette(team):
+#def position_assiette(team):
 	
-	assiette_nous[]	#tableau listant la positions de nos assiettes
+assiette_nous[]	#tableau listant la positions de nos assiettes
 	#assiette_ennemis[]	#tableau listant la position des assiettes ennemis
-	if team == red:
-		assiette_nous[0] = (200,250)
-		assiette_nous[1] = (200,1000)
-		assiette_nous[2] = (200,1750)
-	else:
+	#if team == red:
+assiette_nous[0] = (200,250 + R_ASSIETTE + 20) #20 de marge
+assiette_nous[1] = (200,1000 - R_ASSIETTE - 20) #orienté vers le bas
+assiette_nous[2] = (200 + R_ASSIETTE + 20,1750) #sur x car on chope l'assiette de côté
+	"""else:
 		assiette_nous[0] = (2800,250)
 		assiette_nous[1] = (2800,1000)
-		assiette_nous[2] = (2800,1750)
-	return assiette_nous
+		assiette_nous[2] = (2800,1750)"""
+	#return assiette_nous
 		
-def position_cadeau(team):
-	cadeau_nous[]
-	if team == red:
-		cadeau_nous[0] = (525,2000)
-		cadeau_nous[1] = (1125,2000)
-		cadeau_nous[2] = (1725,2000)
-		cadeau_nous[3] = (2325,2000)
-	else:
+#def position_cadeau(team):
+cadeau_nous[]
+	#if team == red:
+cadeau_nous[0] = (525,2000 - 100) #100 de marge
+cadeau_nous[1] = (1125,2000 - 100)
+cadeau_nous[2] = (1725,2000 - 100)
+cadeau_nous[3] = (2325,2000 - 100)
+	"""else:
 		cadeau_nous[0] = (675,2000)
 		cadeau_nous[1] = (1275,2000)
 		cadeau_nous[2] = (1875,2000)
-		cadeau_nous[3] = (2475,2000)
-	return cadeau_nous
+		cadeau_nous[3] = (2475,2000)"""
+	#return cadeau_nous
 
 #définition des constantes des rayons
-DIAM_ASSIETTE = 240 # 170/2*sqrt(2)
-DIAM_VERRE = 80
+R_ASSIETTE = 120 # 170/2*sqrt(2)
+R_VERRE = 40
 
 def get_actions_bigrobot(ia, robot, enemies):
 	actions = []	
@@ -266,10 +229,16 @@ def get_actions_bigrobot(ia, robot, enemies):
 	#actions.append(ActionBouteille(ia, robot, enemies, (ia.x(1883), 2000 - R_BIGROBOT - 100)))
 	#actions.append(ActionLingo(ia, robot, enemies, ia.p((400, 900))))
 	#actions.append(ActionTotemHaut(ia, robot, enemies, ia.p((1400,1000-125-R_BIGROBOT-40))))
-	actions.append(ActionTotemBas(ia, robot, enemies, ia.p((1400,1000+125+R_BIGROBOT+40))))
+	#actions.append(ActionTotemBas(ia, robot, enemies, ia.p((1400,1000+125+R_BIGROBOT+40))))
 	#actions.append(ActionFinalize(ia, robot, enemies, ia.p((400, 950))))
 	#actions.append(ActionTotem3(ia, robot, enemies, ia.p((2200,1000-125-R_BIGROBOT-60)), ActionTotem.DIRECTION_HAUT))
 	#actions.append(ActionTotem3(ia, robot, enemies, ia.p((2200,1000+125+R_BIGROBOT+60)), ActionTotem.DIRECTION_BAS))
+	
+	for i in range(0,3):
+		actions.append(ActionGetCerise(ia, robot, enemies, ia.p(assiette_nous[i])))
+	actions.append(ActionShootCerise(ia, robot, enemies, ia.p(1300,800)))#valeur mise au hasard
+	
+	#Florent, comment on implémente l'action bougie avec le gateau.py ?
 
 	return actions
 
@@ -279,5 +248,8 @@ def get_actions_minirobot(ia, robot, enemies):
 	"""actions.append(ActionBouteille(robot, enemies, (640, 2000 - R_MINIROBOT - 10)))
 	actions.append(ActionBouteille(robot, enemies, (1883, 2000 - R_MINIROBOT - 10)))
 	actions.append(ActionCarte(robot, enemies, (1500, R_MINIROBOT + 10)))"""
-
+	for i in range(0,4):
+		actions.append(ActionCadeau(ia, robot, enemies, ia.p(cadeau_nous[i])))
+	for i in range(0,3):
+		actions.append(ActionVerre(ia, robot, enemies, ia.p(verre_nous[i])))
 	return actions
