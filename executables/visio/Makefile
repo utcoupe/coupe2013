@@ -1,7 +1,7 @@
 # Makefile for visio
 
 OBJS = service.o camManager.o calibManager.o logger.o helper.o 
-FLAGS = -std=gnu++11 `pkg-config --cflags --libs opencv` `pkg-config jsoncpp --cflags --libs` -lzmq
+FLAGS = -g -std=gnu++11 `pkg-config --cflags --libs opencv` `pkg-config jsoncpp --cflags --libs` -lzmq
 CC = g++
 
 # construction de l'exe

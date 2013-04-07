@@ -36,6 +36,7 @@ private:
 	bool EliminatedContour(const cv::RotatedRect &minRect);
 	string vec2flags(vector<cv::Point> v[], const cv::Point &, int);
 	void checkTennis(int i, vector<cv::Point> & v, const cv::Point & mostLeft);
+	void traitementPremierRangee(vector<cv::Point> v[], const bool see[]);
 
 public:
 	static int flags[20];

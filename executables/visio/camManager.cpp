@@ -13,10 +13,9 @@
 
 using namespace std;
 
-int camManager::flags[20];
 cv::Point camManager::POS_BOUGIE[20];
 cv::Point camManager::POS_GATEAU;
-
+int camManager::flags[20];
 
 struct CommaIterator
 :
@@ -57,36 +56,36 @@ camManager::camManager(const int id, const int display):CAMERA_N(id), display(di
 	sprintf(whiteTemplPath, "./yml/whiteTemplPath_%d.yml", CAMERA_N);
 	loaded = false;
 
-	// Initialize all candles to not detected (-1). 
+		// Initialize all candles to not detected (-1). 
 	for (int i = 0; i < 20; ++i)
 	{
 		flags[i] = -1;
 	}
- 	
+
 	POS_GATEAU = cv::Point(1500, 0);
 
  	// c'est moche... mais j'arrive pas a faire marcher le initialisation list, ce qui est une nouveaute de g++ c11p
- 	POS_BOUGIE[0]=(cv::Point(1157, 68));
- 	POS_BOUGIE[1]=(cv::Point(1209, 194));
- 	POS_BOUGIE[2]=(cv::Point(1306, 291));
- 	POS_BOUGIE[3]=(cv::Point(1432, 343));
- 	POS_BOUGIE[4]=(cv::Point(1568, 343));
- 	POS_BOUGIE[5]=(cv::Point(1694, 291));
- 	POS_BOUGIE[6]=(cv::Point(1791, 194));
- 	POS_BOUGIE[7]=(cv::Point(1843, 68));
+	POS_BOUGIE[7]=(cv::Point(1157, 68));
+	POS_BOUGIE[6]=(cv::Point(1209, 194));
+	POS_BOUGIE[5]=(cv::Point(1306, 291));
+	POS_BOUGIE[4]=(cv::Point(1432, 343));
+	POS_BOUGIE[3]=(cv::Point(1568, 343));
+	POS_BOUGIE[2]=(cv::Point(1694, 291));
+	POS_BOUGIE[1]=(cv::Point(1791, 194));
+	POS_BOUGIE[0]=(cv::Point(1843, 68));
 
-	POS_BOUGIE[8]=(cv::Point(1054, 59));
- 	POS_BOUGIE[9]=(cv::Point(1084, 172));
- 	POS_BOUGIE[10]=(cv::Point(1143, 274));
- 	POS_BOUGIE[11]=(cv::Point(1226, 357));
- 	POS_BOUGIE[12]=(cv::Point(1328, 416));
- 	POS_BOUGIE[13]=(cv::Point(1441, 446));
- 	POS_BOUGIE[14]=(cv::Point(1559, 446));
- 	POS_BOUGIE[15]=(cv::Point(1672, 416));
- 	POS_BOUGIE[16]=(cv::Point(1774, 357));
- 	POS_BOUGIE[17]=(cv::Point(1857, 274));
- 	POS_BOUGIE[18]=(cv::Point(1916, 172));
- 	POS_BOUGIE[19]=(cv::Point(1946, 59));
+	POS_BOUGIE[19]=(cv::Point(1054, 59));
+	POS_BOUGIE[18]=(cv::Point(1084, 172));
+	POS_BOUGIE[17]=(cv::Point(1143, 274));
+	POS_BOUGIE[16]=(cv::Point(1226, 357));
+	POS_BOUGIE[15]=(cv::Point(1328, 416));
+	POS_BOUGIE[14]=(cv::Point(1441, 446));
+	POS_BOUGIE[13]=(cv::Point(1559, 446));
+	POS_BOUGIE[12]=(cv::Point(1672, 416));
+	POS_BOUGIE[11]=(cv::Point(1774, 357));
+	POS_BOUGIE[10]=(cv::Point(1857, 274));
+	POS_BOUGIE[9]=(cv::Point(1916, 172));
+	POS_BOUGIE[8]=(cv::Point(1946, 59));
 }
 /**
 1 * Initialize camera and test if there is a camera associated with CAMERA_N
@@ -106,6 +105,7 @@ camManager::camManager(const int id, const int display):CAMERA_N(id), display(di
 
  vector<cv::Point> camManager::findObjects(const cv::Mat &src, cv::Mat &original, const COLOR color = BLUE)
  {
+
  	vector<cv::Point> result;
  	vector<vector<cv::Point> > contours;
  	vector<cv::Vec4i> hierarchy;
@@ -121,7 +121,7 @@ camManager::camManager(const int id, const int display):CAMERA_N(id), display(di
  	{
  		double area = cv::contourArea(contours[i]);
  		cout << "area = "<< area << endl;
- 		if (area > 300 && area < 5500)
+ 		if (area > 400 && area < 3000)
  		{
  			cv::approxPolyDP( cv::Mat(contours[i]), contours_poly[i], 3, true );
  			cv::Scalar paint_color;
@@ -137,6 +137,7 @@ camManager::camManager(const int id, const int display):CAMERA_N(id), display(di
  				center[i] = boundRect[i].center;
  				break;
  				case WHITE:
+ 				continue;
  				paint_color = cv::Scalar(0, 255, 0);
  				cv::minEnclosingCircle( (cv::Mat)contours_poly[i], center[i], radius[i] );
  				break;
@@ -147,7 +148,7 @@ camManager::camManager(const int id, const int display):CAMERA_N(id), display(di
 
  			if(this->display){
  				if(color == WHITE){
- 					circle( drawing, center[i], (int)radius[i], paint_color, -1, 8, 0 );
+ 					// circle( drawing, center[i], (int)radius[i], paint_color, -1, 8, 0 );
  				}
  				else{
  					rectangle( drawing, boundRect[i].boundingRect().tl(), boundRect[i].boundingRect().br(), paint_color, -1, 8, 0 );
@@ -309,13 +310,13 @@ camManager::camManager(const int id, const int display):CAMERA_N(id), display(di
  		result["data"]["red"] = oss.str();
 		  // cout << "RED: " + res << endl;
 
- 		binaryImg = image;
- 		binaryImg = binaryFiltering(binaryImg, WHITE);
- 		v3 = findObjects(binaryImg, image, WHITE);
- 		// Convert vector to string
- 		oss.str("");
- 		std::copy(v3.begin(), v3.end(), CommaIterator(oss, ","));
- 		result["data"]["tennis"] = oss.str();
+ 		// binaryImg = image;
+ 		// binaryImg = binaryFiltering(binaryImg, WHITE);
+ 		// v3 = findObjects(binaryImg, image, WHITE);
+ 		// // Convert vector to string
+ 		// oss.str("");
+ 		// std::copy(v3.begin(), v3.end(), CommaIterator(oss, ","));
+ 		// result["data"]["tennis"] = oss.str();
 		  // cout << "RED: " + res << endl;
 
  		if(display){
@@ -352,17 +353,18 @@ camManager::camManager(const int id, const int display):CAMERA_N(id), display(di
 
  Json::Value camManager::DisplayWithColorMatching(int x, int y, int angle)
  {
- 	for (int i = 0; i < 4; ++i)
+
+ 	for (int i = 0; i < 20; ++i)
  	{
  		capture.grab();
  	}
  	capture >> image;
- 	blur( image, image, cv::Size(3,3) );
+ 	blur( image, image, cv::Size(4,4) );
  	if(display)
  		drawing = cv::Mat::zeros( image.size(), CV_8UC3 );
 
  	Json::Value result;
- 	vector<cv::Point> v[3];
+ 	vector<cv::Point> v[2];
 
  	cv::Mat binaryImg = image;
  	binaryImg = binaryFiltering(binaryImg, BLUE);
@@ -382,15 +384,16 @@ camManager::camManager(const int id, const int display):CAMERA_N(id), display(di
  	result["data"]["red"] = oss.str();
 		  // cout << "RED: " + res << endl;
 
- 	binaryImg = image;
- 	binaryImg = binaryFiltering(binaryImg, WHITE);
- 	v[2] = findObjects(binaryImg, image, WHITE);
-	// Convert vector to string
- 	oss.str("");
- 	std::copy(v[2].begin(), v[2].end(), CommaIterator(oss, ","));
- 	result["data"]["tennis"] = oss.str();
+ // 	binaryImg = image;
+ // 	binaryImg = binaryFiltering(binaryImg, WHITE);
+ // 	v[2] = findObjects(binaryImg, image, WHITE);
+	// // Convert vector to string
+ // 	oss.str("");
+ // 	std::copy(v[2].begin(), v[2].end(), CommaIterator(oss, ","));
+ // 	result["data"]["tennis"] = oss.str();
 		//   // cout << "WHITE: " + res << endl;
  	cv::Point robot_pos(x, y);
+
  	result["data"]["flags"] = vec2flags(v, robot_pos, angle);
 
  	if(display)
@@ -399,33 +402,83 @@ camManager::camManager(const int id, const int display):CAMERA_N(id), display(di
  	return result;
  }
 
-bool PointCmp(cv::Point p1, cv::Point p2){
-	return p1.x > p2.x;
-}
+ bool PointCmpX(cv::Point p1, cv::Point p2){
+ 	return p1.x > p2.x;
+ }
 
-double sumY(vector<cv::Point> v){
+ bool PointCmpY(cv::Point p1, cv::Point p2){
+ 	return p1.y < p2.y;
+ }
 
-	double sum = 0;
-	for(std::vector<cv::Point>::iterator it = v.begin(); it != v.end(); ++it) {
-		sum += it->y;
-	}
-	return sum;
-}
+ double sumY(vector<cv::Point> v){
 
-void camManager::checkTennis(int i, vector<cv::Point> & v, const cv::Point & mostLeft){
-	std::vector<cv::Point>::iterator it = v.begin();
+ 	double sum = 0;
+ 	for(std::vector<cv::Point>::iterator it = v.begin(); it != v.end(); ++it) {
+ 		sum += it->y;
+ 	}
+ 	return sum;
+ }
 
-	while( it != v.end()) {
-		if(it->x > mostLeft.x - 20 && it->x < mostLeft.x + 20
-			&& it->y > mostLeft.y + 10 && it->y < mostLeft.y + 80){
+ void camManager::checkTennis(int i, vector<cv::Point> & v, const cv::Point & mostLeft){
+ 	std::vector<cv::Point>::iterator it = v.begin();
+
+ 	while( it != v.end()) {
+ 		if(it->x > mostLeft.x - 20 && it->x < mostLeft.x + 20
+ 			&& it->y > mostLeft.y + 10 && it->y < mostLeft.y + 80){
 				// THere is a tennis!
-				flags[i] += 1;
-				v.erase(it);
-				break;
+ 			flags[i] += 1;
+ 		v.erase(it);
+ 		break;
+ 	}
+ 	++it;
+ }
+}
+
+void camManager::traitementPremierRangee(vector<cv::Point> v2[], const bool see[]){
+
+	sort(v2[0].begin(), v2[0].end(), PointCmpX);
+	sort(v2[1].begin(), v2[1].end(), PointCmpX);
+
+	// for (int i = 0; i < v2[0].size(); ++i)
+ // 	{
+ // 		cerr << "v2[0][" <<i<<"] = (" << v2[0][i].x << "," << v2[0][i].y << ") ";
+ // 	}
+ // 	cerr << endl;
+ // 	for (int i = 0; i < v2[1].size(); ++i)
+ // 	{
+ // 		cerr << "v2[1][" <<i<<"] = (" << v2[1][i].x << "," << v2[1][i].y << ") ";
+ // 	}
+
+	for (int i = 8; i < 20; ++i)
+	{
+
+		if(see[i] && flags[i] == -1){
+			cerr << "Je traite " << i << endl;
+		// Traiter 1er rangee
+			if (v2[0].empty() && v2[1].empty())
+			{
+				throw camException("Il manque des bougies au premiere rangee!");
+			}
+			else if (!v2[0].empty() && v2[0].back().x < v2[1].back().x)
+ 			{
+ 				cv::Point mostLeft = v2[0].back();
+ 					v2[0].pop_back();
+ 					flags[i] = 11;
+					// checkTennis(i, v2[2], mostLeft);
+ 			} else {
+ 				cv::Point mostLeft = v2[1].back();
+ 					v2[1].pop_back();
+ 					flags[i] = 21;
+					// checkTennis(i, v2[2], mostLeft);
+ 			}
+ 			cerr << "v2[0].size()=" <<v2[0].size() << " v2[1].size()=" << v2[1].size() << endl;
 		}
-		++it;
 	}
 }
+
+
+
+
 
 
 /**
@@ -437,8 +490,8 @@ void camManager::checkTennis(int i, vector<cv::Point> & v, const cv::Point & mos
  * @return     a string in form of "-1, -1, 10, 11, 20, 11, -1, 21, etc...", there will be 20 entry.
  * We are counting candles in the following order:
  * 										  GATEAU, front view
- * From 2nd level, blue: 				1, 2, 3, 4,   5, 6, 7, 8,               2nd level, red
- * 		1st level, blue: 	 9, 10, 11, 12, 13, 14,   15, 16, 17, 18, 19, 20     1st level, red
+ * From 2nd level, blue: 				  0,1,2,3,  4,5,6,7,               2nd level, red
+ * 		1st level, blue: 	 	  8,9,10,11,12,13,  14,15,16,17,18,19     1st level, red
  */
  string camManager::vec2flags(vector<cv::Point> v[], const cv::Point & pos, int angle){
 	// Angle of view in degree
@@ -454,23 +507,35 @@ void camManager::checkTennis(int i, vector<cv::Point> & v, const cv::Point & mos
 
  	const int SIZE = v[0].size() + v[1].size();
 
+ 	const cv::Point POS_GATEAU(1500, 0);
+
+ 	const double DIS_CAM_GATEAU = norm(pos - POS_GATEAU);
+
+ 	// Distance entre la bougie en face et la bougie la plus loin, 440, 771 sont des donnee mesures.
+ 	const double DIS_TOLERENCE = 440 * (DIS_CAM_GATEAU / 771);
+
+ 	cerr << "Converting " << SIZE << " bougies positions into flags" << endl;
+
  	int seeCount = 0;
-	int maxIndex = -1;
+ 	int maxIndex = -1;
  	
-	double max = 0;
-	double minDis = std::numeric_limits<double>::max;
+ 	double max = 0;
+ 	double minDis = 1000;
 
 	// Find the nearest candle. Mark it as "en face"
-	for (int i = 0; i < 20; ++i)
-	{
-		cv::Point vec1 = POS_BOUGIE[i] - CAMERA_POS;
-		cv::Point vec2 = pos - CAMERA_POS; 
-		if(norm(vec1) < minDis){
-			minDis = norm(vec1);
-			maxIndex = i;
-			max = abs(vec1.ddot(vec2)/(norm(vec1)*norm(vec2)) > cos(ANGLE_VU));
-		}
-	}
+ 	for (int i = 0; i < 20; ++i)
+ 	{
+ 		cv::Point vec1 = POS_BOUGIE[i] - CAMERA_POS;
+ 		cv::Point vec2 = pos - CAMERA_POS; 
+ 		if(norm(vec1) < minDis){
+ 			minDis = norm(vec1);
+ 			maxIndex = i;
+ 			cerr << "Je pense la Bougie en face: " << i << endl;
+ 			max = abs(vec1.ddot(vec2)/(norm(vec1)*norm(vec2)) > cos(ANGLE_VU));
+ 		}
+ 	}
+ 	
+ 	
 
  	// refresh detected flag. =1 if robot see it, 0 otherwise.
  	bool see[20] = {0};
@@ -494,84 +559,113 @@ void camManager::checkTennis(int i, vector<cv::Point> & v, const cv::Point & mos
  			}
 
  			// Begining from left to right, if there is a candle more "en face", we would have already set that one as "en face". We assume that the robot will see at most three candles to the right of the candle "en face". 295 is the distance of 2.5 candles
- 			if(norm(vec3) < 295){
+ 			cerr << "norm(vec3) = "<< norm(vec3) << " Pour " << i << endl;
+
+
+ 			// On ne compte pas les blancs.
+ 			if(norm(vec3) < DIS_TOLERENCE && (i < 12 || i > 15)){
  				seeCount++;
  				see[i] = true;
  			}
  		}
  	}
 
- 	sort(v[0].begin(), v[0].end(), PointCmp);
- 	sort(v[1].begin(), v[1].end(), PointCmp);
+ 	cerr << "I believe I have seen " << seeCount << " bougies" << endl;
+ 	cerr << "Ils sont : ";
+ 	for (int i = 0; i < 20; ++i)
+ 	{
+ 		if(see[i])
+ 			cout << i << " ";
+ 	}
+ 	cerr << endl;
 
-	sort(v[2].begin(), v[2].end(), PointCmp);
+ 	sort(v[0].begin(), v[0].end(), PointCmpX);
+ 	sort(v[1].begin(), v[1].end(), PointCmpX);
 
-	double middleY = (sumY(v[0]) + sumY(v[1])) / SIZE;
+	// sort(v[2].begin(), v[2].end(), PointCmp);
+	// 
+	// 
+ 	for (int i = 0; i < v[0].size(); ++i)
+ 	{
+ 		cerr << "v[0][" <<i<<"] = (" << v[0][i].x << "," << v[0][i].y << ") ";
+ 	}
+ 	cerr << endl;
+ 	for (int i = 0; i < v[1].size(); ++i)
+ 	{
+ 		cerr << "v[1][" <<i<<"] = (" << v[1][i].x << "," << v[1][i].y << ") ";
+ 	}
+ 	cerr << endl;
+ 	double middleY = (sumY(v[0]) + sumY(v[1])) / SIZE;
+
+ 	// Vecteur qui reccueil les bougies de premiere rangee.
+ 	vector<cv::Point> v2[2];
+
+ 	// cerr << "middleY = " << middleY << endl;
+ 	// cerr << "v[0].back() = (" << v[0].back().x << ", " << v[0].back().y << ")"<< endl;
 
 
-	// Traiter 1er rangee
-	for (int i = 0; i < 20; ++i)
-	{
-		if(see[i] && flags[i] == -1){
-			if (v[1].empty() || (!v[0].empty() && v[0].back().x < v[1].back().x))
-			{
-				if(v[0].empty())
-					throw camException("Nb de bougies bleu detectes insuffisant!");
-				cv::Point mostLeft = v[0].back();
-				if(mostLeft.y < middleY){
-					v[0].pop_back();
-					flags[i] = 10;
-					checkTennis(i, v[2], mostLeft);
-					seeCount--;
-				}
-			} else {
-				cv::Point mostLeft = v[1].back();
-				if(mostLeft.y < middleY){
-					v[1].pop_back();
-					flags[i] = 20;
-					checkTennis(i, v[2], mostLeft);
-					seeCount--;
-				}
-			}
-		}
+	// Traiter 2eme rangee
+ 	for (int i = 0; i < 20; ++i)
+ 	{
+ 		if(see[i] && flags[i] == -1){
+ 			cerr << "Je traite " << i << endl;
+ 			
+ 			if (!v[0].empty() && v[0].back().x < v[1].back().x)
+ 			{
+ 				cv::Point mostLeft = v[0].back();
+ 				if(mostLeft.y < middleY){
+ 					v[0].pop_back();
+ 					flags[i] = 11;
+					// checkTennis(i, v[2], mostLeft);
+ 					seeCount--;
+ 				}
+ 				else{
+ 					--i;
+ 					v2[0].push_back(v[0].back());
+ 					v[0].pop_back();
+ 				}
+ 			} else {
+ 				cv::Point mostLeft = v[1].back();
+ 				if(mostLeft.y < middleY){
+ 					v[1].pop_back();
+ 					flags[i] = 21;
+					// checkTennis(i, v[2], mostLeft);
+ 					seeCount--;
+ 				}
+ 				else{
+ 					--i;
+ 					v2[1].push_back(v[1].back());
+ 					v[1].pop_back();
+ 				}
+ 			}
+	 			cerr << "v[0].size()=" <<v[0].size() << " v[1].size()=" << v[1].size() << endl;
+	 			cerr << "v2[0].size()=" <<v2[0].size() << " v2[1].size()=" << v2[1].size() << endl;
+ 		}
+ 		else if(see[i] && flags[i] != -1 && i < 8)
+ 			seeCount--;
 
-		// Traiter 2eme rangee
-		if(see[i] && flags[i] == -1){
-			if (v[1].empty() || (!v[0].empty() && v[0].back().x < v[1].back().x))
-			{
-				if(v[0].empty())
-					throw camException("Nb de bougies bleu detectes insuffisant!");
-				cv::Point mostLeft = v[0].back();
-				if(mostLeft.y > middleY){
-					v[0].pop_back();
-					flags[i] = 10;
-					checkTennis(i, v[2], mostLeft);
-					seeCount--;
-				}
-			} else {
-				cv::Point mostLeft = v[1].back();
-				if(mostLeft.y > middleY){
-					v[1].pop_back();
-					flags[i] = 20;
-					checkTennis(i, v[2], mostLeft);
-					seeCount--;
-				}
-			}
-		}
-		else if(flags[i] != -1)
-			seeCount--;
-	}
+ 		if(v[0].size()==0 && v[1].size()==0){
+ 			traitementPremierRangee(v2, see);
+ 					cerr << "/**\n* Liste des bougies et couleurs\n*/\n";
+ 			for (int j = 0; j < 20; ++j)
+ 			{
+ 				string c = flags[j] == 21 ? "rouge" : "bleu";
+ 				if(flags[j] == -1 )
+ 					c = "-1";
+ 				cout << "flags[" << j << "]: " << c << endl;
+ 			}
 
-	if(seeCount)
-		throw camException("Nb de bougies detecte insuffisant");
-
-	string res(""+flags[0]);
-	for (int i = 1; i < 20; ++i)
-	{
-		res += "," + flags[i];
-	}
-	return res;
-}
+ 			string res(""+flags[0]);
+ 			for (int j = 1; j < 20; ++j)
+ 			{
+ 				res += "," + flags[j];
+ 			}
+			cerr << "liste a renvoie:" << res;
+ 			return res;
+ 		}
+ 		
+ 	}
+ }
 
  /**
  * @function MatchingMethod

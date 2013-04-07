@@ -3,12 +3,12 @@
 
 void Logger::log(int msg)
 {
-	cerr << "> [ LOG | " << this->name << ":" << this->id << " ] " << msg << endl;
+	cerr << "> [ DEBUG | " << this->name << ":" << this->id << " ] " << msg << endl;
 }
 
 void Logger::log(string msg)
 {
-	cout << "> [ LOG | " << this->name << ":" << this->id << " ] " << msg << endl;
+	cout << "> [ DEBUG | " << this->name << ":" << this->id << " ] " << msg << endl;
 }
 
 void Logger::err(int msg)
