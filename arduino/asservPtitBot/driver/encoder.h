@@ -20,13 +20,13 @@ const double ENC_CENTER_DIST_MM = 262.0; // Distance entre chaque roue codeuse
 const double ENC_CENTER_DIST_TICKS = ENC_CENTER_DIST_MM*ENC_MM_TO_TICKS; // Distance entre chaque roue codeuse du robot en ticks
 
 
-#define PIN_LEFT_A 18			// A encodeur 1 (gauche) (vert-marron)
-#define PIN_LEFT_B 19			// B encodeur 1 (gauche) (vert-blanc)
-#define PIN_RIGHT_A 21			// A encodeur 2 (droite) (noir-blanc)
+#define PIN_LEFT_A 3			// A encodeur 1 (gauche) (vert-marron)
+#define PIN_LEFT_B 2			// B encodeur 1 (gauche) (vert-blanc)
+#define PIN_RIGHT_A 19			// A encodeur 2 (droite) (noir-blanc)
 #define PIN_RIGHT_B 20			// B encodeur 2 (droite) (noir-marron)
-#define INTERRUPT_LEFT_A 5
-#define INTERRUPT_LEFT_B 4
-#define INTERRUPT_RIGHT_A 2
+#define INTERRUPT_LEFT_A 1
+#define INTERRUPT_LEFT_B 0
+#define INTERRUPT_RIGHT_A 4
 #define INTERRUPT_RIGHT_B 3
 #define VALUE_PIN_LEFT_A 		bitRead(PIND,3)
 #define VALUE_PIN_LEFT_B 		bitRead(PIND,2)
