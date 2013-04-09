@@ -21,7 +21,7 @@ class Gateau:
 
     def merge_data_str(self, string):
         """Ajoute les données obtenues par la visio"""
-        data = [int(x) for x in string.split(', ')]
+        data = [int(x) for x in string.split(',')]
 
         for i in range(20):
             if self.bougies[i] == -1:
