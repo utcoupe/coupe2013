@@ -10,8 +10,9 @@ import subprocess
 logging.basicConfig(level=logging.DEBUG)
 
 class SubProcessSerial:
-    def __init__(self, executable):
-        self.p = subprocess.Popen(executable, stdout=subprocess.PIPE, stdin=subprocess.PIPE)
+    def __init__(self, executable, options):
+        args = [executable, ] + options.split(',')
+        self.p = subprocess.Popen(args, stdout=subprocess.PIPE, stdin=subprocess.PIPE)
 
     def readline(self):
         self.p.stdout.flush()
@@ -30,6 +31,7 @@ def run(**args):
     default["server_events_port"]     = 5003
     default["identity"]               = "executable"
     default["executable_path"]        = ""
+    default["executable_options"]     = ""
     default["protocol_file"]          = ""
     default["protocol_prefixe"]       = "Q_"
     default["protocol_prefix_erreur"] = "E_"
@@ -52,6 +54,9 @@ def run(**args):
     parser.add_option("-s", "--exec",
                       action="store", dest="executable_path", default=default["executable_path"],
                       help="Fichier executable à utiliser")
+    parser.add_option("-o", "--exec-options",
+                      action="store", dest="executable_options", default=default["executable_options"],
+                      help="Fichier executable à utiliser")
     parser.add_option("-f", "--protocol-file",
                       action="store", dest="protocol_file", default=default["protocol_file"],
                       help="Emplacement du fichier protocole à utiliser")
@@ -64,7 +69,7 @@ def run(**args):
 
     (options, _args) = parser.parse_args()
 
-    fake_ser = SubProcessSerial(options.executable_path)
+    fake_ser = SubProcessSerial(options.executable_path, options.executable_options)
     adapter = zerobot.ArduinoAdapter(
         identity = options.identity,
         conn_addr = "tcp://%s:%s" % (options.server_ip, options.server_backend_port),
