@@ -5,10 +5,10 @@ blue_v_lower: 0
 blue_h_higher: 129
 blue_s_higher: 255
 blue_v_higher: 242
-red_h_lower: 0
-red_s_lower: 140
-red_v_lower: 66
-red_h_higher: 18
+red_h_lower: 148
+red_s_lower: 151
+red_v_lower: 0
+red_h_higher: 255
 red_s_higher: 255
 red_v_higher: 255
 white_h_lower: 22

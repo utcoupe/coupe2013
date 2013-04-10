@@ -1,13 +1,14 @@
 #include <opencv/cv.h>
 #include <opencv/highgui.h>
 #include <vector>
-#include <cstring>
+#include <string>
 #include <cmath>
 #include <algorithm>
 #include <limits>
 #include "camException.h"
 #include "camManager.h"
 #include "helper.h"
+#include <boost/lexical_cast.hpp>
 
 #include "json/json.h"
 
@@ -354,7 +355,7 @@ camManager::camManager(const int id, const int display):CAMERA_N(id), display(di
  Json::Value camManager::DisplayWithColorMatching(int x, int y, int angle)
  {
 
- 	for (int i = 0; i < 20; ++i)
+ 	for (int i = 0; i < 30; ++i)
  	{
  		capture.grab();
  	}
@@ -439,16 +440,6 @@ void camManager::traitementPremierRangee(vector<cv::Point> v2[], const bool see[
 	sort(v2[0].begin(), v2[0].end(), PointCmpX);
 	sort(v2[1].begin(), v2[1].end(), PointCmpX);
 
-	// for (int i = 0; i < v2[0].size(); ++i)
- // 	{
- // 		cerr << "v2[0][" <<i<<"] = (" << v2[0][i].x << "," << v2[0][i].y << ") ";
- // 	}
- // 	cerr << endl;
- // 	for (int i = 0; i < v2[1].size(); ++i)
- // 	{
- // 		cerr << "v2[1][" <<i<<"] = (" << v2[1][i].x << "," << v2[1][i].y << ") ";
- // 	}
-
 	for (int i = 8; i < 20; ++i)
 	{
 
@@ -509,10 +500,10 @@ void camManager::traitementPremierRangee(vector<cv::Point> v2[], const bool see[
 
  	const cv::Point POS_GATEAU(1500, 0);
 
- 	const double DIS_CAM_GATEAU = norm(pos - POS_GATEAU);
+ 	const double DIS_CAM_GATEAU_BORD = norm(pos - POS_GATEAU) - 500;
 
  	// Distance entre la bougie en face et la bougie la plus loin, 440, 771 sont des donnee mesures.
- 	const double DIS_TOLERENCE = 440 * (DIS_CAM_GATEAU / 771);
+ 	const double DIS_TOLERENCE = 450 * (DIS_CAM_GATEAU_BORD / 721);
 
  	cerr << "Converting " << SIZE << " bougies positions into flags" << endl;
 
@@ -530,7 +521,7 @@ void camManager::traitementPremierRangee(vector<cv::Point> v2[], const bool see[
  		if(norm(vec1) < minDis){
  			minDis = norm(vec1);
  			maxIndex = i;
- 			cerr << "Je pense la Bougie en face: " << i << endl;
+ 			cerr << "la Bougie en face: " << i << endl;
  			max = abs(vec1.ddot(vec2)/(norm(vec1)*norm(vec2)) > cos(ANGLE_VU));
  		}
  	}
@@ -644,9 +635,11 @@ void camManager::traitementPremierRangee(vector<cv::Point> v2[], const bool see[
  		else if(see[i] && flags[i] != -1 && i < 8)
  			seeCount--;
 
- 		if(v[0].size()==0 && v[1].size()==0){
+ 		if(v[0].size()==0 && v[1].size()==0 || i == 19){
  			traitementPremierRangee(v2, see);
- 					cerr << "/**\n* Liste des bougies et couleurs\n*/\n";
+ 					cerr << "/**"
+ 							"* Liste des bougies et couleurs"
+ 							"*/\n";
  			for (int j = 0; j < 20; ++j)
  			{
  				string c = flags[j] == 21 ? "rouge" : "bleu";
@@ -655,12 +648,13 @@ void camManager::traitementPremierRangee(vector<cv::Point> v2[], const bool see[
  				cout << "flags[" << j << "]: " << c << endl;
  			}
 
- 			string res(""+flags[0]);
+ 			string res(""+boost::lexical_cast<string>(flags[0]));
  			for (int j = 1; j < 20; ++j)
  			{
- 				res += "," + flags[j];
+ 				res += "," + boost::lexical_cast<string>(flags[j]);
  			}
 			cerr << "liste a renvoie:" << res;
+
  			return res;
  		}
  		

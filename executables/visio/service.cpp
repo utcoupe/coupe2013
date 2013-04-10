@@ -115,6 +115,10 @@ protected:
 					sendResponse(remote_id, request, res);
 				}
 				catch (camException ex){
+					// Retry If we didn't have exacte number of candles detected.
+					cerr << "Didn't get enough candles. Retrying..." << endl;
+					for (int i = 0; i < 20; ++i)
+						flags[i] = -1;
 					Json::Value res = this->cam_0->DisplayWithColorMatching(request["args"][0].asInt(), request["args"][1].asInt(), request["args"][2].asInt());
 					sendResponse(remote_id, request, res);
 				}
