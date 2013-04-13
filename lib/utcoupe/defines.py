@@ -1,4 +1,7 @@
 
+BLUE = False
+RED = True
+
 ASSERV_BIG = "asserv_big"
 ASSERV_MINI = "asserv_mini"
 
