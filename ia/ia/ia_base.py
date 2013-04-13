@@ -107,8 +107,6 @@ class IaBase:
         self.sums = {}
         self.sums['mainloop'] = {'t':0, 'n':0}
 
-        self.reset()
-
     def reset(self):
         self.gamestate.reset()
 
@@ -126,16 +124,14 @@ class IaBase:
         minirobot.set_actions(actions)
 
         self.t_begin_match = None
-        self.match_over = lambda : (self.t_begin_match and self.match_timeout and (time.time() - self.t_begin_match) > self.match_timeout)
         self.e_jack = threading.Event()
-
-        time.sleep(0.5)
 
     def detect_ax12_big(self, resp):
         mapping = resp.data
 
     def cb_jack(self):
         print("Jack enlevé, let's start")
+        self.t_begin_match = time.time()
         self.e_jack.set()
 
     def cb_stop(self):
@@ -182,14 +178,16 @@ class IaBase:
         print("Exit")
 
     def loopsetup(self):
-        self.gamestate.reset()
+        self.reset()
         
         # premier rafraichissement
         self.gamestate.ask_update()
         self.gamestate.wait_update()
+        self.t_begin_match = time.time()
 
     def loop(self):
-        if self.match_over():
+        if self.state_match is STATE_PLAY and self.match_over():
+            self.state_match = 0
             print("Fin du Match")
             self.reset()
 
@@ -205,6 +203,7 @@ class IaBase:
                 print("Un bolosse est dans l'angle mort !!!")
             else:
                 self.loopRobot(self.gamestate.bigrobot)
+                self.loopRobot(self.gamestate.minirobot)
         else:
             self.e_jack.wait(2)
 
@@ -236,7 +235,7 @@ class IaBase:
                     robot.is_path_intersected():
                     print("CHANGEMENT D'ACTION", best_action)
                     asserv.cancel()
-                    self.debug.draw_path(best_action.path, (255,0,0), id(robot))
+                    #self.debug.draw_path(best_action.path, (255,0,0), id(robot))
                     print(robot.pos, best_action.point_acces, best_action.path)
                     robot.set_target_action(best_action, best_action.path)
 
@@ -252,7 +251,10 @@ class IaBase:
                         print("goto %s" % goal)
                         #self.bigrobot.cancel()
                         if goal:
-                            asserv.goto(goal)
+                            a = goal[0]
+                            b = goal[1]
+                            asserv.goto(a, b, 255, block=False)
+                            print('I\'m here fucker !')
             else:
                 print("No reachable actions")
 
@@ -285,7 +287,7 @@ class IaBase:
         @param x
         @return (3000 - x) si rouge sinon x
         """
-        if self.team == BLUE:
+        if self.team == utcoupe.BLUE:
             return 3000 - x
         else:
             return x
@@ -297,13 +299,19 @@ class IaBase:
         @param {degrès} a
         @return (a + 180) si rouge sinon a
         """
-        if self.team == BLUE:
+        if self.team == utcoupe.BLUE:
             if a > 0:
                 return 180 - a
             else:
                 return 180 + a
         else:
             return a
+
+    def match_over(self):
+        if self.match_timeout is None:
+            return False
+        if (time.time() - self.t_begin_match) > self.match_timeout:
+            return True
 
 def get_latency(service):
     n = 10

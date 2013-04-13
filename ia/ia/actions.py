@@ -8,6 +8,11 @@ import utcoupe
 
 import time
 
+
+#définition des constantes des rayons
+R_ASSIETTE = 120 # 170/2*sqrt(2)
+R_VERRE = 40
+
 #point_acces = quand le robot est arrivé à ce point, il déclenche l'action
 
 class ActionCadeau(Action):
@@ -78,8 +83,8 @@ class ActionGetCerise(Action):
 		
 		
 class ActionVerre(Action): #ouvrir les pinces au départ
-"""En mode buldo, on garde les pinces ouvertes, on se rend à la position et on avance toujours tout droit pour retrouner
-à la zone de départ (et normalement le robot devrait récup 2 verres"""
+	"""En mode buldo, on garde les pinces ouvertes, on se rend à la position et on avance toujours tout droit pour retrouner
+	à la zone de départ (et normalement le robot devrait récup 2 verres"""
 	def __init__(self, ia, robot, enemies, point_acces):
 		Action.__init__(self, ia, robot, enemies, point_acces)
 		
@@ -154,28 +159,28 @@ class ActionBougie(Action):
 #définition des positions des items suivant leurs couleurs (afin d'alléger les get_actions)
 
 #def position_verre(team):
-verre_nous[]	#tableau listant la positions de nos verres
-verre_ennemis[]	#tableau listant la position des verres ennemis
+verre_nous = []	#tableau listant la positions de nos verres
+verre_ennemis = []	#tableau listant la position des verres ennemis
 """On part du principe qu'en mode buldo, on va pour choper le premier verre (celui le plus éloigné)
 et qu'on revient vers notre zone de départ et qu'on chope le deuxième au passage (donc ça fait seulement 3 positions"""
-	"""if team == red:
+"""if team == red:
 		verre_nous[0] = (900,950)
 		verre_nous[1] = (1200,950)
 		verre_nous[2] = (1050,1200)
 		verre_nous[3] = (1350,1200)
 		verre_nous[4] = (900,1450)
 		verre_nous[5] = (1200,1450)"""
-verre_nous[0] = (1200 + R_VERRE + 20,950)
-verre_nous[1] = (1350 + R_VERRE + 20,1200)
-verre_nous[2] = (1200 + R_VERRE + 20,1450)
+verre_nous.append((1200 + R_VERRE + 20,950))
+verre_nous.append((1350 + R_VERRE + 20,1200))
+verre_nous.append((1200 + R_VERRE + 20,1450))
 
-verre_ennemis[0] = (2100,950)
-verre_ennemis[1] = (1800,950)
-verre_ennemis[2] = (1950,1200)
-verre_ennemis[3] = (1650,1200)
-verre_ennemis[4] = (2100,1450)
-verre_ennemis[5] = (1800,1450)	
-	"""else: #team == bleu
+verre_ennemis.append((2100,950))
+verre_ennemis.append((1800,950))
+verre_ennemis.append((1950,1200))
+verre_ennemis.append((1650,1200))
+verre_ennemis.append((2100,1450))
+verre_ennemis.append((1800,1450))
+"""else: #team == bleu
 		verre_ennemis[0] = (900,950)
 		verre_ennemis[1] = (1200,950)
 		verre_ennemis[2] = (1050,1200)
@@ -192,35 +197,31 @@ verre_ennemis[5] = (1800,1450)
 	
 #def position_assiette(team):
 	
-assiette_nous[]	#tableau listant la positions de nos assiettes
+assiette_nous = []	#tableau listant la positions de nos assiettes
 	#assiette_ennemis[]	#tableau listant la position des assiettes ennemis
 	#if team == red:
-assiette_nous[0] = (200,250 + R_ASSIETTE + 20) #20 de marge
-assiette_nous[1] = (200,1000 - R_ASSIETTE - 20) #orienté vers le bas
-assiette_nous[2] = (200 + R_ASSIETTE + 20,1750) #sur x car on chope l'assiette de côté
-	"""else:
+assiette_nous.append((200,250 + R_ASSIETTE + 20)) #20 de marge
+assiette_nous.append((200,1000 - R_ASSIETTE - 20)) #orienté vers le bas
+assiette_nous.append((200 + R_ASSIETTE + 20,1750)) #sur x car on chope l'assiette de côté
+"""else:
 		assiette_nous[0] = (2800,250)
 		assiette_nous[1] = (2800,1000)
 		assiette_nous[2] = (2800,1750)"""
 	#return assiette_nous
 		
 #def position_cadeau(team):
-cadeau_nous[]
+cadeau_nous = []
 	#if team == red:
-cadeau_nous[0] = (525,2000 - 100) #100 de marge
-cadeau_nous[1] = (1125,2000 - 100)
-cadeau_nous[2] = (1725,2000 - 100)
-cadeau_nous[3] = (2325,2000 - 100)
-	"""else:
+cadeau_nous.append((525,2000 - 100)) #100 de marge
+cadeau_nous.append((1125,2000 - 100))
+cadeau_nous.append((1725,2000 - 100))
+cadeau_nous.append((2325,2000 - 100))
+"""else:
 		cadeau_nous[0] = (675,2000)
 		cadeau_nous[1] = (1275,2000)
 		cadeau_nous[2] = (1875,2000)
 		cadeau_nous[3] = (2475,2000)"""
 	#return cadeau_nous
-
-#définition des constantes des rayons
-R_ASSIETTE = 120 # 170/2*sqrt(2)
-R_VERRE = 40
 
 def get_actions_bigrobot(ia, robot, enemies):
 	actions = []	
@@ -233,11 +234,12 @@ def get_actions_bigrobot(ia, robot, enemies):
 	#actions.append(ActionFinalize(ia, robot, enemies, ia.p((400, 950))))
 	#actions.append(ActionTotem3(ia, robot, enemies, ia.p((2200,1000-125-R_BIGROBOT-60)), ActionTotem.DIRECTION_HAUT))
 	#actions.append(ActionTotem3(ia, robot, enemies, ia.p((2200,1000+125+R_BIGROBOT+60)), ActionTotem.DIRECTION_BAS))
-	
+	"""
 	for i in range(0,3):
-		actions.append(ActionGetCerise(ia, robot, enemies, ia.p(assiette_nous[i])))
-	actions.append(ActionShootCerise(ia, robot, enemies, ia.p(1300,800)))#valeur mise au hasard
-	
+		print(assiette_nous[i])
+		actions.append(ActionGetCerise(ia, robot, enemies, ia.p(assiette_nous[i]), ActionGetCerise.DIRECTION_FRONT))
+	actions.append(ActionShootCerise(ia, robot, enemies, ia.p((1300,800))))#valeur mise au hasard
+	"""
 	#Florent, comment on implémente l'action bougie avec le gateau.py ?
 
 	return actions

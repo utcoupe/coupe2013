@@ -6,6 +6,8 @@ RED = 20
 HAUT = 0
 BAS = 1
 
+import utcoupe
+
 class InvalidRangee(Exception):
     """1 ou 2"""
     pass
@@ -38,6 +40,10 @@ class Gateau:
 
     def get_left_todo(self, color):
         """Renvoie la liste des index des bougies non encore tapées de la couleur color"""
+        if color == utcoupe.BLUE:
+            color = 10
+        else:
+            color = 20
         todos = []
         for index, done in enumerate(self.done):
             if not(done) and self.bougies[index] == color:

@@ -42,6 +42,8 @@ class GameState:
 		self.sums['update_big_ng'] = {'t':0, 'n':0}
 		self.sums['update_mini_ng'] = {'t':0, 'n':0}
 
+		self.gateau = Gateau()
+
 		self.us_detect = False # pour l'homologation, si les ultra sons detectent quelque chose devant alors on s'arrête
 
 		self.enemies_angle_mort = False # si les enemis sont dans un angle mort
@@ -93,22 +95,22 @@ class GameState:
 		self.event_minirobot_pos_update.clear()
 		self.event_hokuyo_update.clear()
 		self.event_bigrobot_visio_update.clear()
-		self.event_minirobot_visio_update.clear()
+		#self.event_minirobot_visio_update.clear()
 		
 		
 		self.ask_asserv_for_pos(self.bigrobot)
 
-		#self.ask_asserv_for_pos(self.minirobot)						// IMPORTANT A DECOMMENTER
-		#self.ask_visio_for_objects()									// IMPORTANT A DECOMMENTER
-		self.ask_hokyo_for_pos()										# IMPORTANT A DECOMMENTER HOKUYO
+		self.ask_asserv_for_pos(self.minirobot)
+		self.ask_visio_for_objects()
+		self.ask_hokyo_for_pos()
 
 		
 	def wait_update(self):
 		self.event_bigrobot_pos_update.wait()
-		#self.event_bigrobot_visio_update.wait()
+		self.event_bigrobot_visio_update.wait()
 		#self.event_minirobot_visio_update.wait()
-		#self.event_minirobot_pos_update.wait()							// IMPORTANT A DECOMMENTER
-		#self.event_hokuyo_update.wait() 								# IMPORTANT A DECOMMENTER HOKUYO
+		self.event_minirobot_pos_update.wait()
+		self.event_hokuyo_update.wait()
 
 	def ping(self, canal):
 		n = 10
@@ -165,41 +167,41 @@ class GameState:
 
 	def on_msg_hokyo(self, resp):
 		args = resp.data
-		if len(args) == 1:
-			lpos = eval(args[0])
+		lpos = eval(args)
+		#print(lpos)
+		lpos = list(filter(lambda p: (self.bigrobot.pos-p).norm2() > 300*300 and (self.minirobot.pos-p).norm2() > 300*300, lpos))
+		if len(lpos) == 0:
+			self.enemies_angle_mort = True
+		else:
+			self.enemies_angle_mort = False
+			robots = self.enemyrobots()
 			#print(lpos)
-			lpos = list(filter(lambda p: (self.bigrobot.pos-p).norm2() > 300*300 and (self.minirobot.pos-p).norm2() > 300*300, lpos))
-			if len(lpos) == 0:
-				self.enemies_angle_mort = True
+			if len(lpos)==0:
+				pass
+			elif len(lpos)==1:
+				robot = min(robots, key=lambda r: (r.pos-lpos[0]).norm2())
+				robot.update_pos(lpos[0])
 			else:
-				self.enemies_angle_mort = False
-				robots = self.enemyrobots()
-				#print(lpos)
-				if len(lpos)==0:
-					pass
-				elif len(lpos)==1:
-					robot = min(robots, key=lambda r: (r.pos-lpos[0]).norm2())
-					robot.update_pos(lpos[0])
+				def test_permut(permut):
+					l = ( (robots[i].pos - lpos[j]).norm2() for i,j in enumerate(permut) )
+					return sum(l)
+				permuts = tuple(itertools.permutations(range(len(lpos)), 2))
+				print(permuts)
+				if not permuts:
+					print("quoi ?", lpos)
 				else:
-					def test_permut(permut):
-						l = ( (robots[i].pos - lpos[j]).norm2() for i,j in enumerate(permut) )
-						return sum(l)
-					permuts = tuple(itertools.permutations(range(len(lpos)), 2))
-					print(permuts)
-					if not permuts:
-						print("quoi ?", lpos)
-					else:
-						best_permut = min(permuts, key=lambda permut: test_permut(permut))
-						for i,j in enumerate(best_permut):
-							robots[i].update_pos(lpos[j])
-				#print(robots)
-			self.event_hokuyo_update.set()
+					best_permut = min(permuts, key=lambda permut: test_permut(permut))
+					for i,j in enumerate(best_permut):
+						robots[i].update_pos(lpos[j])
+			#print(robots)
+		self.event_hokuyo_update.set()
 
 	def on_msg_visio(self, args):
 		#TODO
-		# format des données : { 'blue' : ((x,y),), 'red': ((x,y),), 'green' : ((x,y),) }
-		"""
-		if len(args) == 2:
+                #self.gateau.merge_data(args)
+                self.event_bigrobot_visio_update.set()
+                """
+                if len(args) == 2:
 			if canal == self.canal_big_visio:
 				event = self.event_bigrobot_visio_update
 				robot = self.bigrobot
