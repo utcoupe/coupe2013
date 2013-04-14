@@ -114,12 +114,17 @@ class IaBase:
         bigrobot = self.gamestate.bigrobot
         enemies = self.gamestate.enemyrobots()
 
-        bigrobot.actionneurs.detect_ax12(cb_fct=self.detect_ax12_big)
-        bigrobot.actionneurs.add_callback('jack_removed', self.cb_jack)
-        bigrobot.actionneurs.add_callback('emergency_stop', self.cb_stop)
+        #bigrobot.actionneurs.detect_ax12(cb_fct=self.detect_ax12_big)
+        #minirobot.actionneurs.add_callback('jack_removed', self.cb_jack)
+        #bigrobot.actionneurs.add_callback('emergency_stop', self.cb_stop_gros)
         actions = get_actions_bigrobot(self, bigrobot, enemies)
         bigrobot.set_actions(actions)
 
+        minirobot.actionneurs.detect_ax12(cb_fct=self.detect_ax12_big, block=False)
+        minirobot.actionneurs.add_callback('jack_removed', self.cb_jack)
+        stop = lambda a, b: self.cb_stop(b, minirobot)
+        minirobot.actionneurs.add_callback('emergency_stop', stop)
+        
         actions = get_actions_minirobot(self, minirobot, enemies)
         minirobot.set_actions(actions)
 
@@ -127,7 +132,11 @@ class IaBase:
         self.e_jack = threading.Event()
 
     def detect_ax12_big(self, resp):
-        mapping = resp.data
+        print("AX12 : ", resp.data)
+        ax12 = []
+        for index, chain_id in enumerate(resp.data):
+            if chain_id != -1:
+                print("Moteur %s in position %s" % (chain_id, index))
 
     def cb_jack(self):
         print("Jack enlevé, let's start")
@@ -248,13 +257,12 @@ class IaBase:
                     # on passe au suivant
                     if robot.reach_next_checkpoint():
                         goal = robot.get_next_checkpoint()
-                        print("goto %s" % goal)
+                        #print("goto %s" % goal)
                         #self.bigrobot.cancel()
                         if goal:
                             a = goal[0]
                             b = goal[1]
                             asserv.goto(a, b, 255, block=False)
-                            print('I\'m here fucker !')
             else:
                 print("No reachable actions")
 
