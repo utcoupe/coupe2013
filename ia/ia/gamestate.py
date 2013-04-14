@@ -94,20 +94,18 @@ class GameState:
 		self.event_bigrobot_pos_update.clear()
 		self.event_minirobot_pos_update.clear()
 		self.event_hokuyo_update.clear()
-		self.event_bigrobot_visio_update.clear()
 		#self.event_minirobot_visio_update.clear()
 		
 		
 		self.ask_asserv_for_pos(self.bigrobot)
 
 		self.ask_asserv_for_pos(self.minirobot)
-		self.ask_visio_for_objects()
 		self.ask_hokyo_for_pos()
 
 		
 	def wait_update(self):
 		self.event_bigrobot_pos_update.wait()
-		self.event_bigrobot_visio_update.wait()
+		#self.event_bigrobot_visio_update.wait()
 		#self.event_minirobot_visio_update.wait()
 		self.event_minirobot_pos_update.wait()
 		self.event_hokuyo_update.wait()
@@ -129,9 +127,11 @@ class GameState:
 		cb = lambda y: self.on_msg_pos(y, robot)
 		robot.asserv.get_pos(cb_fct=cb)
 
-	def ask_visio_for_objects(self):
-		self.objects = []
+	def take_picture(self, block=False):
+		self.event_bigrobot_visio_update.clear()
 		self.bigrobot.visio.get_by_color(cb_fct=self.on_msg_visio)
+		if block:
+			self.event_bigrobot_visio_update.wait()
 	
 	def on_msg(self, canal, auteur, msg):
 		msg_split = msg.split(SEP)
@@ -197,27 +197,8 @@ class GameState:
 		self.event_hokuyo_update.set()
 
 	def on_msg_visio(self, args):
-		#TODO
-                #self.gateau.merge_data(args)
+                self.gateau.merge_data_str(args.data)
                 self.event_bigrobot_visio_update.set()
-                """
-                if len(args) == 2:
-			if canal == self.canal_big_visio:
-				event = self.event_bigrobot_visio_update
-				robot = self.bigrobot
-			else:
-				event = self.event_minirobot_visio_update
-				event = self.minirobot
-			cds = eval(args[0])
-			lingos = eval(args[1])
-			objects = cds + lingos
-			new_objects = Visio.relative_to_absolute(robot.pos, math.radians(robot.a), objects)
-			self.objects += new_objects
-			event.set()
-		else:
-			self.send_error(canal, "Error %s.on_msg_visio (%s:%d) : pas assez de paramètres " %
-				(self.__class__.__name__, currentframe().f_code.co_filename, currentframe().f_lineno))
-		"""
 
 	def on_msg_us(self, args):
 		args = resp.data
