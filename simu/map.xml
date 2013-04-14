@@ -15,11 +15,11 @@
 	<!-- <gateau x="1500" y="0" /> -->
 	
 	<!-- Placement des assiettes de cerise du côté gauche (mettre en commentaire l'assiette où le robot est) -->
-	<cerise x="200" y="1400" />
-	<cerise x="200" y="1000" />
-	<cerise x="200" y="600" />
 	<cerise x="200" y="250" />
-	<!-- <cerise x="200" y="250" /> -->
+	<cerise x="200" y="1000" />
+	<!-- <cerise x="200" y="600" /> -->
+	<cerise x="200" y="1750" />
+	<!-- <cerise x="200" y="1400" /> -->
 	
 	<!-- Placement des assiettes de cerise du côté droite (mettre en commentaire l'assiette où le robot est) -->
 	<cerise x="2800" y="1750"/>

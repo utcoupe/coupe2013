@@ -92,7 +92,8 @@ class ActionVerre(Action): #ouvrir les pinces au départ
 		print("\nACTION VERRE\n")
 		
 		self.robot.asserv.turn(self.ia.a(90))
-		self.robot.asserv.sgoto(50,pos.y, 100)	#retourne à l'air de jeu
+		#self.robot.asserv.sgoto(ia.p(50,pos.y, 100))	#retourne à l'air de jeu
+		self.robot.asserv.sgoto(500,1400,100)	#retourne à l'air de jeu
 	
 	def __repr__(self):	#surcharge du print
 		return "ActionVerre(%s, %s)" % (self.point_acces, self.score)
@@ -170,9 +171,9 @@ et qu'on revient vers notre zone de départ et qu'on chope le deuxième au passa
 		verre_nous[3] = (1350,1200)
 		verre_nous[4] = (900,1450)
 		verre_nous[5] = (1200,1450)"""
-verre_nous.append((1200 + R_VERRE + 20,950))
-verre_nous.append((1350 + R_VERRE + 20,1200))
-verre_nous.append((1200 + R_VERRE + 20,1450))
+verre_nous.append((1200 + R_VERRE + 20,950)) #extremité verre 1
+verre_nous.append((1350 + R_VERRE + 20,1200))#extremité verre 2
+verre_nous.append((1200 + R_VERRE + 20,1450))#extremité verre 3
 
 verre_ennemis.append((2100,950))
 verre_ennemis.append((1800,950))
@@ -250,8 +251,9 @@ def get_actions_minirobot(ia, robot, enemies):
 	"""actions.append(ActionBouteille(robot, enemies, (640, 2000 - R_MINIROBOT - 10)))
 	actions.append(ActionBouteille(robot, enemies, (1883, 2000 - R_MINIROBOT - 10)))
 	actions.append(ActionCarte(robot, enemies, (1500, R_MINIROBOT + 10)))"""
-	for i in range(0,4):
-		actions.append(ActionCadeau(ia, robot, enemies, ia.p(cadeau_nous[i])))
-	for i in range(0,3):
-		actions.append(ActionVerre(ia, robot, enemies, ia.p(verre_nous[i])))
+	#for i in range(0,4):
+		#actions.append(ActionCadeau(ia, robot, enemies, ia.p(cadeau_nous[0])))
+	#for i in range(0,3):
+	#actions.append(ActionVerre(ia, robot, enemies, ia.p(verre_nous[1])))
+	actions.append(ActionVerre(ia, robot, enemies, verre_nous[0]))
 	return actions
