@@ -90,11 +90,13 @@ class ActionVerre(Action): #ouvrir les pinces au départ
 		
 	def run(self):
 		print("\nACTION VERRE\n")
+		self.robot.asserv.turn(180,100)
+		self.robot.asserv.goto(self.robot.pos[0]-310,self.robot.pos[1],100)	#cherche le verre suivant
+		self.robot.asserv.goto(250,1400,100)	#retourne à l'air de jeu
 		
-		self.robot.asserv.turn(self.ia.a(90))
-		#self.robot.asserv.sgoto(ia.p(50,pos.y, 100))	#retourne à l'air de jeu
-		self.robot.asserv.sgoto(500,1400,100)	#retourne à l'air de jeu
-	
+		#fini
+		self.clean()
+		
 	def __repr__(self):	#surcharge du print
 		return "ActionVerre(%s, %s)" % (self.point_acces, self.score)
 		
@@ -253,7 +255,6 @@ def get_actions_minirobot(ia, robot, enemies):
 	actions.append(ActionCarte(robot, enemies, (1500, R_MINIROBOT + 10)))"""
 	#for i in range(0,4):
 		#actions.append(ActionCadeau(ia, robot, enemies, ia.p(cadeau_nous[0])))
-	#for i in range(0,3):
-	#actions.append(ActionVerre(ia, robot, enemies, ia.p(verre_nous[1])))
-	actions.append(ActionVerre(ia, robot, enemies, verre_nous[0]))
+	for i in range(0,3):
+		actions.append(ActionVerre(ia, robot, enemies, verre_nous[i]))
 	return actions
