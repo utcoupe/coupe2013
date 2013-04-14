@@ -137,4 +137,5 @@ class BigOthers(Others):
 	pass
 
 class BigVisio(Others):
-	pass
+	def get_by_color(self, uid):
+		return "21, 11, 21, 11, 21, 11, 21, 11, 21, 11, 21, 11, 21, 11, 21, 11, 21, 11, 21, 11"

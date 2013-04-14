@@ -320,7 +320,7 @@ class Visio:
 		self.robot = robot
 
 	def get_by_color(self, id_msg, cam_id=0):
-		return {'blue': (), 'red': (), 'green': ()}
+		return "21, 11, 21, 11, 21, 11, 21, 11, 21, 11, 21, 11, 21, 11, 21, 11, 21, 11, 21, 11"
 
 	def calib(self, id_msg, cam_id=0):
 		pass

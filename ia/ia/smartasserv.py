@@ -11,11 +11,11 @@ class SmartAsserv:
         def zb_cb(self, msg):
                 pass
 
-        def s_goto(self, x, y, speed):
-                return self.client.goto(x, y, speed)
+        def s_goto(self, x, y, speed, **kwargs):
+                return self.client.goto(x, y, speed, **kwargs)
 
-        def s_gotor(self, x, y, speed):
-                return self.client.goto(x, y, speed)
+        def s_gotor(self, x, y, speed, **kwargs):
+                return self.client.goto(x, y, speed, **kwargs)
 
         def __getattr__(self, key):
                 return self.client.__getattr__(key)
