@@ -85,7 +85,7 @@ if __name__ == "__main__":
 
         # robots
         bigrobot = BigRobot(engine = engine,
-                            posinit = mm_to_px(250, 600),
+                            posinit = mm_to_px(225, 600),
                             team = BLUE,
                             asserv = utcoupe.ASSERV_BIG,
                             others = utcoupe.OTHERS_BIG,
@@ -93,7 +93,7 @@ if __name__ == "__main__":
                             match = match,
                             services = services)
         minirobot = MiniRobot(engine = engine,
-                              posinit = mm_to_px(250, 1400),
+                              posinit = mm_to_px(225, 1400),
                               team = BLUE,
                               asserv = utcoupe.ASSERV_MINI,
                               others = utcoupe.OTHERS_MINI,

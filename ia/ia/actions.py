@@ -12,6 +12,7 @@ import time
 #définition des constantes des rayons
 R_ASSIETTE = 120 # 170/2*sqrt(2)
 R_VERRE = 40
+RAYON_BIGROBOT = 230
 
 #point_acces = quand le robot est arrivé à ce point, il déclenche l'action
 
@@ -21,18 +22,18 @@ class ActionCadeau(Action):
 		
 	def run(self):
 		print("\nACTION CADEAU\n")
-		self.robot.asserv.turn(self.ia.a(90))	#block et block_level à virer dans l'asserv,utilisé pour irc
+		self.robot.asserv.turn(90, 100)	#block et block_level à virer dans l'asserv,utilisé pour irc
 		#permet d'être sûr que le robot est en face du cadeau avant d'aller le taper
-		time.sleep(0.5)
+		time.sleep(1)
 		
 		#avance
-		self.robot.asserv.pwm(100,100,500)			# !!!!!! valeur à tester, mise totalement arbitrairement
+		self.robot.asserv.pwm(75,75,100)			# !!!!!! valeur à tester, mise totalement arbitrairement
 		#commande pwm : puissance roue droite, puissance roue gauche, temps
 		#doit avancer de 100mm (car point_acces le position à 100+rayon_minirobot de l'action
-		time.sleep(0.5)
+		time.sleep(1)
 		
 		#recul
-		self.robot.asserv.pwm(-100,-100,500)			# !!!!!! valeur à tester, mise totalement arbitrairement
+		self.robot.asserv.pwm(-75,-75,100)			# !!!!!! valeur à tester, mise totalement arbitrairement
 		
 		#fini
 		self.clean()
@@ -56,22 +57,21 @@ class ActionGetCerise(Action):
 		
 	def run(self):
 		print("\nACTION RECUPERER CERISE\n")
-		self.robot.asserv.turn(self.ia.a(90))
-		#permet d'être sûr que le robot est en face de l'objet
-		time.sleep(0.5)
+		#self.robot.asserv.turn(-90, 75)
+		time.sleep(1)
 		
 		if self.direction != self.DIRECTION_FRONT:
 			# le robot se tourne face à l'assiette
 			angle = 90 if self.direction==self.DIRECTION_LEFT else -90
-			asserv.turn(angle)
+			self.robot.asserv.turn(angle, 75)
 		
 		#avance
-		self.robot.asserv.pwm(100,100,100)			# !!!!!! valeur à tester, mise totalement arbitrairement		
-		time.sleep(0.5)
-		self.robot.actionneurs.cerise.get()
+		self.robot.asserv.pwm(50,50,175)			# !!!!!! valeur à tester, mise totalement arbitrairement		
+		time.sleep(1)
+		#self.robot.actionneurs.cerise.get()
 		
 		#recul
-		self.robot.asserv.pwm(-100,-100,100)			# !!!!!! valeur à tester, mise totalement arbitrairement
+		self.robot.asserv.pwm(-50,-50,175)			# !!!!!! valeur à tester, mise totalement arbitrairement
 		
 		#fini
 		self.clean()
@@ -90,7 +90,9 @@ class ActionVerre(Action): #ouvrir les pinces au départ
 		
 	def run(self):
 		print("\nACTION VERRE\n")
+		time.sleep(1)
 		self.robot.asserv.turn(180,100)
+		time.sleep(1)
 		self.robot.asserv.goto(self.robot.pos[0]-310,self.robot.pos[1],100)	#cherche le verre suivant
 		self.robot.asserv.goto(250,1400,100)	#retourne à l'air de jeu
 		
@@ -203,9 +205,10 @@ verre_ennemis.append((1800,1450))
 assiette_nous = []	#tableau listant la positions de nos assiettes
 	#assiette_ennemis[]	#tableau listant la position des assiettes ennemis
 	#if team == red:
-assiette_nous.append((200,250 + R_ASSIETTE + 20)) #20 de marge
-assiette_nous.append((200,1000 - R_ASSIETTE - 20)) #orienté vers le bas
-assiette_nous.append((200 + R_ASSIETTE + 20,1750)) #sur x car on chope l'assiette de côté
+#assiette_nous.append((500,250 + R_ASSIETTE + RAYON_BIGROBOT)) #10 de marge
+assiette_nous.append((225,600)) #10 de marge
+assiette_nous.append((225,600)) #orienté vers le bas
+assiette_nous.append((225 + R_ASSIETTE + 20,1750)) #sur x car on chope l'assiette de côté
 """else:
 		assiette_nous[0] = (2800,250)
 		assiette_nous[1] = (2800,1000)
@@ -215,10 +218,10 @@ assiette_nous.append((200 + R_ASSIETTE + 20,1750)) #sur x car on chope l'assiett
 #def position_cadeau(team):
 cadeau_nous = []
 	#if team == red:
-cadeau_nous.append((525,2000 - 100)) #100 de marge
-cadeau_nous.append((1125,2000 - 100))
-cadeau_nous.append((1725,2000 - 100))
-cadeau_nous.append((2325,2000 - 100))
+cadeau_nous.append((490,2000 - 200)) #100 de marge
+cadeau_nous.append((1090,2000 - 200))
+cadeau_nous.append((1690,2000 - 200))
+cadeau_nous.append((2290,2000 - 200))
 """else:
 		cadeau_nous[0] = (675,2000)
 		cadeau_nous[1] = (1275,2000)
@@ -237,24 +240,23 @@ def get_actions_bigrobot(ia, robot, enemies):
 	#actions.append(ActionFinalize(ia, robot, enemies, ia.p((400, 950))))
 	#actions.append(ActionTotem3(ia, robot, enemies, ia.p((2200,1000-125-R_BIGROBOT-60)), ActionTotem.DIRECTION_HAUT))
 	#actions.append(ActionTotem3(ia, robot, enemies, ia.p((2200,1000+125+R_BIGROBOT+60)), ActionTotem.DIRECTION_BAS))
-	"""
-	for i in range(0,3):
-		print(assiette_nous[i])
-		actions.append(ActionGetCerise(ia, robot, enemies, ia.p(assiette_nous[i]), ActionGetCerise.DIRECTION_FRONT))
-	actions.append(ActionShootCerise(ia, robot, enemies, ia.p((1300,800))))#valeur mise au hasard
-	"""
+	
+	#for i in range(0,3):
+	#actions.append(ActionGetCerise(ia, robot, enemies, assiette_nous[0], ActionGetCerise.DIRECTION_RIGHT))
+	#actions.append(ActionGetCerise(ia, robot, enemies, assiette_nous[1], ActionGetCerise.DIRECTION_LEFT))
+	
+	#actions.append(ActionShootCerise(ia, robot, enemies, ia.p((1300,800))))#valeur mise au hasard
+	
 	#Florent, comment on implémente l'action bougie avec le gateau.py ?
 
 	return actions
 
 def get_actions_minirobot(ia, robot, enemies):
 	actions = []
-	# bouteilles
-	"""actions.append(ActionBouteille(robot, enemies, (640, 2000 - R_MINIROBOT - 10)))
-	actions.append(ActionBouteille(robot, enemies, (1883, 2000 - R_MINIROBOT - 10)))
-	actions.append(ActionCarte(robot, enemies, (1500, R_MINIROBOT + 10)))"""
-	#for i in range(0,4):
-		#actions.append(ActionCadeau(ia, robot, enemies, ia.p(cadeau_nous[0])))
+	for i in range(0,4):
+		actions.append(ActionCadeau(ia, robot, enemies, cadeau_nous[i]))
+	#print("Après ajout de l'action")
+	print(actions)
 	for i in range(0,3):
 		actions.append(ActionVerre(ia, robot, enemies, verre_nous[i]))
 	return actions
