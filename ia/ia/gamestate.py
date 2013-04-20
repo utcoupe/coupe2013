@@ -193,6 +193,7 @@ class GameState:
 					best_permut = min(permuts, key=lambda permut: test_permut(permut))
 					for i,j in enumerate(best_permut):
 						robots[i].update_pos(lpos[j])
+                        self.verres.add_enemy_pos(lpos)
 			#print(robots)
 		self.event_hokuyo_update.set()
 
