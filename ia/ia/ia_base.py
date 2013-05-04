@@ -114,14 +114,18 @@ class IaBase:
         bigrobot = self.gamestate.bigrobot
         enemies = self.gamestate.enemyrobots()
 
-        #bigrobot.actionneurs.detect_ax12(cb_fct=self.detect_ax12_big)
-        #minirobot.actionneurs.add_callback('jack_removed', self.cb_jack)
-        #bigrobot.actionneurs.add_callback('emergency_stop', self.cb_stop_gros)
+        bigrobot.actionneurs.detect_ax12(cb_fct=self.detect_ax12_big, block=False)
+        bigrobot.actionneurs.add_callback('jack_removed', self.cb_jack)
+        stop = lambda a, b: self.cb_stop(b, bigrobot)
+        bigrobot.actionneurs.add_callback('emergency_stop', stop)
+        bigrobot.actionneurs.add_callback('sharp_trop_proche', self.cb_sharp_big)
+
         actions = get_actions_bigrobot(self, bigrobot, enemies)
         bigrobot.set_actions(actions)
 
-        minirobot.actionneurs.detect_ax12(cb_fct=self.detect_ax12_big, block=False)
-        minirobot.actionneurs.add_callback('jack_removed', self.cb_jack)
+
+        minirobot.actionneurs.detect_ax12(cb_fct=self.detect_ax12_mini, block=False)
+        #minirobot.actionneurs.add_callback('jack_removed', self.cb_jack)
         stop = lambda a, b: self.cb_stop(b, minirobot)
         minirobot.actionneurs.add_callback('emergency_stop', stop)
         
@@ -132,11 +136,38 @@ class IaBase:
         self.e_jack = threading.Event()
 
     def detect_ax12_big(self, resp):
-        print("AX12 : ", resp.data)
+        print("AX12 Gros : ", resp.data)
         ax12 = []
         for index, chain_id in enumerate(resp.data):
             if chain_id != -1:
                 print("Moteur %s in position %s" % (chain_id, index))
+
+    def detect_ax12_mini(self, resp):
+        print("AX12 Petit : ", resp.data)
+        ax12 = []
+        for index, chain_id in enumerate(resp.data):
+            if chain_id != -1:
+                print("Moteur %s in position %s" % (chain_id, index))
+
+    def cb_sharp_big(self, resp):
+        if len(resp.data) != 1:
+            print("Donnees bizarres des sharps : %s" % resp.data)
+        else:
+            position = resp.data[0]
+            robot = self.gamestate.bigrobot
+            if position == 1 or position == 2:
+                # danger vers l'arrière
+                if robot.asserv.recule:
+                    print("Truc derrière (sharp) et on recule, on s'arrête !")
+                    robot.cancel()
+                    robot.in_action = False
+                    robot.reset_target_action()
+            elif position == 3 or position == 4:
+                # danger vers l'avant
+                print("Truc devant (sharp), on s'arrête !")
+                robot.cancel()
+                robot.in_action = False
+                robot.reset_target_action()
 
     def cb_jack(self):
         print("Jack enlevé, let's start")
