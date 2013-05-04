@@ -18,6 +18,7 @@
 
 /**
  * ping-pong
+ * @param x
  */
 #define Q_PING 			1
 

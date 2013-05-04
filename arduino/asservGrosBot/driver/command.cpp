@@ -90,8 +90,8 @@ void cmd(int16_t id, int8_t cmd, int8_t size, int16_t *args){
 			int x_mm = robot_get_x()*0.01*ENC_TICKS_TO_MM;
 			int y_mm = robot_get_y()*0.01*ENC_TICKS_TO_MM;
 			int a_deg = robot_get_angle()*RAD_TO_DEG;
-			int tab[] = {x_mm,y_mm,a_deg};
-			sendResponse(id, 3, tab);
+			int tab[] = {x_mm,y_mm,a_deg,value_left_enc,value_right_enc};
+			sendResponse(id, 5, tab);
 	        break;
 		}
 
