@@ -1,6 +1,7 @@
 #include "Arduino.h"
 
 #include "command.h"
+#include "sharp.h"
 
 unsigned long index = 0;
 unsigned long timeStart = 0;
@@ -41,6 +42,7 @@ void loop(){
 	/* fin zone de programmation libre */
 	
 	check_ax12_goals();
+	check_sharp();
 
 	/* On eteint la del */
 	digitalWrite(16, LOW);

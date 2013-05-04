@@ -67,6 +67,13 @@
 #define Q_JACK_REMOVED       1
 
 /**
+ * Quand un des sharp a detecte une distance trop proche.
+ * Ceci déclenche normalement une arrete urgence en fonction de id des sharp
+ * @event
+ */
+#define Q_SHARP_TROP_PROCHE  7
+
+/**
  * Quand on appuie sur le bouton d'arrêt d'urgence ça coupe
  * l'alimentation des actionneurs et envoie ce signal
  * @event
