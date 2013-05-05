@@ -6,7 +6,7 @@
 #define PIN_SHARP_ARRIERE_GAUCHE A1
 #define PIN_SHARP_ARRIERE_DROIT A0
 
-#define THRESHOLD_PROCHE 300
+#define THRESHOLD_PROCHE 250
 
 void check_sharp();
 
