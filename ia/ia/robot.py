@@ -12,7 +12,7 @@ class Robot:
 		self.asserv = None
 		self.reset()
 		self.path_was_intersected = False
-                self.trajectoire = []
+		self.trajectoire = []
 
 	def set_actions(self, actions):
 		self.init_actions = actions
@@ -90,7 +90,7 @@ class Robot:
 			return False
 
 	def update_pos(self, p):
-                self.trajectoire.append((self.pos, self.time_pos_updated))
+		self.trajectoire.append((self.pos, self.time_pos_updated))
 		self.pos = Vec(p)
 		self.time_pos_updated = time.time()
 

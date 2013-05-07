@@ -61,8 +61,11 @@ LEFT		= 0
 RIGHT		= 1
 
 # dimensions du petit robot
-WIDTH_MINI 		= 184
-HEIGHT_MINI 	= 116
+WIDTH_MINI 		= 180
+HEIGHT_MINI 	= 102
+# dimensions du gros robot
+WIDTH_GROS 		= 308
+HEIGHT_GROS 	= 192
 # dimension des palettes (buldo) du mini robot
 SIZE_PALETTE	= 120
 WIDTH_PALETTE	= 10

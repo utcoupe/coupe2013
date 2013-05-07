@@ -4,6 +4,7 @@ FILE_DIR  = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(FILE_DIR,"..","lib"))
 
 from .gateau import *
+from .verre import *
 
 import re
 import time
@@ -43,6 +44,7 @@ class GameState:
 		self.sums['update_mini_ng'] = {'t':0, 'n':0}
 
 		self.gateau = Gateau()
+		self.verres = Verres()
 
 		self.us_detect = False # pour l'homologation, si les ultra sons detectent quelque chose devant alors on s'arrête
 
@@ -193,7 +195,7 @@ class GameState:
 					best_permut = min(permuts, key=lambda permut: test_permut(permut))
 					for i,j in enumerate(best_permut):
 						robots[i].update_pos(lpos[j])
-                        self.verres.add_enemy_pos(lpos)
+						self.verres.add_enemy_pos(lpos)
 			#print(robots)
 		self.event_hokuyo_update.set()
 

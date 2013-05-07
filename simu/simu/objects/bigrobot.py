@@ -15,21 +15,30 @@ from .ping_pong import Ping_pong
 
 class BigRobot(Robot):
 	def __init__(self, *, engine, asserv, others, visio, posinit, team, match, services):
-		self.bras = EngineObjectPoly(
+		self.bras_milieu = EngineObjectPoly(
 			engine 		= engine,
 			colltype	= COLLTYPE_BRAS,
-			offset		= mm_to_px(100,0),
+			offset		= mm_to_px(4, -154),
 			color		= "purple",
-			poly_points = map(lambda p: mm_to_px(*p),[(0,0),(200,0),(200,20),(0,20)]), #taille du bras
+			poly_points = map(lambda p: mm_to_px(*p),[(0,0),(20,0),(20,-215),(0,-215)]), #taille du bras
 			is_extension= True
 		)
 
-		self.rouleau = EngineObjectPoly(
+		self.bras_gauche = EngineObjectPoly(
 			engine 		= engine,
-			colltype	= COLLTYPE_ROULEAU,
-			offset		= mm_to_px(6, -104),
-			color		= "orange",
-			poly_points = map(lambda p: mm_to_px(*p),[(0,0),(118,0),(118,220),(0,220)]),
+			colltype	= COLLTYPE_BRAS,
+			offset		= mm_to_px(-41, -154),
+			color		= "purple",
+			poly_points = map(lambda p: mm_to_px(*p),[(0,0),(20,0),(20,-100),(0,-100)]), #taille du bras
+			is_extension= True
+		)
+
+		self.bras_droit = EngineObjectPoly(
+			engine 		= engine,
+			colltype	= COLLTYPE_BRAS,
+			offset		= mm_to_px(54, -154),
+			color		= "purple",
+			poly_points = map(lambda p: mm_to_px(*p),[(0,0),(20,0),(20,-100),(0,-100)]), #taille du bras
 			is_extension= True
 		)
 
@@ -46,8 +55,8 @@ class BigRobot(Robot):
 			mass				= 10,
 			typerobot			= BIG,
 			colltype 			= COLLTYPE_GROS_ROBOT,
-			poly_points			= mm_to_px((0,0),(288,0),(288,314),(0,314)),
-			extension_objects	= [self.rouleau],
+			poly_points			= mm_to_px((0,0),(HEIGHT_GROS,0),(HEIGHT_GROS,WIDTH_GROS),(0,WIDTH_GROS)),
+			extension_objects	= [],
                         match = match,
                         services = services
 		)
@@ -58,10 +67,14 @@ class BigRobot(Robot):
 		self.state_bras			= False
 
 	def remove_bras(self):
-		self.remove_body_extension(self.bras)
+		self.remove_body_extension(self.bras_milieu)
+		self.remove_body_extension(self.bras_gauche)
+		self.remove_body_extension(self.bras_droit)
 
 	def add_bras(self):
-		self.add_body_extension(self.bras)
+		self.add_body_extension(self.bras_milieu)
+		self.add_body_extension(self.bras_gauche)
+		self.add_body_extension(self.bras_droit)
 
 	def onEvent(self, event):
 		if not Robot.onEvent(self,event):
@@ -82,7 +95,8 @@ class BigRobot(Robot):
 			self.nb_bougie += 1
 		else:
 			self.nb_bougie -= 1
-		self.engine.objects_to_remove.append(bougie)
+		if bougie not in self.engine.objects_to_remove:
+			self.engine.objects_to_remove.append(bougie)
 		print("Bougie eteinte: %d" % self.nb_bougie)
 
 	def prendre_cerise(self, cerise):

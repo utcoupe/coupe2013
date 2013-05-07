@@ -1,4 +1,5 @@
-
+""" Liste des classes d'action. Lorsque le robot arrive au point d'accès d'une action, celle-ci se déclenche et
+effectue le traitement prévu dans la classe action correspondante"""
 import sys
 sys.path.append('../../lib')
 
@@ -7,6 +8,7 @@ from .action import *
 import utcoupe
 
 import time
+import math
 
 
 #définition des constantes des rayons
@@ -17,8 +19,8 @@ RAYON_BIGROBOT = 230
 #point_acces = quand le robot est arrivé à ce point, il déclenche l'action
 
 class ActionCadeau(Action):
-	def __init__(self, ia, robot, enemies, point_acces):
-		Action.__init__(self, ia, robot, enemies, point_acces)
+	def __init__(self, ia, robot, enemies, point_acces, priority):
+		Action.__init__(self, ia, robot, enemies, point_acces, priority)
 		
 	def run(self):
 		print("\nACTION CADEAU\n")
@@ -51,8 +53,8 @@ class ActionGetCerise(Action):
 	DIRECTION_LEFT		= 1 # il faudra tourner de 90° à gauche (-90°)
 	DIRECTION_FRONT		= 2 # pas besoin de tourner
 	
-	def __init__(self, ia, robot, enemies, point_acces, direction):
-		Action.__init__(self, ia, robot, enemies, point_acces)
+	def __init__(self, ia, robot, enemies, point_acces, direction, priority):
+		Action.__init__(self, ia, robot, enemies, point_acces, priority)
 		self.direction = direction
 		
 	def run(self):
@@ -85,8 +87,8 @@ class ActionGetCerise(Action):
 class ActionVerre(Action): #ouvrir les pinces au départ
 	"""En mode buldo, on garde les pinces ouvertes, on se rend à la position et on avance toujours tout droit pour retrouner
 	à la zone de départ (et normalement le robot devrait récup 2 verres"""
-	def __init__(self, ia, robot, enemies, point_acces):
-		Action.__init__(self, ia, robot, enemies, point_acces)
+	def __init__(self, ia, robot, enemies, point_acces, priority):
+		Action.__init__(self, ia, robot, enemies, point_acces, priority)
 		
 	def run(self):
 		print("\nACTION VERRE\n")
@@ -106,8 +108,8 @@ class ActionVerre(Action): #ouvrir les pinces au départ
 
 class ActionShootCerise(Action):
 	
-	def __init__(self, ia, robot, enemies, point_acces):
-		Action.__init__(self, ia, robot, enemies, point_acces)
+	def __init__(self, ia, robot, enemies, point_acces, priority):
+		Action.__init__(self, ia, robot, enemies, point_acces, priority)
 
 	def run(self):
 		
@@ -124,20 +126,8 @@ class ActionShootCerise(Action):
 		
 class ActionBougie(Action):
 		
-	def __init__(self, ia, robot, enemies, point_acces, color_bougie):
-		Action.__init__(self, ia, robot, enemies, point_acces)
-		if (color_bougie >= 100):
-			bras_gauche = 1
-		else:
-			bras_gauche = 0
-		if (color_bougie%100 >= 10):
-			bras_haut = 1
-		else:
-			bras_haut = 0
-		if (color_bougie%10):
-			bras_droite = 1
-		else:
-			bras_droite = 0
+	def __init__(self, ia, robot, enemies, point_acces, priority):
+		Action.__init__(self, ia, robot, enemies, point_acces, priority)
 			
 # EXPLICATION
 # color_bougie est composé comme suit : bras_gauche bras_haut bras_droite
@@ -148,8 +138,40 @@ class ActionBougie(Action):
 	def run(self):
 		
 		#tape les bougies (en foncion de la couleur)
-		self.robot.actionneurs.bougie(bras_gauche, bras_haut, bras_droite)
-		
+		#self.robot.actionneurs.bougie(bras_gauche, bras_haut, bras_droite)	
+
+		angle = math.atan(abs(1500-self.robot.pos[0])/self.robot.pos[1])*180/math.pi
+		print(self.robot.pos)
+		if (self.robot.pos[0]<1500):
+			self.robot.asserv.turn(angle,100)
+		elif (self.robot.pos[0]>1500):
+			self.robot.asserv.turn(angle * -1,100)
+		#pour les tests
+
+		#test pour le coin du gâteau
+		#self.robot.asserv.pwm(-15,-15,100)
+
+		a_taper = self.ia.gamestate.gateau.bougie_a_taper(self.robot.pos, angle, self.ia.team)
+		#test
+		if (a_taper):
+			print("il a une liste")
+			print(a_taper)
+		else:
+			print("il a pas de liste")
+		#lance l'action qui appel les actionneurs pour taper
+		for i in range(len(a_taper)):
+			if a_taper[i][0] == 'gauche':
+				self.robot.actionneurs.goto_ax12(1,-150,110)
+				self.robot.actionneurs.goto_ax12(1,-93,110)
+			elif a_taper[i][0] == 'milieu':
+				self.robot.actionneurs.goto_ax12(2,80,110)
+				self.robot.actionneurs.goto_ax12(2,93,110)
+			elif a_taper[i][0] == 'droit':
+				self.robot.actionneurs.goto_ax12(0,100,110)
+				self.robot.actionneurs.goto_ax12(0,150,110)
+			print("on taper avec le bras")
+			print(a_taper[i][0])
+
 		#fini
 		self.clean()
 
@@ -158,8 +180,42 @@ class ActionBougie(Action):
 	def __repr__(self):
 		return "ActionBougie(%s, %s)" % (self.point_acces, self.score)	
 
+class ActionTakePicture(Action):
+	"""Classe d'action basique qui déclenche la prise d'une photo pour la visio
+	afin de déterminer la position des bougies de notre couleur (traitement fait dans gateau.py)"""
+	
+	def __init__(self, ia, robot, enemies, point_acces, priority):
+		Action.__init__(self, ia, robot, enemies, point_acces, priority)
 
-# Il y a encore les get_action à changer
+	def run(self):
+		#active la prise de photo
+		self.ia.gamestate.take_picture() 
+		
+		#fini
+		self.clean()
+
+		print("Shoot de cerise done !")
+		
+	def __repr__(self):
+		return "ActionTakePicture(%s, %s)" % (self.point_acces, self.score)	
+
+class ActionHomologation(Action):
+	def __init__(self, ia, robot, enemies, point_acces, priority):
+		Action.__init__(self, ia, robot, enemies, point_acces, priority)
+
+	def run(self):
+		#active la prise de photo
+		self.robot.asserv.goto(1450,950,100)
+		self.robot.asserv.goto(330,950,200)
+		
+		#fini
+		self.clean()
+
+		print("Shoot de cerise done !")
+		
+	def __repr__(self):
+		return "ActionTakePicture(%s, %s)" % (self.point_acces, self.score)
+
 
 #définition des positions des items suivant leurs couleurs (afin d'alléger les get_actions)
 
@@ -168,95 +224,71 @@ verre_nous = []	#tableau listant la positions de nos verres
 verre_ennemis = []	#tableau listant la position des verres ennemis
 """On part du principe qu'en mode buldo, on va pour choper le premier verre (celui le plus éloigné)
 et qu'on revient vers notre zone de départ et qu'on chope le deuxième au passage (donc ça fait seulement 3 positions"""
-"""if team == red:
-		verre_nous[0] = (900,950)
-		verre_nous[1] = (1200,950)
-		verre_nous[2] = (1050,1200)
-		verre_nous[3] = (1350,1200)
-		verre_nous[4] = (900,1450)
-		verre_nous[5] = (1200,1450)"""
 verre_nous.append((1200 + R_VERRE + 20,950)) #extremité verre 1
 verre_nous.append((1350 + R_VERRE + 20,1200))#extremité verre 2
 verre_nous.append((1200 + R_VERRE + 20,1450))#extremité verre 3
-
 verre_ennemis.append((2100,950))
 verre_ennemis.append((1800,950))
 verre_ennemis.append((1950,1200))
 verre_ennemis.append((1650,1200))
 verre_ennemis.append((2100,1450))
 verre_ennemis.append((1800,1450))
-"""else: #team == bleu
-		verre_ennemis[0] = (900,950)
-		verre_ennemis[1] = (1200,950)
-		verre_ennemis[2] = (1050,1200)
-		verre_ennemis[3] = (1350,1200)
-		verre_ennemis[4] = (900,1450)
-		verre_ennemis[5] = (1200,1450)
-		verre_nous[0] = (2100,950)
-		verre_nous[1] = (1800,950)
-		verre_nous[2] = (1950,1200)
-		verre_nous[3] = (1650,1200)
-		verre_nous[4] = (2100,1450)
-		verre_nous[5] = (1800,1450)"""
-	#return verre_nous, verre_ennemis
 	
-#def position_assiette(team):
-	
-assiette_nous = []	#tableau listant la positions de nos assiettes
-	#assiette_ennemis[]	#tableau listant la position des assiettes ennemis
-	#if team == red:
-#assiette_nous.append((500,250 + R_ASSIETTE + RAYON_BIGROBOT)) #10 de marge
+assiette_nous = []	
+#tableau listant la positions de nos assiettes
 assiette_nous.append((225,600)) #10 de marge
 assiette_nous.append((225,600)) #orienté vers le bas
 assiette_nous.append((225 + R_ASSIETTE + 20,1750)) #sur x car on chope l'assiette de côté
-"""else:
-		assiette_nous[0] = (2800,250)
-		assiette_nous[1] = (2800,1000)
-		assiette_nous[2] = (2800,1750)"""
-	#return assiette_nous
 		
 #def position_cadeau(team):
 cadeau_nous = []
-	#if team == red:
 cadeau_nous.append((490,2000 - 200)) #100 de marge
 cadeau_nous.append((1090,2000 - 200))
 cadeau_nous.append((1690,2000 - 200))
 cadeau_nous.append((2290,2000 - 200))
-"""else:
-		cadeau_nous[0] = (675,2000)
-		cadeau_nous[1] = (1275,2000)
-		cadeau_nous[2] = (1875,2000)
-		cadeau_nous[3] = (2475,2000)"""
-	#return cadeau_nous
 
 def get_actions_bigrobot(ia, robot, enemies):
 	actions = []	
-	
-	#actions.append(ActionBouteille(ia, robot, enemies, ia.p((640, 2000 - R_BIGROBOT - 100))))
-	#actions.append(ActionBouteille(ia, robot, enemies, (ia.x(1883), 2000 - R_BIGROBOT - 100)))
-	#actions.append(ActionLingo(ia, robot, enemies, ia.p((400, 900))))
-	#actions.append(ActionTotemHaut(ia, robot, enemies, ia.p((1400,1000-125-R_BIGROBOT-40))))
-	#actions.append(ActionTotemBas(ia, robot, enemies, ia.p((1400,1000+125+R_BIGROBOT+40))))
-	#actions.append(ActionFinalize(ia, robot, enemies, ia.p((400, 950))))
-	#actions.append(ActionTotem3(ia, robot, enemies, ia.p((2200,1000-125-R_BIGROBOT-60)), ActionTotem.DIRECTION_HAUT))
-	#actions.append(ActionTotem3(ia, robot, enemies, ia.p((2200,1000+125+R_BIGROBOT+60)), ActionTotem.DIRECTION_BAS))
-	
 	#for i in range(0,3):
 	#actions.append(ActionGetCerise(ia, robot, enemies, assiette_nous[0], ActionGetCerise.DIRECTION_RIGHT))
 	#actions.append(ActionGetCerise(ia, robot, enemies, assiette_nous[1], ActionGetCerise.DIRECTION_LEFT))
-	
 	#actions.append(ActionShootCerise(ia, robot, enemies, ia.p((1300,800))))#valeur mise au hasard
-	
-	#Florent, comment on implémente l'action bougie avec le gateau.py ?
+	#actions.append(ActionBougie(ia, robot, enemies, (1000,550), 1))
 
+	actions.append(ActionHomologation(ia, robot, enemies, (1450,720), 1))
+	"""actions.append(ActionBougie(ia, robot, enemies, (1300,600), 2))
+	actions.append(ActionBougie(ia, robot, enemies, (1550,680), 2))
+	actions.append(ActionBougie(ia, robot, enemies, (1450,680), 2))
+	actions.append(ActionBougie(ia, robot, enemies, (850,190), 2))
+	actions.append(ActionBougie(ia, robot, enemies, (950,370), 2))
+	actions.append(ActionBougie(ia, robot, enemies, (1300,600), 1))
+	actions.append(ActionBougie(ia, robot, enemies, (1450,680), 1))
+	actions.append(ActionBougie(ia, robot, enemies, (1550,680), 1))
+	actions.append(ActionBougie(ia, robot, enemies, (1900,550), 1))
+	actions.append(ActionBougie(ia, robot, enemies, (2050,370), 1))
+	actions.append(ActionBougie(ia, robot, enemies, (2150,150), 1))
+	actions.append(ActionBougie(ia, robot, enemies, (850,150), 1))"""
 	return actions
 
 def get_actions_minirobot(ia, robot, enemies):
 	actions = []
-	for i in range(0,4):
-		actions.append(ActionCadeau(ia, robot, enemies, cadeau_nous[i]))
+	"""for i in range(0,4):
+		actions.append(ActionCadeau(ia, robot, enemies, cadeau_nous[i], 2))
 	#print("Après ajout de l'action")
 	print(actions)
 	for i in range(0,3):
-		actions.append(ActionVerre(ia, robot, enemies, verre_nous[i]))
+		actions.append(ActionVerre(ia, robot, enemies, verre_nous[i], 1))"""
+	"""actions.append(ActionBougie(ia, robot, enemies, (2050,370), 2))
+	actions.append(ActionBougie(ia, robot, enemies, (1300,600), 2))
+	actions.append(ActionBougie(ia, robot, enemies, (1550,680), 2))
+	actions.append(ActionBougie(ia, robot, enemies, (1450,680), 2))
+	actions.append(ActionBougie(ia, robot, enemies, (850,150), 2))
+	actions.append(ActionBougie(ia, robot, enemies, (950,370), 2))
+	actions.append(ActionBougie(ia, robot, enemies, (1300,600), 1))
+	actions.append(ActionBougie(ia, robot, enemies, (1450,680), 1))
+	actions.append(ActionBougie(ia, robot, enemies, (1550,680), 1))
+	actions.append(ActionBougie(ia, robot, enemies, (1900,550), 1))
+	actions.append(ActionBougie(ia, robot, enemies, (2050,370), 1))
+	actions.append(ActionBougie(ia, robot, enemies, (2150,150), 1))
+	actions.append(ActionBougie(ia, robot, enemies, (850,150), 1))"""
 	return actions

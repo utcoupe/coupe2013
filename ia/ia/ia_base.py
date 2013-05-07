@@ -140,6 +140,7 @@ class IaBase:
 
     def cb_jack(self):
         print("Jack enlevé, let's start")
+        self.robot.actionneurs.goto_ax12(2,93,110)
         self.t_begin_match = time.time()
         self.e_jack.set()
 
@@ -231,10 +232,24 @@ class IaBase:
             # recherche de la meilleur action à effectuer
             for action in actions:
                 action.compute_score(robot.pos)
+            print(actions)
             reachable_actions = tuple(filter(lambda a: a.path, actions))
             
             if reachable_actions:
-                best_action = min(reachable_actions, key=lambda a: a.score)
+                sorted_by_prio = []
+                tmp = sorted(reachable_actions, key=lambda a: a.priority)
+                prio= tmp[0].priority
+                for action in reachable_actions:
+                    if (action.priority == prio):
+                        sorted_by_prio.append(action)
+                best_action = min(sorted_by_prio, key=lambda a: a.score)
+                """    best_actions = sorted(reachable_actions, key=lambda a: a.priority)
+                    for prio in min(best_actions[0].priority):
+                        best_action = min(best_actions, key=lambda a: a.path)
+                print("MESBEST ACTIONS !!!!!!!!!!!!!!!!!!!!")
+                print(best_action)
+                #best_action = min(reachable_actions, key=lambda a: a.path)
+                #best_action = min(reachable_actions, key=lambda a: a.path)"""
                 
                 #print(best_action)
 
@@ -318,7 +333,7 @@ class IaBase:
     def match_over(self):
         if self.match_timeout is None:
             return False
-        if (time.time() - self.t_begin_match) > self.match_timeout:
+        if self.t_begin_match is None or (time.time() - self.t_begin_match) > self.match_timeout:
             return True
 
 def get_latency(service):
