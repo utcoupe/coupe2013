@@ -47,7 +47,7 @@ void valueChangeOnEncoderLeftPinA(){
 	//int new_state = VALUE_PIN_LEFT_A;
 	int new_state = digitalRead(PIN_LEFT_A);
 	
-	if(new_state == state_left_pinB)
+	if(new_state != state_left_pinB)
 		value_left_enc--;
 	else
 		value_left_enc++;
@@ -71,7 +71,7 @@ void valueChangeOnEncoderLeftPinB(){
 	//int new_state = VALUE_PIN_LEFT_B;
 	int new_state = digitalRead(PIN_LEFT_B);
 
-	if(new_state == state_left_pinA)
+	if(new_state != state_left_pinA)
 		value_left_enc++;
 	else
 		value_left_enc--;

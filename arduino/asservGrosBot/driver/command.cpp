@@ -5,7 +5,11 @@
 #include "fifo.h"
 #include "message.h"
 #include "encoder.h"
+#include "Encoder.h"
 #include "pwm.h"
+
+extern Encoder knobLeft;
+extern Encoder knobRight;
 
 #define CHECK_ARGS(nbr) if (size < nbr) { sendResponse(id, E_INVALID_PARAMETERS_NUMBERS); } else
 
@@ -179,6 +183,8 @@ void cmd(int16_t id, int8_t cmd, int8_t size, int16_t *args){
 			current_goal.isPaused = false;
 			value_left_enc = 0;
 			value_right_enc = 0;
+			knobLeft.write(0);
+			knobRight.write(0);
 			robot_set_rad_angle(0.0);
 			robot_set_x(0);
 			robot_set_y(0);
