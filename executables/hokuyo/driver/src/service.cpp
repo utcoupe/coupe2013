@@ -86,7 +86,7 @@ private:
 
 int main(int argc, char *argv[]) {
 	
-	Hokuyo hokuyo(argc, argv, "hokuyo", "tcp://*:5001", Service::CONNECT);
+	Hokuyo hokuyo(argc, argv, "hokuyo", "tcp://192.0.0.2:5001", Service::CONNECT);
 	cerr << "connect on port 5001" << endl;
 
 	while (!s_interrupted) {
