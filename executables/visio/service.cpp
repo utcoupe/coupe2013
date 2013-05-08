@@ -118,8 +118,15 @@ protected:
 					// Retry If we didn't have exacte number of candles detected.
 					cerr << "Didn't get enough candles. Retrying..." << endl;
 					for (int i = 0; i < 20; ++i)
-						flags[i] = -1;
+						this->flags[i] = -1;
+					try{
 					Json::Value res = this->cam_0->DisplayWithColorMatching(request["args"][0].asInt(), request["args"][1].asInt(), request["args"][2].asInt());
+					}
+					catch(camException ex){
+						for (int i = 0; i < 20; ++i)
+							this->flags[i] = -1;
+						this->sendError(remote_id, request, "Visio doesn't work, move and retry!", "");
+					}
 					sendResponse(remote_id, request, res);
 				}
 			}
@@ -133,21 +140,21 @@ protected:
 private:
 	camManager *cam_0;
 	bool debug;
-		// camManager *cam_1;
+	// camManager *cam_1;
 
 };
 
 int main(int argc, char *argv[]) {
-	
+
 	if(argc != 4)
 		cout << "Help -> \"visio camID graphic_mode debug_mode\"\n"
-	<< "\t1 for external cam, 0 for internal cam\n"
-	<< "\t0 for no graphic_mode, 1 for graphic_mode\n" 
-	<< "\t0 for match_mode, 1 for debug_mode"<< endl;
-	
+			<< "\t1 for external cam, 0 for internal cam\n"
+			<< "\t0 for no graphic_mode, 1 for graphic_mode\n" 
+			<< "\t0 for match_mode, 1 for debug_mode"<< endl;
+
 	Visio visio(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]), "visio", "tcp://*:5001", Service::CONNECT);
 	cout << "connect on port 5001" << endl;
-	
+
 	while (!s_interrupted) {
 		visio.read();
 	}
