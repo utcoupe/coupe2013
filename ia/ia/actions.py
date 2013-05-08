@@ -87,16 +87,19 @@ class ActionGetCerise(Action):
 class ActionVerre(Action): #ouvrir les pinces au départ
 	"""En mode buldo, on garde les pinces ouvertes, on se rend à la position et on avance toujours tout droit pour retrouner
 	à la zone de départ (et normalement le robot devrait récup 2 verres"""
-	def __init__(self, ia, robot, enemies, point_acces, priority):
+	def __init__(self, ia, robot, enemies, point_acces, priority, pos_final):
 		Action.__init__(self, ia, robot, enemies, point_acces, priority)
+		self.pos_final = pos_final;
 		
 	def run(self):
 		print("\nACTION VERRE\n")
+		#self.robot.asserv.turn(180,100)
+		if self.robot.pos[1] < 1000:
+			self.robot.asserv.goto(self.robot.pos[0],self.robot.pos[1]+300,100)	#cherche le verre suivant
+		else:
+			self.robot.asserv.goto(self.robot.pos[0],self.robot.pos[1]-300,100)	#cherche le verre suivant
 		time.sleep(1)
-		self.robot.asserv.turn(180,100)
-		time.sleep(1)
-		self.robot.asserv.goto(self.robot.pos[0]-310,self.robot.pos[1],100)	#cherche le verre suivant
-		self.robot.asserv.goto(250,1400,100)	#retourne à l'air de jeu
+		self.robot.asserv.goto(self.pos_final[0], self.pos_final[1], 150)	#retourne à l'air de jeu
 		
 		#fini
 		self.clean()
@@ -173,6 +176,7 @@ class ActionBougie(Action):
 			print(a_taper[i][0])
 
 		#fini
+		time.sleep(1)
 		self.clean()
 
 		print("Bougie soufflée !")
@@ -190,6 +194,7 @@ class ActionTakePicture(Action):
 	def run(self):
 		#active la prise de photo
 		self.ia.gamestate.take_picture() 
+		#mettre un ajout des actions bougies ici
 		
 		#fini
 		self.clean()
@@ -255,12 +260,15 @@ def get_actions_bigrobot(ia, robot, enemies):
 	#actions.append(ActionShootCerise(ia, robot, enemies, ia.p((1300,800))))#valeur mise au hasard
 	#actions.append(ActionBougie(ia, robot, enemies, (1000,550), 1))
 
-	actions.append(ActionHomologation(ia, robot, enemies, (1450,720), 1))
-	"""actions.append(ActionBougie(ia, robot, enemies, (1300,600), 2))
+	#actions.append(ActionVerre(ia, robot, enemies, (1400,700), 1, (350,730)))
+	actions.append(ActionVerre(ia, robot, enemies, (1550,850), 2, (350,1300)))
+	actions.append(ActionVerre(ia, robot, enemies, (1410,1700), 2, (350,1450)))
+	actions.append(ActionCadeau(ia, robot, enemies, (450,1750), 2))
+	actions.append(ActionBougie(ia, robot, enemies, (1300,600), 1))
 	actions.append(ActionBougie(ia, robot, enemies, (1550,680), 2))
-	actions.append(ActionBougie(ia, robot, enemies, (1450,680), 2))
-	actions.append(ActionBougie(ia, robot, enemies, (850,190), 2))
-	actions.append(ActionBougie(ia, robot, enemies, (950,370), 2))
+	actions.append(ActionBougie(ia, robot, enemies, (1450,680), 1))
+	"""actions.append(ActionBougie(ia, robot, enemies, (850,190), 1))
+	actions.append(ActionBougie(ia, robot, enemies, (950,370), 1))
 	actions.append(ActionBougie(ia, robot, enemies, (1300,600), 1))
 	actions.append(ActionBougie(ia, robot, enemies, (1450,680), 1))
 	actions.append(ActionBougie(ia, robot, enemies, (1550,680), 1))
@@ -268,6 +276,7 @@ def get_actions_bigrobot(ia, robot, enemies):
 	actions.append(ActionBougie(ia, robot, enemies, (2050,370), 1))
 	actions.append(ActionBougie(ia, robot, enemies, (2150,150), 1))
 	actions.append(ActionBougie(ia, robot, enemies, (850,150), 1))"""
+
 	return actions
 
 def get_actions_minirobot(ia, robot, enemies):
