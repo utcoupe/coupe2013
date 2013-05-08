@@ -26,7 +26,7 @@ class Engine:
 		self.physicsengine.add_collision_handler(COLLTYPE_PETIT_ROBOT, COLLTYPE_WALL, self.graphicsengine.draw_collision)
 		self.physicsengine.add_collision_handler(COLLTYPE_BRAS, COLLTYPE_BOUGIE, self.on_collision_bras_bougie)
 		self.physicsengine.add_collision_handler(COLLTYPE_ROULEAU, COLLTYPE_CERISE, self.on_collision_gros_robot_cerise)
-		self.physicsengine.add_collision_handler(COLLTYPE_PETIT_ROBOT, COLLTYPE_VERRE, self.on_collision_petit_robot_verre)
+		#self.physicsengine.add_collision_handler(COLLTYPE_PETIT_ROBOT, COLLTYPE_VERRE, self.on_collision_petit_robot_verre)
 		self.physicsengine.add_collision_handler(COLLTYPE_PETIT_ROBOT, COLLTYPE_CADEAU, self.on_collision_petit_robot_cadeau)
 		self.e_stop = threading.Event()
 		self.objects = []
@@ -60,7 +60,10 @@ class Engine:
 			if not bougie:
 				print("Bougie not found")
 			else:
-				robot.eteindre_bougie(bougie)
+				if (bougie.color == "red" and robot.team == RED) \
+				or (bougie.color == "blue" and robot.team == BLUE) \
+				or (bougie.color == "white"):
+					robot.eteindre_bougie(bougie)
 	
 	def on_collision_gros_robot_cerise(self, space, arb):
 		"""

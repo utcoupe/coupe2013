@@ -14,8 +14,8 @@ void setup(){
 	delay(100);
 
     /* Active le jack et le bouton d'arrêt*/
-    /*initJackDetection();
-	  initEmergencyStopDetection();*/
+    initJackDetection();
+	/*  initEmergencyStopDetection();*/
 
 	// LED qui n'en est pas une
 	pinMode(16,OUTPUT);
@@ -34,8 +34,8 @@ void loop(){
 	readIncomingData(cmd);
 
     /*on regarde l'état du jack et du bouton d'arrêt*/
-    /*jackCheck();
-    if (emergencyCheck()) {
+    jackCheck();
+    /*if (emergencyCheck()) {
       //STOP ALL THE STUFF !
 	  }*/
 	

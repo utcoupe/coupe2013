@@ -79,7 +79,7 @@ server = utcoupe.Server(server = options.server_ip,
                         ev_sub = options.port_ev_sub)
 
 myia = IaChoosen(server,
-                 pos_grosbot = (0,0),
+                 pos_grosbot = (225,600),
                  pos_minibot = (0,0),
                  pos_enemy1 = (3000,0),
                  pos_enemy2 = (3000,0),

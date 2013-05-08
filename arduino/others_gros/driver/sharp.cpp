@@ -5,7 +5,6 @@
  *Date		:09/03/2013
  */
 
-#include "math.h"
 #include "sharp.h"
 #include "Arduino.h"
 #include "protocole.h"

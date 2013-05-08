@@ -4,6 +4,7 @@
 #include <math.h>
 
 #include "encoder.h"
+#include "Encoder.h"
 #include "robotstate.h"
 #include "pwm.h"
 #include "fifo.h"
@@ -42,6 +43,8 @@ void loop(){
 	digitalWrite(16, HIGH);
 
 	/* zone programmation libre */
+
+	loopEncoders();
 	
 	/*lecture des ordres*/
 	readIncomingData(cmd);

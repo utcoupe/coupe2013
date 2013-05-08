@@ -5,12 +5,13 @@ MAX_DIST = 1E50
 
 class Action(threading.Thread):
 	
-	def __init__(self, ia, robot, enemies, point_acces):
+	def __init__(self, ia, robot, enemies, point_acces, priority):
 		super().__init__()
 		self.ia = ia
 		self.point_acces = Vec(point_acces)
 		self.robot = robot
 		self.enemies = enemies
+		self.priority = priority
 
 		# calculé automatiquement par compute_score
 		self.score = 0
