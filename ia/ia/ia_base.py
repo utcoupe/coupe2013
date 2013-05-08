@@ -268,6 +268,17 @@ class IaBase:
             self.reset()
             return
 
+        # Test d'évitement
+        if robot.sharps[3] or robot.sharps[4] or (robot.recule and (robot.sharps[1] or robot.sharps[2])):
+            #robot.reset_target_action()
+            robot.asserv.cancel()
+            robot.stopped_by_sharps = time.time()
+            return
+        else:
+            if robot.stopped_by_sharps > 0:
+                robot.asserv.resume()
+                robot.stopped_by_sharps = 0
+
         # si le robot n'est pas en action et qu'il reste des actions
         if not robot.in_action and actions:
             # recherche de la meilleur action à effectuer
