@@ -124,7 +124,7 @@ class GameState:
 
 	def ask_asserv_for_pos(self, robot):
 		cb = lambda y: self.on_msg_pos(y, robot)
-		robot.asserv.get_pos(cb_fct=cb, block=False)
+		robot.asserv.pos(cb_fct=cb, block=False)
 
 	def take_picture(self, block=False):
 		self.event_bigrobot_visio_update.clear()

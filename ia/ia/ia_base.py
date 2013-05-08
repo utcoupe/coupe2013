@@ -280,17 +280,25 @@ class IaBase:
                 robot.asserv.resume()
                 robot.stopped_by_sharps = 0
 
+
+        #print("ACTIONS avant traitement")
+        #print(actions)
         # si le robot n'est pas en action et qu'il reste des actions
         if not robot.in_action and actions:
             # recherche de la meilleur action à effectuer
             for action in actions:
                 action.compute_score(robot.pos)
-            print(actions)
+
+            #print(actions)
             reachable_actions = tuple(filter(lambda a: a.path, actions))
+            #print("RECHABLE ACTIONS")
+            #print(reachable_actions)
 
             if reachable_actions:
                 sorted_by_prio = []
                 tmp = sorted(reachable_actions, key=lambda a: a.priority)
+                print("TMP liste triee par prio")
+                print(tmp)
                 prio= tmp[0].priority
                 for action in reachable_actions:
                     if (action.priority == prio):
@@ -333,6 +341,13 @@ class IaBase:
                             asserv.goto(a, b, 255, block=False)
             else:
                 print("No reachable actions")
+
+    def low_prio(self, actions):
+        min = actions[0].priority
+        for i in range(len(actions)):
+            if (min > actions[i].priority):
+                min = actions[i].priority
+        return min
 
 
     def stats(self):

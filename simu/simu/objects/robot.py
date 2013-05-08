@@ -314,7 +314,7 @@ class Asserv:
 		self.robot.stop = False
 		return 0
 	
-	def get_pos(self, id_msg):
+	def pos(self, id_msg):
 		return (self.robot.x(), self.robot.y(), self.robot.a())
 
 	def pwm(self, id_msg, pwm_l, pwm_r, delay):

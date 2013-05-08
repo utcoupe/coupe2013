@@ -30,6 +30,7 @@ class Action(threading.Thread):
 		raise Exception("method run must be overriden")
 
 	def clean(self):
+		print("CLEAN:!!! ", self)
 		self.robot.actions.remove(self)
 		self._done = True
 		self.robot.in_action = False
@@ -51,6 +52,9 @@ class Action(threading.Thread):
 			return dist
 		else:
 			return MAX_DIST
+
+	def get_prio(self):
+		return self.priority
 
 	def compute_score(self, p):
 		"""

@@ -98,7 +98,7 @@ class ActionVerre(Action): #ouvrir les pinces au départ
 			self.robot.asserv.goto(self.robot.pos[0],self.robot.pos[1]+300,100)	#cherche le verre suivant
 		else:
 			self.robot.asserv.goto(self.robot.pos[0],self.robot.pos[1]-300,100)	#cherche le verre suivant
-		time.sleep(1)
+		#time.sleep(1)
 		self.robot.asserv.goto(self.pos_final[0], self.pos_final[1], 150)	#retourne à l'air de jeu
 		
 		#fini
@@ -210,8 +210,12 @@ class ActionHomologation(Action):
 
 	def run(self):
 		#active la prise de photo
-		self.robot.asserv.goto(1450,950,100)
-		self.robot.asserv.goto(330,950,200)
+		"""self.robot.asserv.goto(1450,700,100)
+		self.robot.asserv.goto(1450,990,100)
+		self.robot.asserv.goto(900,950,200)
+		self.robot.asserv.goto(350,750,200)"""
+		self.robot.asserv.goto(self.robot.pos[0],self.robot.pos[1],100)
+
 		
 		#fini
 		self.clean()
@@ -260,22 +264,25 @@ def get_actions_bigrobot(ia, robot, enemies):
 	#actions.append(ActionShootCerise(ia, robot, enemies, ia.p((1300,800))))#valeur mise au hasard
 	#actions.append(ActionBougie(ia, robot, enemies, (1000,550), 1))
 
-	#actions.append(ActionVerre(ia, robot, enemies, (1400,700), 1, (350,730)))
-	actions.append(ActionVerre(ia, robot, enemies, (1550,850), 2, (350,1300)))
+	actions.append(ActionHomologation(ia, robot, enemies, (400,600), 1))
+	"""actions.append(ActionVerre(ia, robot, enemies, (1400,700), 1, (350,730)))
+	actions.append(ActionVerre(ia, robot, enemies, (1550,850), 3, (350,1300)))
 	actions.append(ActionVerre(ia, robot, enemies, (1410,1700), 2, (350,1450)))
 	actions.append(ActionCadeau(ia, robot, enemies, (450,1750), 2))
-	actions.append(ActionBougie(ia, robot, enemies, (1300,600), 1))
-	actions.append(ActionBougie(ia, robot, enemies, (1550,680), 2))
-	actions.append(ActionBougie(ia, robot, enemies, (1450,680), 1))
-	"""actions.append(ActionBougie(ia, robot, enemies, (850,190), 1))
-	actions.append(ActionBougie(ia, robot, enemies, (950,370), 1))
-	actions.append(ActionBougie(ia, robot, enemies, (1300,600), 1))
-	actions.append(ActionBougie(ia, robot, enemies, (1450,680), 1))
-	actions.append(ActionBougie(ia, robot, enemies, (1550,680), 1))
-	actions.append(ActionBougie(ia, robot, enemies, (1900,550), 1))
-	actions.append(ActionBougie(ia, robot, enemies, (2050,370), 1))
-	actions.append(ActionBougie(ia, robot, enemies, (2150,150), 1))
-	actions.append(ActionBougie(ia, robot, enemies, (850,150), 1))"""
+	actions.append(ActionCadeau(ia, robot, enemies, (450,1750), 1))
+	actions.append(ActionCadeau(ia, robot, enemies, (450,1750), 1))
+	actions.append(ActionCadeau(ia, robot, enemies, (450,1750), 1))
+	actions.append(ActionBougie(ia, robot, enemies, (1312,680), 5))
+	actions.append(ActionBougie(ia, robot, enemies, (1660,676), 1))
+	actions.append(ActionBougie(ia, robot, enemies, (1450,680), 2))
+	actions.append(ActionBougie(ia, robot, enemies, (818,172), 1))
+	actions.append(ActionBougie(ia, robot, enemies, (900,360), 4))
+	actions.append(ActionBougie(ia, robot, enemies, (1105,550), 1))
+	actions.append(ActionBougie(ia, robot, enemies, (1490,705), 3))
+	actions.append(ActionBougie(ia, robot, enemies, (1850,615), 1))
+	actions.append(ActionBougie(ia, robot, enemies, (1990,510), 2))
+	actions.append(ActionBougie(ia, robot, enemies, (2105,355), 5))
+	actions.append(ActionBougie(ia, robot, enemies, (2175,180), 1))"""
 
 	return actions
 

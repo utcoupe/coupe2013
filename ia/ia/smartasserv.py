@@ -31,31 +31,35 @@ class SmartAsserv:
 
         def goto(self, a, b, c, **kwargs):
                 self.recule = False
-                if not('block' in kwargs.keys()):
-                        kwargs['block'] = False
+                """if not('block' in kwargs.keys()):
+                        kwargs['block'] = False"""
                 self.goal = {'type': 'goto', 'x':a, 'y':b, 'speed':c, 'k':kwargs}
                 return self.client.goto(a, b, c, **kwargs)
 
         def gotor(self, a, b, c, **kwargs):
                 self.recule = False
-                if not('block' in kwargs.keys()):
-                        kwargs['block'] = False
+                """if not('block' in kwargs.keys()):
+                        kwargs['block'] = False"""
                 self.goal = {'type': 'gotor', 'pos':Vec(a,b), 'speed':c, 'start': self.pos, 'k':kwargs}
                 return self.client.gotor(a, b, c, **kwargs)
 
         def turn(self, a, b, **kwargs):
                 self.recule = False
-                if not('block' in kwargs.keys()):
-                        kwargs['block'] = False
+                """if not('block' in kwargs.keys()):
+                        kwargs['block'] = False"""
                 self.goal = {'type': 'turn', 'angle':a, 'speed':b, 'k':kwargs}
                 return self.client.turn(a, b, **kwargs)
 
         def turnr(self, a, b, **kwargs):
                 self.recule = False
-                if not('block' in kwargs.keys()):
-                        kwargs['block'] = False
+                """if not('block' in kwargs.keys()):
+                        kwargs['block'] = False"""
                 self.goal = {'type': 'turnr', 'angle':a, 'speed':b, 'start': self.a, 'k':kwargs}
                 return self.client.turnr(a, b, **kwargs)
+        """
+        def get_pos(self, **kwargs):
+                return self.client.
+        """
 
         #On recommence après avoir été interrompus
         def resume(self):
