@@ -118,16 +118,16 @@ protected:
 					// Retry If we didn't have exacte number of candles detected.
 					cerr << "Didn't get enough candles. Retrying..." << endl;
 					for (int i = 0; i < 20; ++i)
-						this->flags[i] = -1;
+						this->cam_0->flags[i] = -1;
 					try{
 					Json::Value res = this->cam_0->DisplayWithColorMatching(request["args"][0].asInt(), request["args"][1].asInt(), request["args"][2].asInt());
+					sendResponse(remote_id, request, res);
 					}
 					catch(camException ex){
 						for (int i = 0; i < 20; ++i)
-							this->flags[i] = -1;
+							this->cam_0->flags[i] = -1;
 						this->sendError(remote_id, request, "Visio doesn't work, move and retry!", "");
 					}
-					sendResponse(remote_id, request, res);
 				}
 			}
 		}
