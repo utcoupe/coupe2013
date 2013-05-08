@@ -40,3 +40,6 @@ LONGUEUR_MINIROBOT = 102
 PINCE_BAS = 0
 PINCE_HAUT = 1
 PINCE_MED = 2
+
+# Temps à partir duquel on ressaye d'avance (secondes)
+SHARP_TIME_LIMIT = 2
