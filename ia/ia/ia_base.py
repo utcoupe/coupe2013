@@ -151,11 +151,11 @@ class IaBase:
             if chain_id != -1:
                 print("Moteur %s in position %s" % (chain_id, index))
 
-    def cb_sharp_big(self, resp):
-        if len(resp.data) != 1:
+    def cb_sharp_big(self, event, service, resp):
+        if len(resp) != 1:
             print("Donnees bizarres des sharps : %s" % resp.data)
         else:
-            position = resp.data[0]
+            position = int(resp[0])
             self.gamestate.bigrobot.set_sharp_alert(position)
             """
             robot = self.gamestate.bigrobot
@@ -174,11 +174,10 @@ class IaBase:
                 robot.reset_target_action()
             """
 
-    def cb_jack(self, w, t, f):
+    def cb_jack(self, event, service, resp):
         print("Jack enlevé")
         if self.t_begin_match is None:
             print("let's start")
-            self.gamestate.bigrobot.actionneurs.goto_ax12(2,93,110)
             self.t_begin_match = time.time()
             self.state_match = STATE_PLAY
             self.e_jack.set()
@@ -207,7 +206,9 @@ class IaBase:
         #print("Ping hokuyo")
         #print(self.gamestate.hokuyo.get_latency())                         # A DECOMMENTER HOKUYO
         #input("appuyez sur une touche pour démarrer")
+        print("Asserv a répondu au ping, on configure")
         self.loopsetup()
+        print("Configuration ok, let's start")
         while 1:
             start_main_loop = time.time()
 
@@ -215,14 +216,15 @@ class IaBase:
             self.loop()
 
             # calcul du temps écoulé
-            self.sums['mainloop']['t'] += time.time() - start_main_loop
-            self.sums['mainloop']['n'] += 1
+            #self.sums['mainloop']['t'] += time.time() - start_main_loop
+            #self.sums['mainloop']['n'] += 1
 
             # calcul des stats
-            self.stats()
+            #self.stats()
 
-            delay = max(0.05, 0.2 - time.time() - start_main_loop)
-            time.sleep(delay)
+            #delay = max(0.05, 0.2 - time.time() - start_main_loop)
+            #print (delay)
+            #time.sleep(0.01)
 
     def stop(self):
         self.zfactory.stop()
@@ -232,17 +234,19 @@ class IaBase:
         self.reset()
 
         # premier rafraichissement
+        self.t_begin_match = None
         self.gamestate.ask_update()
         self.gamestate.wait_update()
-        self.t_begin_match = None
 
     def loop(self):
-        if self.state_match is STATE_PLAY and self.match_over():
+        if self.state_match == STATE_PLAY and self.match_over():
+            self.gamestate.bigrobot.actionneurs.ballon()
+            time.sleep(10)
             self.state_match = 0
             print("Fin du Match")
             self.reset()
 
-        if self.state_match is STATE_PLAY:
+        if self.state_match == STATE_PLAY:
             # demande de rafraichissement
             self.gamestate.ask_update()
             # attente du rafraichissement

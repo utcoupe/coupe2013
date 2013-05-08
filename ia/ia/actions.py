@@ -210,11 +210,11 @@ class ActionHomologation(Action):
 
 	def run(self):
 		#active la prise de photo
-		"""self.robot.asserv.goto(1450,700,100)
-		self.robot.asserv.goto(1450,990,100)
+		self.robot.asserv.goto(1450,700,150)
+		self.robot.asserv.goto(1450,990,150)
 		self.robot.asserv.goto(900,950,200)
-		self.robot.asserv.goto(350,750,200)"""
-		self.robot.asserv.goto(self.robot.pos[0],self.robot.pos[1],100)
+		self.robot.asserv.goto(350,750,200)
+		#self.robot.asserv.goto(self.robot.pos[0],self.robot.pos[1],100)
 
 		
 		#fini
@@ -265,13 +265,14 @@ def get_actions_bigrobot(ia, robot, enemies):
 	#actions.append(ActionBougie(ia, robot, enemies, (1000,550), 1))
 
 	actions.append(ActionHomologation(ia, robot, enemies, (400,600), 1))
+
 	"""actions.append(ActionVerre(ia, robot, enemies, (1400,700), 1, (350,730)))
 	actions.append(ActionVerre(ia, robot, enemies, (1550,850), 3, (350,1300)))
 	actions.append(ActionVerre(ia, robot, enemies, (1410,1700), 2, (350,1450)))
-	actions.append(ActionCadeau(ia, robot, enemies, (450,1750), 2))
-	actions.append(ActionCadeau(ia, robot, enemies, (450,1750), 1))
-	actions.append(ActionCadeau(ia, robot, enemies, (450,1750), 1))
-	actions.append(ActionCadeau(ia, robot, enemies, (450,1750), 1))
+	actions.append(ActionCadeau(ia, robot, enemies, (440,1780), 1))
+	actions.append(ActionCadeau(ia, robot, enemies, (1040,1780), 1))
+	actions.append(ActionCadeau(ia, robot, enemies, (1640,1780), 1))
+	actions.append(ActionCadeau(ia, robot, enemies, (2240,1780), 1))
 	actions.append(ActionBougie(ia, robot, enemies, (1312,680), 5))
 	actions.append(ActionBougie(ia, robot, enemies, (1660,676), 1))
 	actions.append(ActionBougie(ia, robot, enemies, (1450,680), 2))

@@ -28,7 +28,12 @@ class ClientsFactory:
                              ev_sub_addr = self.server["ev_sub"],
                              ctx = self.ctx)
         client.start(False)
+        self.clients[service] = client
         return client
 
     def stop(self):
-        raise Exception('Not implemented yet')
+        for client in self.clients:
+            try:
+                client.stop()
+            except Exception as e:
+                continue
