@@ -174,12 +174,13 @@ class IaBase:
                 robot.reset_target_action()
             """
 
-    def cb_jack(self):
+    def cb_jack(self, w, t, f):
         print("Jack enlevé")
         if self.t_begin_match is None:
             print("let's start")
-            self.robot.actionneurs.goto_ax12(2,93,110)
+            self.gamestate.bigrobot.actionneurs.goto_ax12(2,93,110)
             self.t_begin_match = time.time()
+            self.state_match = STATE_PLAY
             self.e_jack.set()
         else:
             print("Already started")
@@ -233,7 +234,7 @@ class IaBase:
         # premier rafraichissement
         self.gamestate.ask_update()
         self.gamestate.wait_update()
-        self.t_begin_match = time.time()
+        self.t_begin_match = None
 
     def loop(self):
         if self.state_match is STATE_PLAY and self.match_over():
@@ -269,7 +270,7 @@ class IaBase:
             return
 
         # Test d'évitement
-        if robot.sharps[3] or robot.sharps[4] or (robot.recule and (robot.sharps[1] or robot.sharps[2])):
+        if robot.sharps[3] or robot.sharps[4] or (robot.asserv.recule and (robot.sharps[1] or robot.sharps[2])):
             #robot.reset_target_action()
             robot.asserv.cancel()
             robot.stopped_by_sharps = time.time()

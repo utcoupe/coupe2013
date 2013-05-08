@@ -19,7 +19,7 @@ class Robot:
 		self.trajectoire = []
 		self.sharps = [None, False, False, False, False]
 		self.sharps_time = [None, 0, 0, 0, 0]
-                self.stopped_by_sharps = 0
+		self.stopped_by_sharps = 0
 
 	def set_sharp_alert(self, position):
 		if (position > 1 and position <= 4):
