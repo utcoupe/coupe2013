@@ -198,7 +198,7 @@ class Robot(EngineObjectPoly):
 				self.mod_recul = not self.mod_recul
 			elif KEY_JACK == event.key:
 				self.state_jack = 0 if self.state_jack else 1
-				self.others.send_event('jack', self.state_jack)
+				self.others.send_event('jack_removed', self.state_jack)
 		elif KEYUP == event.type:
 			if KEY_CHANGE_TEAM == event.key:
 				print("équipe bleu")

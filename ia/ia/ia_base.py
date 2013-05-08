@@ -45,7 +45,7 @@ class IaBase:
         ng = NavGraph(utcoupe.RAYON_BIGROBOT, utcoupe.FILENAME_MAP)
         ng.add_dynamic_obstacle(ConvexPoly().initFromCircle(self.init_pos['enemy1'],utcoupe.RAYON_ENEMY,8))
         ng.add_dynamic_obstacle(ConvexPoly().initFromCircle(self.init_pos['enemy2'],utcoupe.RAYON_ENEMY,8))
-        ng.add_dynamic_obstacle(ConvexPoly().initFromCircle(self.init_pos['mini'],utcoupe.RAYON_MINIROBOT,8))
+        #Mng.add_dynamic_obstacle(ConvexPoly().initFromCircle(self.init_pos['mini'],utcoupe.RAYON_MINIROBOT,8))
         ng.update()
         
         # robot
@@ -69,7 +69,7 @@ class IaBase:
         #####
         ## Création mini robot
         #####
-        
+        """
         # création du graph de déplacement
         ng = NavGraph(utcoupe.RAYON_MINIROBOT, utcoupe.FILENAME_MAP)
         ng.add_dynamic_obstacle(ConvexPoly().initFromCircle(self.init_pos['enemy1'],utcoupe.RAYON_ENEMY,8))
@@ -87,13 +87,14 @@ class IaBase:
         #creation des actionneurs
         petits_actionneurs = self.zfactory.get_client(utcoupe.OTHERS_MINI)
         minirobot.set_actionneurs(petits_actionneurs)
-
+        """
+        minirobot = None
 	#Hokuyo
         hokuyo = self.zfactory.get_client(utcoupe.HOKUYO)
 
         self.gamestate = GameState(bigrobot, minirobot, enemy1, enemy2, hokuyo)
-        minirobot.asserv.configure(self)
-        bigrobot.asserv.configure(self)
+        #minirobot.asserv.configure(self, minirobot)
+        bigrobot.asserv.configure(self, bigrobot)
 
         self.skip_recalage = skip_recalage
         self.autostart = autostart
@@ -110,7 +111,7 @@ class IaBase:
     def reset(self):
         self.gamestate.reset()
 
-        minirobot = self.gamestate.minirobot
+        #minirobot = self.gamestate.minirobot
         bigrobot = self.gamestate.bigrobot
         enemies = self.gamestate.enemyrobots()
 
@@ -123,7 +124,7 @@ class IaBase:
         actions = get_actions_bigrobot(self, bigrobot, enemies)
         bigrobot.set_actions(actions)
 
-
+        """
         minirobot.actionneurs.detect_ax12(cb_fct=self.detect_ax12_mini, block=False)
         #minirobot.actionneurs.add_callback('jack_removed', self.cb_jack)
         stop = lambda a, b: self.cb_stop(b, minirobot)
@@ -131,12 +132,13 @@ class IaBase:
         
         actions = get_actions_minirobot(self, minirobot, enemies)
         minirobot.set_actions(actions)
+        """
 
         self.t_begin_match = None
         self.e_jack = threading.Event()
 
     def detect_ax12_big(self, resp):
-        print("AX12 Gros : ", resp.data)
+        #print("AX12 Gros : ", resp.data)
         ax12 = []
         for index, chain_id in enumerate(resp.data):
             if chain_id != -1:
@@ -154,6 +156,8 @@ class IaBase:
             print("Donnees bizarres des sharps : %s" % resp.data)
         else:
             position = resp.data[0]
+            self.gamestate.bigrobot.set_sharp_alert(position)
+            """
             robot = self.gamestate.bigrobot
             if position == 1 or position == 2:
                 # danger vers l'arrière
@@ -168,12 +172,18 @@ class IaBase:
                 robot.cancel()
                 robot.in_action = False
                 robot.reset_target_action()
+            """
 
-    def cb_jack(self):
-        print("Jack enlevé, let's start")
-        self.robot.actionneurs.goto_ax12(2,93,110)
-        self.t_begin_match = time.time()
-        self.e_jack.set()
+    def cb_jack(self, w, t, f):
+        print("Jack enlevé")
+        if self.t_begin_match is None:
+            print("let's start")
+            self.gamestate.bigrobot.actionneurs.goto_ax12(2,93,110)
+            self.t_begin_match = time.time()
+            self.state_match = STATE_PLAY
+            self.e_jack.set()
+        else:
+            print("Already started")
 
     def cb_stop(self):
         self.stop()
@@ -203,14 +213,14 @@ class IaBase:
 
             # faire quelquechose
             self.loop()
-            
+
             # calcul du temps écoulé
             self.sums['mainloop']['t'] += time.time() - start_main_loop
             self.sums['mainloop']['n'] += 1
 
             # calcul des stats
             self.stats()
-                
+
             delay = max(0.05, 0.2 - time.time() - start_main_loop)
             time.sleep(delay)
 
@@ -220,11 +230,11 @@ class IaBase:
 
     def loopsetup(self):
         self.reset()
-        
+
         # premier rafraichissement
         self.gamestate.ask_update()
         self.gamestate.wait_update()
-        self.t_begin_match = time.time()
+        self.t_begin_match = None
 
     def loop(self):
         if self.state_match is STATE_PLAY and self.match_over():
@@ -244,7 +254,7 @@ class IaBase:
                 print("Un bolosse est dans l'angle mort !!!")
             else:
                 self.loopRobot(self.gamestate.bigrobot)
-                self.loopRobot(self.gamestate.minirobot)
+                #self.loopRobot(self.gamestate.minirobot)
         else:
             self.e_jack.wait(2)
 
@@ -252,12 +262,24 @@ class IaBase:
         actions = robot.actions
         ng = robot.ng
         asserv = robot.asserv
-            
-        if not self.gamestate.bigrobot.actions and not self.gamestate.minirobot.actions:
+
+        #if not self.gamestate.bigrobot.actions and not self.gamestate.minirobot.actions:
+        if not actions:
             print("PLUS D'ACTIONS A RÉALISER !")
             self.reset()
             return
-            
+
+        # Test d'évitement
+        if robot.sharps[3] or robot.sharps[4] or (robot.asserv.recule and (robot.sharps[1] or robot.sharps[2])):
+            #robot.reset_target_action()
+            robot.asserv.cancel()
+            robot.stopped_by_sharps = time.time()
+            return
+        else:
+            if robot.stopped_by_sharps > 0:
+                robot.asserv.resume()
+                robot.stopped_by_sharps = 0
+
         # si le robot n'est pas en action et qu'il reste des actions
         if not robot.in_action and actions:
             # recherche de la meilleur action à effectuer
@@ -265,7 +287,7 @@ class IaBase:
                 action.compute_score(robot.pos)
             print(actions)
             reachable_actions = tuple(filter(lambda a: a.path, actions))
-            
+
             if reachable_actions:
                 sorted_by_prio = []
                 tmp = sorted(reachable_actions, key=lambda a: a.priority)
@@ -281,7 +303,7 @@ class IaBase:
                 print(best_action)
                 #best_action = min(reachable_actions, key=lambda a: a.path)
                 #best_action = min(reachable_actions, key=lambda a: a.path)"""
-                
+
                 #print(best_action)
 
                 # si cette action n'est pas déjà celle que le robot veut atteindre

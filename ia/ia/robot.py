@@ -2,6 +2,10 @@
 import copy
 import time
 
+import sys
+sys.path.append('../../lib')
+import utcoupe
+
 from geometry import Segment, Vec
 
 class Robot:
@@ -13,6 +17,22 @@ class Robot:
 		self.reset()
 		self.path_was_intersected = False
 		self.trajectoire = []
+		self.sharps = [None, False, False, False, False]
+		self.sharps_time = [None, 0, 0, 0, 0]
+		self.stopped_by_sharps = 0
+
+	def set_sharp_alert(self, position):
+		if (position > 1 and position <= 4):
+			self.sharps_time = time.time()
+
+	def process_sharps(self):
+		time = time.time()
+		for i in range(1, 5):
+			if (time - self.sharps_time[i]) >= utcoupe.SHARP_TIME_LIMIT:
+				#C'est safe, on peut repartir
+				self.sharps[i] = False
+			else:
+				self.sharps[i] = True
 
 	def set_actions(self, actions):
 		self.init_actions = actions
