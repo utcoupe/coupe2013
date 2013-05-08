@@ -52,18 +52,18 @@ class GameState:
 
 	def reset(self):
 		self.bigrobot.reset()
-		self.minirobot.reset()
+		#Mself.minirobot.reset()
 		self.enemy1.reset()
 		self.enemy2.reset()
 		
 		self.bigrobot.ng.dynamic_obstacles[0].move_to(self.enemy1.pos)
 		self.bigrobot.ng.dynamic_obstacles[1].move_to(self.enemy2.pos)
-		self.bigrobot.ng.dynamic_obstacles[2].move_to(self.minirobot.pos)
+		#Mself.bigrobot.ng.dynamic_obstacles[2].move_to(self.minirobot.pos)
 		self.bigrobot.ng.update()
-		self.minirobot.ng.dynamic_obstacles[0].move_to(self.enemy1.pos)
-		self.minirobot.ng.dynamic_obstacles[1].move_to(self.enemy2.pos)
-		self.minirobot.ng.dynamic_obstacles[2].move_to(self.bigrobot.pos)
-		self.minirobot.ng.update()
+		#Mself.minirobot.ng.dynamic_obstacles[0].move_to(self.enemy1.pos)
+		#Mself.minirobot.ng.dynamic_obstacles[1].move_to(self.enemy2.pos)
+		#Mself.minirobot.ng.dynamic_obstacles[2].move_to(self.bigrobot.pos)
+		#Mself.minirobot.ng.update()
 
 		
 		self.sums = {}
@@ -74,10 +74,10 @@ class GameState:
 	def update_robots(self):
 		self.bigrobot.ng.dynamic_obstacles[0].move_to(self.enemy1.pos)
 		self.bigrobot.ng.dynamic_obstacles[1].move_to(self.enemy2.pos)
-		self.bigrobot.ng.dynamic_obstacles[2].move_to(self.minirobot.pos)
-		self.minirobot.ng.dynamic_obstacles[0].move_to(self.enemy1.pos)
-		self.minirobot.ng.dynamic_obstacles[1].move_to(self.enemy2.pos)
-		self.minirobot.ng.dynamic_obstacles[2].move_to(self.bigrobot.pos)
+		#Mself.bigrobot.ng.dynamic_obstacles[2].move_to(self.minirobot.pos)
+		#Mself.minirobot.ng.dynamic_obstacles[0].move_to(self.enemy1.pos)
+		#Mself.minirobot.ng.dynamic_obstacles[1].move_to(self.enemy2.pos)
+		#Mself.minirobot.ng.dynamic_obstacles[2].move_to(self.bigrobot.pos)
 		
 		#if self.bigrobot.is_path_intersected():
 		start_update_ng = time.time()
@@ -86,30 +86,28 @@ class GameState:
 		self.sums['update_big_ng']['n'] += 1
 			
 		#if self.minirobot.is_path_intersected():
-		start_update_ng = time.time()
-		self.minirobot.ng.update()
-		self.sums['update_mini_ng']['t'] += time.time() - start_update_ng
-		self.sums['update_mini_ng']['n'] += 1
+		#Mstart_update_ng = time.time()
+		#Mself.minirobot.ng.update()
+		#Mself.sums['update_mini_ng']['t'] += time.time() - start_update_ng
+		#Mself.sums['update_mini_ng']['n'] += 1
 		
 	
 	def ask_update(self):
 		self.event_bigrobot_pos_update.clear()
-		self.event_minirobot_pos_update.clear()
+		#Mself.event_minirobot_pos_update.clear()
 		self.event_hokuyo_update.clear()
 		#self.event_minirobot_visio_update.clear()
-		
-		
+
 		self.ask_asserv_for_pos(self.bigrobot)
 
-		self.ask_asserv_for_pos(self.minirobot)
-		self.ask_hokyo_for_pos()
-
+		#Mself.ask_asserv_for_pos(self.minirobot)
+		self.ask_hokuyo_for_pos()
 		
 	def wait_update(self):
 		self.event_bigrobot_pos_update.wait()
 		#self.event_bigrobot_visio_update.wait()
 		#self.event_minirobot_visio_update.wait()
-		self.event_minirobot_pos_update.wait()
+		#Mself.event_minirobot_pos_update.wait()
 		self.event_hokuyo_update.wait()
 
 	def ping(self, canal):
@@ -120,21 +118,24 @@ class GameState:
 			self.ircbot.send(canal, PREFIX_CMD+"ping # id=%s" % ID_MSG_PING)
 			self.event_on_pong.wait()
 		return (time.time() - start) / n
-		
 
-	def ask_hokyo_for_pos(self):
-		self.hokuyo.send_pos(cb_fct=self.on_msg_hokyo)
+	def ask_hokuyo_for_pos(self):
+		self.hokuyo.send_pos(cb_fct=self.on_msg_hokyo, block=False)
 
 	def ask_asserv_for_pos(self, robot):
 		cb = lambda y: self.on_msg_pos(y, robot)
-		robot.asserv.get_pos(cb_fct=cb)
+		robot.asserv.get_pos(cb_fct=cb, block=False)
 
 	def take_picture(self, block=False):
 		self.event_bigrobot_visio_update.clear()
-		self.bigrobot.visio.get_by_color(cb_fct=self.on_msg_visio)
+		self.bigrobot.visio.get_by_color(cb_fct=self.on_msg_visio, block=False)
 		if block:
 			self.event_bigrobot_visio_update.wait()
-	
+
+	def process_sharps(self):
+		self.bigrobot.process_sharps()
+		#Mself.minirobot.process_sharps()
+
 	def on_msg(self, canal, auteur, msg):
 		msg_split = msg.split(SEP)
 		if len(msg_split) > 1:
@@ -149,7 +150,7 @@ class GameState:
 
 	def on_msg_pos(self, resp, robot):
 		args = resp.data
-		print(args, robot)
+		#print(args, robot)
 		if len(args) >= 3:
 			# transformation des strings en int
 			args = tuple(map(int, args))
@@ -165,13 +166,13 @@ class GameState:
 			# update
 			robot_to_update.update_pos(args[0:2])
 			robot_to_update.a = args[2]
-	
 
 	def on_msg_hokyo(self, resp):
 		args = resp.data
 		lpos = eval(args)
 		#print(lpos)
-		lpos = list(filter(lambda p: (self.bigrobot.pos-p).norm2() > 300*300 and (self.minirobot.pos-p).norm2() > 300*300, lpos))
+		#lpos = list(filter(lambda p: (self.bigrobot.pos-p).norm2() > 300*300 and (self.minirobot.pos-p).norm2() > 300*300, lpos))
+		lpos = list(filter(lambda p: (self.bigrobot.pos-p).norm2() > 300*300, lpos))
 		if len(lpos) == 0:
 			self.enemies_angle_mort = True
 		else:
@@ -200,8 +201,8 @@ class GameState:
 		self.event_hokuyo_update.set()
 
 	def on_msg_visio(self, args):
-                self.gateau.merge_data_str(args.data)
-                self.event_bigrobot_visio_update.set()
+		self.gateau.merge_data_str(args.data)
+		self.event_bigrobot_visio_update.set()
 
 	def on_msg_us(self, args):
 		args = resp.data
@@ -215,9 +216,10 @@ class GameState:
 				if self.us_detect:
 					self.bigrobot.resume()
 				self.us_detect = False
-	
+
 	def robots(self):
-		return (self.bigrobot, self.minirobot, self.enemy1, self.enemy2)
+		#return (self.bigrobot, self.minirobot, self.enemy1, self.enemy2)
+		return (self.bigrobot, self.enemy1, self.enemy2)
 
 	def enemyrobots(self):
 		return (self.enemy1, self.enemy2)
