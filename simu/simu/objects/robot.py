@@ -199,6 +199,14 @@ class Robot(EngineObjectPoly):
 			elif KEY_JACK == event.key:
 				self.state_jack = 0 if self.state_jack else 1
 				self.others.send_event('jack_removed', self.state_jack)
+			elif KEY_SHARP1 == event.key:
+				self.others.send_event('sharp_trop_proche', 1)
+			elif KEY_SHARP2 == event.key:
+				self.others.send_event('sharp_trop_proche', 2)
+			elif KEY_SHARP3 == event.key:
+				self.others.send_event('sharp_trop_proche', 3)
+			elif KEY_SHARP4 == event.key:
+				self.others.send_event('sharp_trop_proche', 4)
 		elif KEYUP == event.type:
 			if KEY_CHANGE_TEAM == event.key:
 				print("équipe bleu")

@@ -52,7 +52,10 @@ KEY_BULDO			= K_x			# mode buldozer
 KEY_TELEPORTATION	= K_t			# mode téléportation
 KEY_RECUL			= K_r			# mode marche arrière
 KEY_JACK			= K_j			# jack
-
+KEY_SHARP1			= K_k			# sharp1
+KEY_SHARP2			= K_l			# sharp2
+KEY_SHARP3			= K_i			# sharp3
+KEY_SHARP4			= K_o			# sharp4
 
 BIG			= 0
 MINI		= 1
