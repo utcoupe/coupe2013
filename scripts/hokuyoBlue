@@ -1,0 +1,3 @@
+#!/bin/sh
+
+ssh pi@192.0.0.41 "/home/pi/coupe2013/executables/hokuyo/driver/hokuyo -color 1"

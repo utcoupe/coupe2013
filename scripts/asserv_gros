@@ -1,0 +1,4 @@
+#!/bin/sh
+
+cd /home/fred/coupe2013/arduino/asservGrosBot
+python3 asserv_service.py -s /dev/serial/by-id/usb-Arduino__www.arduino.cc__Arduino_Mega_2560_6493234373835161F131-if00

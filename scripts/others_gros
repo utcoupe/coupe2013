@@ -1,0 +1,4 @@
+#!/bin/sh
+
+cd /home/fred/coupe2013/arduino/others_gros
+python3 others_service.py -s /dev/serial/by-id/usb-Arduino__www.arduino.cc__0042_64938333932351401241-if00
