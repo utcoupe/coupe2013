@@ -196,33 +196,23 @@ void angleControl(int* value_pwm_left, int* value_pwm_right){
 		(*value_pwm_left) = 0;
 	}
 	else{
+		/*Evite les "vibrations" dues aux pwm trop basse sur des moteurs CC, tout en conservant un eventuel rapport entre les pwm*/
+                /* [0;255] transformé en [PWM_MINI;255], de même dans le negatif*/
+		
+		if(pwm > 0)
+                        pwm = pwm*((255-PWM_MINI)/255)+PWM_MINI;
+                else if (pwm < 0)
+                        pwm = pwm*((255-PWM_MINI)/255)-PWM_MINI;
+		
+		// Débordement
+		if(pwm > 255)
+			pwm = 255;
+		else if(pwm < -255)
+			pwm = -255;
+
 		(*value_pwm_right) = pwm;
 		(*value_pwm_left) = -pwm;
 
-		/*Evite les "vibrations" dues aux pwm trop basse sur des moteurs CC, tout en conservant un eventuel rapport entre les pwm*/
-		/* [0;255] transformé en [PWM_MINI;255], de même dans le negatif*/
-		/*if((*value_pwm_left) > 0)
-			(*value_pwm_left) = (*value_pwm_left)*((255-PWM_MINI)/255)+PWM_MINI;
-		else if (*value_pwm_left < 0)
-			(*value_pwm_left) = (*value_pwm_left)*((255-PWM_MINI)/255)-PWM_MINI;
-
-		if((*value_pwm_right) > 0)
-			(*value_pwm_right) = (*value_pwm_right)*((255-PWM_MINI)/255)+PWM_MINI;
-		else if (*value_pwm_right < 0)
-			(*value_pwm_right) = (*value_pwm_right)*((255-PWM_MINI)/255)-PWM_MINI;
-*/
-		// Débordement
-		if ((*value_pwm_right) > 255)
-			(*value_pwm_right) = 255;
-		else if ((*value_pwm_right) < -255)
-			(*value_pwm_right) = -255;
-		
-		if ((*value_pwm_left) > 255)
-			(*value_pwm_left) = 255;
-		else if ((*value_pwm_left) < -255)
-			(*value_pwm_left) = -255;
-
-		
 	}
 
 	if(current_goal.phase == PHASE_2){
