@@ -1,0 +1,2 @@
+Asservissement des moteurs brushless Maxon avec un controleur DEC-Module-24-2.
+Le module permet un asservissement en vitesse, cependant, il semble plus facile de l'utiliser en boucle ouverte et d'asservir la vitesse dans le code

@@ -1,0 +1,1 @@
+../asservCommon/goals.cpp

@@ -1,0 +1,10 @@
+parameters.h 	: configuration of the robsot
+motor.* 	: link between the code and the AF_DCMotor library
+goals.*		: goal management
+encoder.*	: encoders managements, keep the ticks count, is called with interruptions
+robotstate.*	: keep every information about the robot's position, speed, etc...
+control.*	: control part, use the PID to control the motor depending on the goal
+PID.*		: generic PID controller
+compaArduino.*	: "hacks" to link the code's functions to the arduino
+command.* 	: commands called by the serial port
+message.*	: serial port compatibility

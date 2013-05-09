@@ -1,0 +1,21 @@
+BrushlessMotor	: Gestion de l'alim des moteurs
+command		: Gestion de la reception des messages
+control		: Gestion des PWM à appliquer en fonction de la goalPos
+encoder		: Décode les codeurs avec fils A et B (utilise des interruptions 
+fifo		: Gestion des goal
+pwm		: Interface de gestion des PWN à appliquer
+robotstate	: met à jour les infos sur la pos du robot
+PID_Beta6	: Permet de gérer les control sur les pwm ????
+
+command ---(envoie dans)--> fifo
+
+robotstate ---(se sert de)--> encoder
+control ---(se sert de)--> PID
+	---(modifie)--> robotstate (les pwm) 
+pwm ---(se sert de)--> AF-Motor
+
+driver :
+	+command
+	+control <--(en fct de)--- fifo
+	+pwm <--(en fct de)--- robotstate (les pwm)
+	+robotstate
