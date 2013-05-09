@@ -57,6 +57,11 @@
 #define Q_WRITE_AX12          42
 
 /**
+ * Gongle la ballon
+ */
+#define Q_BALLON             50
+
+/**
  * Détecte les ax12 reliés à l'arduino
  */
 #define Q_DETECT_AX12       44

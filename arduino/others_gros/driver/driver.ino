@@ -10,8 +10,8 @@ void setup(){
 	/*Active la liaison serie*/
 	initSerialLink();
 
-    /* Détection des ax12 */
-	delay(100);
+	pinMode(PIN_BALLON, OUTPUT);
+	digitalWrite(PIN_BALLON, LOW);
 
     /* Active le jack et le bouton d'arrêt*/
     initJackDetection();

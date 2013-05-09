@@ -84,6 +84,13 @@ void cmd(int16_t id, int8_t cmd, int8_t size, int16_t *args){
 				}
             break;
 		}
+	case Q_BALLON:
+		{
+			digitalWrite(PIN_BALLON, HIGH);
+			delay(2000);
+			digitalWrite(PIN_BALLON, LOW);
+		}
+	break;
     default:
         {
             sendError(id,E_INVALID_CMD);
