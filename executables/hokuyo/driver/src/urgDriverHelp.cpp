@@ -152,7 +152,7 @@ void UrgDriver::setDelta(bool autoSearch, int dX, int dY)
 {
 	this->deltaX = dX;
 	this->deltaY = dY;
-	
+
 	this->calculLangleScanne();
 }
 
@@ -165,10 +165,14 @@ void UrgDriver::updateParamWithColor(short color)
 	this->color = color;
 	cerr << "\n\nUrgDriver::updateParamWithColor, deg1 = " << deg1 << "deg2" << deg2 << endl;
 	if(this->color == ROUGE) {
+		this->deltaX = 35;
+		this->deltaY = 36;
 		defineRange(deg1,deg2);
 		defineRangeIndex(deg1,deg2);
 	}
 	else {
+		this->deltaX = 38;
+		this->deltaY = 36;
 		defineRange((-1)*deg2,(-1)*deg1);
 		defineRangeIndex((-1)*deg2,(-1)*deg1);
 	}

@@ -30,7 +30,7 @@ void MainAppDriver::initArgManager(int argc, char *argv[])
 {
 	//! --- Récupération des paramétres ---
 	am = new ArgManager();
-	am->addArg(new Argument<string>(TAG_PORTCOM));	// Le port com
+	// am->addArg(new Argument<string>(TAG_PORTCOM));	// Le port com
 	am->addArg(new Argument<int>(TAG_COLOR)); 		// La couleur 
 	am->analyse(argc,argv);
 }
