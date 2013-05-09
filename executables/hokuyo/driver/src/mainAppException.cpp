@@ -41,7 +41,7 @@ void mainAppException::react(void)
 				finalKill();
 		break;
 		case mainAppException::Err_argException_react_tropDerr :
-			cerr << "Il faut passer l'argument couleur par 1:rouge, 0:bleu" << endl;
+			cerr << "Il faut passer l'argument couleur par 0:rouge, 1:bleu" << endl;
 				finalKill();
 		break;
 		

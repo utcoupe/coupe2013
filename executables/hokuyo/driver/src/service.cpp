@@ -39,7 +39,7 @@ protected:
 		else if (request["fct"] == "help") {
 			Json::Value data(
 				"-> ping(): pong \n "
-				"-> send_pos(): recuperer les positions des robots.\n"
+				"-> get_data(): recuperer les positions des robots.\n"
 				"-> setRed(): le red c'est la maison!\n"
 				"-> setBlue(): le blue c'est la maison!\n"
 				);

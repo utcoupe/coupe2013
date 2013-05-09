@@ -23,7 +23,7 @@ void UrgDriver::toString()
 		cerr << "Color ROUGE"<< endl;
 	}
 	else {
-		cerr << "Color VIOLET"<< endl;
+		cerr << "Color BLEU"<< endl;
 	}
 	
 	cerr << "Com Port" << comPort << endl;	

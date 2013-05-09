@@ -117,12 +117,11 @@ void UrgDriver::interpretData(const std::vector<long> & data, int n)
 		if(l>minLength && l<distanceMax[j])
 		{
 			coord c;
-			double radian = urg.index2rad(j);
-			radian = ABS(radian);
+			double radian = ABS(urg.index2rad(j));
 			// Origine en haut a gauche.
-			c.x = LX - (l*cos(radian)  + deltaX); 
+			c.x = LX - (l*sin(radian) - deltaX); 
 			// Cette annee, on place l'hokuyo sur cote loin de gateau, on prend la sysmetrie du c.y
-			c.y = LY - (l*sin(radian)  + deltaY);
+			c.y = LY - (l*cos(radian) - deltaY);
 
 			// si c est dans le gateau, on l'enleve.
 			if(inGateau(c))

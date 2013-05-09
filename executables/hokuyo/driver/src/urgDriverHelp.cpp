@@ -150,12 +150,9 @@ void UrgDriver::UpdateRange()
  **********************************************************************/
 void UrgDriver::setDelta(bool autoSearch, int dX, int dY)
 {
-	if(!autoSearch) {
-		this->deltaX = dX;
-		this->deltaY = dY;
-	} else {
-		
-	}
+	this->deltaX = dX;
+	this->deltaY = dY;
+	
 	this->calculLangleScanne();
 }
 
@@ -217,8 +214,8 @@ void UrgDriver::calculLangleScanne()
 {
 	double radScan = (90 * M_PI / 180.0);
 	
-	double radDelX = atan( (double)ABS(deltaX) / (double)(LY-deltaY) ); 
-	double radDelY = atan( (double)ABS(deltaY) / (double)(LX-deltaX) );
+	double radDelX = atan( (double)ABS(deltaX) / (double)(LY+deltaY) ); 
+	double radDelY = atan( (double)ABS(deltaY) / (double)(LX+deltaX) );
 	
 	//cerr << radDelX << endl;
 	//cerr << radDelY << endl;
